@@ -5,6 +5,7 @@ import { AppShell, Group, Burger, Text, Button } from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -13,6 +14,7 @@ export const metadata = {
 
 export default function AppShellLayout({ children }: { children: any }) {
   const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
+  const pathname = usePathname();
 
   return (
     <AppShell
@@ -33,17 +35,19 @@ export default function AppShellLayout({ children }: { children: any }) {
             size="sm"
           />
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Text>Poputka.kg</Text>
+            <Text>Poputka.pro</Text>
             <Group gap="10px" visibleFrom="sm">
-              <Button
-                component={Link}
-                href="/new"
-                radius="xl"
-                variant="gradient"
-                gradient={{ from: "orange", to: "red", deg: 90 }}
-              >
-                + Новая попутка
-              </Button>
+              {pathname !== "/new" && (
+                <Button
+                  component={Link}
+                  href="/new"
+                  radius="xl"
+                  variant="gradient"
+                  gradient={{ from: "orange", to: "red", deg: 90 }}
+                >
+                  + Новая попутка
+                </Button>
+              )}
               <Button variant="subtle" radius="xl">
                 Blog
               </Button>

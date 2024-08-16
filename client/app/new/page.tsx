@@ -1,24 +1,31 @@
 "use client";
 import {
   Button,
+  Fieldset,
   Grid,
   GridCol,
   Group,
   NumberInput,
   SegmentedControl,
   Stack,
+  Textarea,
   TextInput,
+  Text,
+  Title,
+  SimpleGrid,
 } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useState } from "react";
 
-const NewPage = () => {
+export default function NewPage() {
   const [role, setRole] = useState<string>("driver");
 
   return (
-    <Stack gap="10px">
+    <Stack maw="600px" mx="auto" gap="33px">
+      <Text fz={{ base: "16px", xs: "18px", sm: "20px" }}>
+        Укажите детали вашей поездки:
+      </Text>
       <SegmentedControl
-        fullWidth
         value={role}
         onChange={(role) => setRole(role)}
         data={[
@@ -26,45 +33,41 @@ const NewPage = () => {
           { label: "Я пассажир", value: "passenger" },
         ]}
       />
-      <TextInput label="Имя" placeholder="Асан" />
-      <Group grow>
+      <SimpleGrid cols={{ base: 1, xs: 2 }}>
+        <TextInput label="Имя" placeholder="Асан" />
+        <TextInput
+          label="Номер телефона"
+          placeholder="0 500 600 700"
+          required
+        />
+      </SimpleGrid>
+
+      <SimpleGrid cols={{ base: 1, xs: 4 }}>
         <TextInput label="Откуда" placeholder="Бишкек" required />
         <TextInput label="Куда" placeholder="Чолпон-Ата" required />
-      </Group>
-      <Group grow>
         <DatePickerInput label="День" required />
         <TimeInput label="Время" placeholder="Укажите время" required />
-      </Group>
-      <TextInput label="Номер телефона" placeholder="0 500 600 700" required />
+      </SimpleGrid>
       {role === "driver" && (
-        <TextInput label="Авто" placeholder="Тойота Королла" />
-      )}
-      {role === "driver" && (
-        <Grid>
-          <GridCol span={2.4}>
+        <>
+          <SimpleGrid cols={{ base: 1, xs: 4 }}>
+            <TextInput label="Авто" placeholder="Тойота Королла" />
             <NumberInput label="Мест" placeholder="3" />
-          </GridCol>
-          <GridCol span={4.8}>
             <NumberInput
-              label="Цена за место, cомов"
+              label="Сомов за место"
               placeholder="400"
               hideControls
             />
-          </GridCol>
-          <GridCol span={4.8}>
             <NumberInput
-              label="Цена за салон, сомов"
+              label="Сомов за салон"
               placeholder="2000"
               hideControls
             />
-          </GridCol>
-        </Grid>
+          </SimpleGrid>
+        </>
       )}
-
-      {/* <TextInput label="Комментарий" /> */}
-      <Button mt="10px">Сохранить</Button>
+      <Textarea label="Комментарий" />
+      <Button>Разместить объявление</Button>
     </Stack>
   );
-};
-
-export default NewPage;
+}

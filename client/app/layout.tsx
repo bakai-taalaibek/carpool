@@ -6,8 +6,7 @@ import "@mantine/dates/styles.css";
 import AppShellLayout from "./appShellLayout";
 
 export const metadata = {
-  title: "Mantine Next.js template",
-  description: "I am using Mantine with Next.js!",
+  title: "Poputka.pro",
 };
 
 export default function RootLayout({ children }: { children: any }) {
