@@ -1,12 +1,14 @@
-import "@mantine/core/styles.css";
+import "@mantine/core/styles.layer.css";
+import "@mantine/dates/styles.layer.css";
 import React from "react";
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { theme } from "../theme";
-import "@mantine/dates/styles.css";
-import AppShellLayout from "./appShellLayout";
+import BasicMantineLayout from "./basicMantineLayout";
+import DatesProviderWrapper from "./datesProvider";
 
 export const metadata = {
   title: "Poputka.pro",
+  description: "Найди свою попутку!",
 };
 
 export default function RootLayout({ children }: { children: any }) {
@@ -22,7 +24,9 @@ export default function RootLayout({ children }: { children: any }) {
       </head>
       <body>
         <MantineProvider theme={theme}>
-          <AppShellLayout>{children}</AppShellLayout>
+          <DatesProviderWrapper>
+            <BasicMantineLayout>{children}</BasicMantineLayout>
+          </DatesProviderWrapper>
         </MantineProvider>
       </body>
     </html>

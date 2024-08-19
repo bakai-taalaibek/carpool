@@ -12,7 +12,7 @@ export const metadata = {
   description: "I am using Mantine with Next.js!",
 };
 
-export default function AppShellLayout({ children }: { children: any }) {
+export default function BasicMantineLayout({ children }: { children: any }) {
   const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
   const pathname = usePathname();
 
@@ -36,7 +36,7 @@ export default function AppShellLayout({ children }: { children: any }) {
           />
           <Group justify="space-between" style={{ flex: 1 }}>
             <Text>Poputka.pro</Text>
-            <Group gap="10px" visibleFrom="sm">
+            <Group gap={10} visibleFrom="sm">
               {pathname !== "/new" && (
                 <Button
                   component={Link}

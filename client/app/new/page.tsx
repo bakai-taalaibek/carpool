@@ -1,28 +1,24 @@
 "use client";
 import {
   Button,
-  Fieldset,
-  Grid,
-  GridCol,
-  Group,
   NumberInput,
   SegmentedControl,
   Stack,
   Textarea,
   TextInput,
   Text,
-  Title,
   SimpleGrid,
 } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
+import { IconClock } from "@tabler/icons-react";
 import { useState } from "react";
 
 export default function NewPage() {
   const [role, setRole] = useState<string>("driver");
 
   return (
-    <Stack maw="600px" mx="auto" gap="33px">
-      <Text fz={{ base: "16px", xs: "18px", sm: "20px" }}>
+    <Stack maw={600} mx="auto" gap={33}>
+      <Text fz={{ base: 16, xs: 18, sm: 20 }}>
         Укажите детали вашей поездки:
       </Text>
       <SegmentedControl
@@ -46,7 +42,14 @@ export default function NewPage() {
         <TextInput label="Откуда" placeholder="Бишкек" required />
         <TextInput label="Куда" placeholder="Чолпон-Ата" required />
         <DatePickerInput label="День" required />
-        <TimeInput label="Время" placeholder="Укажите время" required />
+        <TimeInput
+          label="Время"
+          placeholder="Укажите время"
+          required
+          rightSection={
+            <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
+          }
+        />
       </SimpleGrid>
       {role === "driver" && (
         <>
@@ -66,7 +69,7 @@ export default function NewPage() {
           </SimpleGrid>
         </>
       )}
-      <Textarea label="Комментарий" />
+      <Textarea autosize minRows={2} label="Комментарий" />
       <Button>Разместить объявление</Button>
     </Stack>
   );
