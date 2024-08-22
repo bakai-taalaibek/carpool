@@ -1,6 +1,26 @@
-import { Box, Table } from "@mantine/core";
+"use client";
+import { useState } from "react";
+import {
+  Table,
+  ScrollArea,
+  UnstyledButton,
+  Group,
+  Text,
+  Center,
+  TextInput,
+  rem,
+  Box,
+  Flex,
+} from "@mantine/core";
+import {
+  IconSelector,
+  IconChevronDown,
+  IconChevronUp,
+  IconSearch,
+} from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
-const posts = [
+const posts: RowData[] = [
   {
     role: "Водитель",
     name: "John Doe",
@@ -8,7 +28,7 @@ const posts = [
       phoneCode: 1,
       phoneNumber: 1234567890,
     },
-    source: "New York, NY",
+    origin: "New York, NY",
     destination: "Washington, D.C.",
     departureDatetime: "2024-09-15T10:00:00Z",
     car: "Toyota Prius",
@@ -29,9 +49,9 @@ const posts = [
       phoneCode: 44,
       phoneNumber: 9876543210,
     },
-    source: "London, UK",
+    origin: "London, UK",
     destination: "Manchester, UK",
-    departureDatetime: "2024-09-16T14:00:00Z",
+    departureDatetime: "2024-09-15T14:00:00Z",
     car: null,
     seats: null,
     pricePerSeat: null,
@@ -50,9 +70,9 @@ const posts = [
       phoneCode: 33,
       phoneNumber: 2233445566,
     },
-    source: "Paris, France",
+    origin: "Paris, France",
     destination: "Marseille, France",
-    departureDatetime: "2024-09-17T08:30:00Z",
+    departureDatetime: "2023-09-17T08:30:00Z",
     car: "Peugeot 208",
     seats: 4,
     pricePerSeat: 25,
@@ -71,9 +91,9 @@ const posts = [
       phoneCode: 34,
       phoneNumber: 7788990011,
     },
-    source: "Madrid, Spain",
+    origin: "Madrid, Spain",
     destination: "Barcelona, Spain",
-    departureDatetime: "2024-09-18T09:00:00Z",
+    departureDatetime: "2025-09-18T09:00:00Z",
     car: null,
     seats: null,
     pricePerSeat: null,
@@ -92,7 +112,7 @@ const posts = [
       phoneCode: 49,
       phoneNumber: 5566778899,
     },
-    source: "Berlin, Germany",
+    origin: "Berlin, Germany",
     destination: "Hamburg, Germany",
     departureDatetime: "2024-09-19T13:00:00Z",
     car: "Volkswagen Golf",
@@ -113,7 +133,7 @@ const posts = [
       phoneCode: 61,
       phoneNumber: 6677889900,
     },
-    source: "Sydney, Australia",
+    origin: "Sydney, Australia",
     destination: "Melbourne, Australia",
     departureDatetime: "2024-09-20T07:30:00Z",
     car: null,
@@ -134,7 +154,7 @@ const posts = [
       phoneCode: 82,
       phoneNumber: 9988776655,
     },
-    source: "Seoul, South Korea",
+    origin: "Seoul, South Korea",
     destination: "Busan, South Korea",
     departureDatetime: "2024-09-21T06:00:00Z",
     car: "Hyundai Sonata",
@@ -155,7 +175,7 @@ const posts = [
       phoneCode: 86,
       phoneNumber: 4455667788,
     },
-    source: "Beijing, China",
+    origin: "Beijing, China",
     destination: "Shanghai, China",
     departureDatetime: "2024-09-22T08:00:00Z",
     car: null,
@@ -171,53 +191,247 @@ const posts = [
   },
 ];
 
-const tableData = {
-  head: [
-    "Роль автора",
-    "Имя",
-    "Телефон",
-    "Откуда",
-    "Куда",
-    "Время выезда",
-    "Авто",
-    "Мест",
-    "Цена/место",
-    "Цена/салон",
-    // "Детали",
-    // "Опубликовано",
-    // "Отредактировано",
-    // "ID пользователя",
-    // "ID объявления",
-    // "Мой пост?",
-  ],
+interface RowData {
+  role: string;
+  name: string | null;
+  phone: {
+    phoneCode: number;
+    phoneNumber: number;
+  };
+  origin: string;
+  destination: string;
+  departureDatetime: string;
+  car: string | null;
+  seats: number | null;
+  pricePerSeat: number | null;
+  pricePerCar: number | null;
+  details: string | null;
+  postDatetime: string;
+  lastEditedDatetime: string;
+  userId: number | null;
+  postId: number;
+  isOwnPost: boolean;
+}
 
-  body: posts.map((item) => {
-    if (item.name === null) {
-      (item.name as unknown as string) = "Анонимно";
-    }
+const headers: { name: string; value: keyof RowData }[] = [
+  {
+    name: "Кто",
+    value: "role",
+  },
+  {
+    name: "Имя",
+    value: "name",
+  },
+  {
+    name: "Телефон",
+    value: "phone",
+  },
+  {
+    name: "Откуда",
+    value: "origin",
+  },
+  {
+    name: "Куда",
+    value: "destination",
+  },
+  {
+    name: "Когда",
+    value: "departureDatetime",
+  },
+  {
+    name: "Цена/место",
+    value: "pricePerSeat",
+  },
+];
 
-    item.departureDatetime =
-      new Date(item.departureDatetime).toLocaleDateString("ru") +
-      " " +
-      new Date(item.departureDatetime).toLocaleTimeString("ru", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+interface ThProps {
+  children: React.ReactNode;
+  isReversed: boolean;
+  isCurrentSortingKey: boolean;
+  onSort(): void;
+}
 
-    return Object.values(item)
-      .splice(0, 10)
-      .map((item) =>
-        typeof item === "object" && item !== null
-          ? item.phoneCode + " " + item.phoneNumber
-          : item
-      );
-  }),
-};
+function Th({ children, isReversed, isCurrentSortingKey, onSort }: ThProps) {
+  const Icon = isCurrentSortingKey
+    ? isReversed
+      ? IconChevronUp
+      : IconChevronDown
+    : IconSelector;
+  return (
+    <Table.Th p={0}>
+      <Flex
+        w="full"
+        p="var(--mantine-spacing-xs) var(--mantine-spacing-md)"
+        style={{ cursor: "pointer" }}
+        onClick={onSort}
+        justify="space-between"
+        wrap="wrap"
+      >
+        <Text fw={500} fz="sm">
+          {children}
+        </Text>
+        <Center>
+          <Icon style={{ width: 16, height: 16 }} stroke={1.5} />
+        </Center>
+      </Flex>
+    </Table.Th>
+  );
+}
+
+function filterData(data: RowData[], search: string) {
+  const query = search.toLowerCase().trim();
+  return data.filter((item) =>
+    Object.values(item).some(
+      (value) =>
+        value !== null && value.toString().toLowerCase().includes(query)
+    )
+  );
+}
+
+function sortData({
+  data,
+  newSortKey,
+  isReversed,
+  searchString,
+}: {
+  data: RowData[];
+  newSortKey: keyof RowData | null;
+  isReversed: boolean;
+  searchString: string;
+}) {
+  if (!newSortKey) {
+    return filterData(data, searchString);
+  }
+  return filterData(
+    [...data].sort((a, b) => {
+      if (a[newSortKey] === null) {
+        return isReversed ? 0 : 1;
+      }
+
+      if (b[newSortKey] === null) {
+        return isReversed ? 1 : 0;
+      }
+
+      const result = a[newSortKey]
+        .toString()
+        .localeCompare(b[newSortKey].toString());
+
+      return isReversed ? -result : result;
+    }),
+    searchString
+  );
+}
 
 export default function HomePage() {
+  const [searchString, setSearchString] = useState("");
+  const [sortedData, setSortedData] = useState(posts);
+  const [sortKey, setSortKey] = useState<keyof RowData | null>(null);
+  const [isSortingReversed, setIsSortingReversed] = useState(false);
+  const router = useRouter();
+
+  const setSorting = (field: keyof RowData) => {
+    const isReversed = field === sortKey ? !isSortingReversed : false;
+    setIsSortingReversed(isReversed);
+    setSortKey(field);
+    setSortedData(
+      sortData({
+        data: posts,
+        newSortKey: field,
+        isReversed,
+        searchString,
+      })
+    );
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget;
+    setSearchString(value);
+    setSortedData(
+      sortData({
+        data: posts,
+        newSortKey: sortKey,
+        isReversed: isSortingReversed,
+        searchString: value,
+      })
+    );
+  };
+
+  const rows = sortedData.map((row) => (
+    <Table.Tr
+      key={row.postId}
+      style={{ cursor: "pointer" }}
+      onClick={() => router.push(`/post/${row.postId}`)}
+    >
+      <Table.Td>{row.role}</Table.Td>
+      <Table.Td>{row.name}</Table.Td>
+      <Table.Td>{row.phone.phoneCode + " " + row.phone.phoneNumber}</Table.Td>
+      <Table.Td>{row.origin}</Table.Td>
+      <Table.Td>{row.destination}</Table.Td>
+      <Table.Td>
+        {new Date(row.departureDatetime).toLocaleDateString("ru") +
+          ", " +
+          new Date(row.departureDatetime).toLocaleTimeString("ru", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+      </Table.Td>
+      <Table.Td style={{ textAlign: "center" }}>
+        {row.pricePerSeat && row.pricePerSeat + " сом"}
+      </Table.Td>
+    </Table.Tr>
+  ));
+
   return (
     <Box>
-      <Table data={tableData} />
+      <ScrollArea>
+        <TextInput
+          placeholder="Поиск по всем объявлениям"
+          mb="md"
+          leftSection={
+            <IconSearch
+              style={{ width: rem(16), height: rem(16) }}
+              stroke={1.5}
+            />
+          }
+          value={searchString}
+          onChange={handleSearchChange}
+        />
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          miw={700}
+          layout="fixed"
+          highlightOnHover
+        >
+          <Table.Thead>
+            <Table.Tr>
+              {headers.map((item) => (
+                <Th
+                  key={item.value}
+                  isCurrentSortingKey={sortKey === item.value}
+                  isReversed={isSortingReversed}
+                  onSort={() => setSorting(item.value)}
+                >
+                  {item.name}
+                </Th>
+              ))}
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            {rows.length > 0 ? (
+              rows
+            ) : (
+              <Table.Tr>
+                <Table.Td colSpan={7}>
+                  <Text fw={500} ta="center">
+                    Nothing found
+                  </Text>
+                </Table.Td>
+              </Table.Tr>
+            )}
+          </Table.Tbody>
+        </Table>
+      </ScrollArea>
     </Box>
   );
 }
