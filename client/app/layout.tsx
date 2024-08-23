@@ -5,6 +5,10 @@ import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { theme } from "../theme";
 import BasicMantineLayout from "./basicMantineLayout";
 import DatesProviderWrapper from "./datesProvider";
+import "dayjs/locale/ru";
+import dayjs from "dayjs";
+
+dayjs.locale("ru");
 
 export const metadata = {
   title: "Poputka.pro",
