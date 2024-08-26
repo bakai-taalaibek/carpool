@@ -35,7 +35,16 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             size="sm"
           />
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Text>Poputka.pro</Text>
+            <Text
+              component={Link}
+              href="/"
+              tt="uppercase"
+              c="cyan.8"
+              fw={700}
+              size="lg"
+            >
+              Poputka.pro
+            </Text>
             <Group gap={10} visibleFrom="sm">
               {pathname !== "/new" && (
                 <Button
