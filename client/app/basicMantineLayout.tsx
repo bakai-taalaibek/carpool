@@ -6,6 +6,8 @@ import "@mantine/dates/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Footer from "./footer";
+import { useScrollIntoView } from "@mantine/hooks";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -14,6 +16,9 @@ export const metadata = {
 
 export default function BasicMantineLayout({ children }: { children: any }) {
   const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
+  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
+    duration: 800,
+  });
   const pathname = usePathname();
 
   return (
@@ -57,14 +62,12 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                   + Новая попутка
                 </Button>
               )}
-              <Button variant="subtle" radius="xl">
-                Blog
-              </Button>
-              <Button variant="subtle" radius="xl">
-                Contacts
-              </Button>
-              <Button variant="subtle" radius="xl">
-                Support
+              <Button
+                variant="subtle"
+                radius="xl"
+                onClick={() => scrollIntoView()}
+              >
+                Оставить отзыв
               </Button>
             </Group>
           </Group>
@@ -79,6 +82,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
       </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>
+      <Footer ref={targetRef} />
     </AppShell>
   );
 }
