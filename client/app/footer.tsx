@@ -8,20 +8,17 @@ import {
   Center,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { forwardRef, RefObject } from "react";
+import { forwardRef } from "react";
 
-const Footer = forwardRef<HTMLDivElement>(function Footer(props, ref) {
+const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
   const form = useForm({
     initialValues: {
       name: "",
       email: "",
-      subject: "",
       message: "",
     },
     validate: {
-      name: (value) => value.trim().length < 2,
-      email: (value) => !/^\S+@\S+$/.test(value),
-      subject: (value) => value.trim().length === 0,
+      message: (value) => value.trim().length === 0,
     },
   });
 
@@ -58,15 +55,6 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(props, ref) {
             {...form.getInputProps("email")}
           />
         </SimpleGrid>
-
-        <TextInput
-          label="Тема"
-          placeholder="Тема"
-          mt="md"
-          name="subject"
-          variant="filled"
-          {...form.getInputProps("subject")}
-        />
         <Textarea
           label="Сообщение"
           mt="md"
