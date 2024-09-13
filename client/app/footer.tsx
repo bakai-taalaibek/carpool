@@ -1,4 +1,5 @@
 import {
+  Text,
   TextInput,
   Textarea,
   SimpleGrid,
@@ -6,9 +7,15 @@ import {
   Title,
   Button,
   Center,
+  Box,
+  Flex,
+  Grid,
+  Paper,
+  GridCol,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { forwardRef } from "react";
+import { ContactIconsList } from "./contactIcons";
 
 const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
   const form = useForm({
@@ -25,54 +32,63 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
   return (
     <Center
       ref={ref}
-      py={20}
-      style={{ borderTop: "1px solid var(--mantine-color-gray-3)" }}
+      w="100%"
+      bg="linear-gradient(-60deg, var(--mantine-color-blue-4) 0%, var(--mantine-color-blue-7) 100%)"
     >
-      <form style={{ width: "500px" }} onSubmit={form.onSubmit(() => {})}>
-        <Title
-          order={2}
-          size="h1"
-          style={{ fontFamily: "Greycliff CF, var(--mantine-font-family)" }}
-          fw={900}
-          ta="center"
-        >
-          Оставить отзыв
-        </Title>
+      <Grid
+        gutter={50}
+        mih={400}
+        justify="center"
+        p={{
+          base: "calc(var(--mantine-spacing-xl) * 1.5)",
+          sm: "calc(var(--mantine-spacing-xl) * 2.5)",
+        }}
+      >
+        <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
+          <Title c="white" lh={1} ff="Greycliff CF">
+            Contact us
+          </Title>
+          <Text
+            c="var(--mantine-color-blue-0)"
+            maw={{ base: "100%", sm: 300 }}
+            mt="sm"
+            mb={30}
+          >
+            Leave your email and we will get back to you within 24 hours
+          </Text>
 
-        <SimpleGrid cols={{ base: 1, sm: 2 }} mt="xl">
-          <TextInput
-            label="Имя"
-            placeholder="Ваше имя"
-            name="name"
-            variant="filled"
-            {...form.getInputProps("name")}
-          />
-          <TextInput
-            label="Почта"
-            placeholder="Ваша электронная почта"
-            name="email"
-            variant="filled"
-            {...form.getInputProps("email")}
-          />
-        </SimpleGrid>
-        <Textarea
-          label="Сообщение"
-          mt="md"
-          placeholder="Ваше сообщение"
-          maxRows={10}
-          minRows={5}
-          autosize
-          name="message"
-          variant="filled"
-          {...form.getInputProps("message")}
-        />
+          <ContactIconsList />
+        </GridCol>
 
-        <Group justify="center" mt="xl">
-          <Button type="submit" size="md">
-            Отправить отзыв
-          </Button>
-        </Group>
-      </form>
+        <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
+          <Paper bg="white" p="xl" shadow="lg" radius="md" w="100%">
+            <TextInput
+              label="Email"
+              placeholder="your@email.com"
+              required
+              // classNames={{ input: classes.input, label: classes.inputLabel }}
+            />
+            <TextInput
+              label="Name"
+              placeholder="John Doe"
+              mt="md"
+              // classNames={{ input: classes.input, label: classes.inputLabel }}
+            />
+            <Textarea
+              required
+              label="Your message"
+              placeholder="I want to order your goods"
+              minRows={4}
+              mt="md"
+              // classNames={{ input: classes.input, label: classes.inputLabel }}
+            />
+
+            <Group justify="flex-end" mt="md">
+              <Button bg="var(--mantine-color-blue-6)">Send message</Button>
+            </Group>
+          </Paper>
+        </GridCol>
+      </Grid>
     </Center>
   );
 });
