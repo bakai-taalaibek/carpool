@@ -46,7 +46,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
       >
         <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
           <Title c="white" lh={1} ff="Greycliff CF">
-            Contact us
+            Свяжитесь с нами
           </Title>
           <Text
             c="var(--mantine-color-blue-0)"
@@ -54,7 +54,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
             mt="sm"
             mb={30}
           >
-            Leave your email and we will get back to you within 24 hours
+            Можете задать вопрос, оставить отзыв или внести предложения
           </Text>
 
           <ContactIconsList />
@@ -63,28 +63,25 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
         <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
           <Paper bg="white" p="xl" shadow="lg" radius="md" w="100%">
             <TextInput
-              label="Email"
+              label="Имя"
+              placeholder="Асан Асанов"
+              />
+            <TextInput
+              label="Электронная почта"
               placeholder="your@email.com"
               required
-              // classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
-            <TextInput
-              label="Name"
-              placeholder="John Doe"
               mt="md"
-              // classNames={{ input: classes.input, label: classes.inputLabel }}
             />
             <Textarea
               required
-              label="Your message"
-              placeholder="I want to order your goods"
+              label="Ваше сообщение"
+              placeholder="У меня есть предложение о сотрудничестве"
               minRows={4}
               mt="md"
-              // classNames={{ input: classes.input, label: classes.inputLabel }}
             />
 
             <Group justify="flex-end" mt="md">
-              <Button bg="var(--mantine-color-blue-6)">Send message</Button>
+              <Button bg="var(--mantine-color-blue-6)">Отправить сообщение</Button>
             </Group>
           </Paper>
         </GridCol>
