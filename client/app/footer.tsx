@@ -12,6 +12,7 @@ import {
   Grid,
   Paper,
   GridCol,
+  Stack,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { forwardRef } from "react";
@@ -43,6 +44,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
           base: "calc(var(--mantine-spacing-xl) * 1.5)",
           sm: "calc(var(--mantine-spacing-xl) * 2.5)",
         }}
+        pb="xl"
       >
         <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
           <Title c="white" lh={1} ff="Greycliff CF">
@@ -54,7 +56,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
             mt="sm"
             mb={30}
           >
-            Можете задать вопрос, оставить отзыв или внести предложения
+            Задайте вопрос, оставьте отзыв или предложение...
           </Text>
 
           <ContactIconsList />
@@ -62,10 +64,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
 
         <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
           <Paper bg="white" p="xl" shadow="lg" radius="md" w="100%">
-            <TextInput
-              label="Имя"
-              placeholder="Асан Асанов"
-              />
+            <TextInput label="Имя" placeholder="Асан Асанов" />
             <TextInput
               label="Электронная почта"
               placeholder="your@email.com"
@@ -81,9 +80,16 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
             />
 
             <Group justify="flex-end" mt="md">
-              <Button bg="var(--mantine-color-blue-6)">Отправить сообщение</Button>
+              <Button bg="var(--mantine-color-blue-6)">
+                Отправить сообщение
+              </Button>
             </Group>
           </Paper>
+        </GridCol>
+        <GridCol span={12} p="md">
+          <Text ta="center" c="white" fz={14} fw={500}>
+            © {new Date().getFullYear()} Bakai Taalaibek uulu
+          </Text>
         </GridCol>
       </Grid>
     </Center>
