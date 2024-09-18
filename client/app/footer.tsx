@@ -26,6 +26,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
       message: "",
     },
     validate: {
+      email: (value) => !/^\S+@\S+$/.test(value),
       message: (value) => value.trim().length === 0,
     },
   });
@@ -64,12 +65,17 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
 
         <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
           <Paper bg="white" p="xl" shadow="lg" radius="md" w="100%">
-            <TextInput label="Имя" placeholder="Асан Асанов" />
+            <TextInput
+              label="Имя"
+              placeholder="Асан Асанов"
+              {...form.getInputProps("name")}
+            />
             <TextInput
               label="Электронная почта"
               placeholder="your@email.com"
               required
               mt="md"
+              {...form.getInputProps("email")}
             />
             <Textarea
               required
@@ -77,6 +83,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
               placeholder="У меня есть предложение о сотрудничестве"
               minRows={4}
               mt="md"
+              {...form.getInputProps("message")}
             />
 
             <Group justify="flex-end" mt="md">
