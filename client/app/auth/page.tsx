@@ -24,7 +24,7 @@ export default function AuthenticationForm(props: PaperProps) {
       email: "",
       name: "",
       password: "",
-      terms: true,
+      terms: false,
     },
 
     validate: {
@@ -37,10 +37,18 @@ export default function AuthenticationForm(props: PaperProps) {
   });
 
   return (
-    <Center h="100svh">
-      <Paper radius="md" p="xl" withBorder {...props}>
-        <Text size="lg" fw={500}>
-          Welcome to Mantine, {type} with
+    <Center
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        top: 0,
+        left: 0,
+      }}
+    >
+      <Paper radius="md" p="xl" withBorder w={400} {...props}>
+        <Text size="lg" fw={500} ta="center">
+          {type === "login" ? "Войдите в свой аккаунт" : "Регистрация"}
         </Text>
 
         <Button
@@ -54,18 +62,14 @@ export default function AuthenticationForm(props: PaperProps) {
           Google
         </Button>
 
-        <Divider
-          label="Or continue with email"
-          labelPosition="center"
-          my="lg"
-        />
+        <Divider label="Или используйте почту" labelPosition="center" my="lg" />
 
         <form onSubmit={form.onSubmit(() => {})}>
           <Stack>
             {type === "register" && (
               <TextInput
-                label="Name"
-                placeholder="Your name"
+                label="Имя"
+                placeholder="Ваше имя"
                 value={form.values.name}
                 onChange={(event) =>
                   form.setFieldValue("name", event.currentTarget.value)
@@ -76,34 +80,33 @@ export default function AuthenticationForm(props: PaperProps) {
 
             <TextInput
               required
-              label="Email"
-              placeholder="hello@mantine.dev"
+              label="Почта"
+              placeholder="your.name@email.com"
               value={form.values.email}
               onChange={(event) =>
                 form.setFieldValue("email", event.currentTarget.value)
               }
-              error={form.errors.email && "Invalid email"}
+              error={form.errors.email && "Недействительная почта"}
               radius="md"
             />
 
             <PasswordInput
               required
-              label="Password"
-              placeholder="Your password"
+              label="Пароль"
+              placeholder="Ваш пароль"
               value={form.values.password}
               onChange={(event) =>
                 form.setFieldValue("password", event.currentTarget.value)
               }
               error={
-                form.errors.password &&
-                "Password should include at least 6 characters"
+                form.errors.password && "Минимальная длина пароля — 6 символов"
               }
               radius="md"
             />
 
             {type === "register" && (
               <Checkbox
-                label="I accept terms and conditions"
+                label="Я принимаю условия"
                 checked={form.values.terms}
                 onChange={(event) =>
                   form.setFieldValue("terms", event.currentTarget.checked)
@@ -121,11 +124,11 @@ export default function AuthenticationForm(props: PaperProps) {
               size="xs"
             >
               {type === "register"
-                ? "Already have an account? Login"
-                : "Don't have an account? Register"}
+                ? "Уже есть аккаунт? Войдите"
+                : "Нет аккаунта? Зарегистрируйтесь"}
             </Anchor>
             <Button type="submit" radius="xl">
-              {upperFirst(type)}
+              {type === "login" ? "Войти" : "Далее"}
             </Button>
           </Group>
         </form>

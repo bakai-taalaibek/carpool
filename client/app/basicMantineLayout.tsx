@@ -69,6 +69,14 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               >
                 Оставить отзыв
               </Button>
+              <Button
+                component={Link}
+                href="/auth"
+                variant="subtle"
+                radius="xl"
+              >
+                Войти
+              </Button>
             </Group>
           </Group>
         </Group>
