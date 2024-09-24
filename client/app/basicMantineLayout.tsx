@@ -50,7 +50,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             >
               Poputka.pro
             </Text>
-            <Group gap={10} visibleFrom="sm">
+            <Group gap={20} visibleFrom="sm">
               {pathname !== "/new" && (
                 <Button
                   component={Link}
@@ -64,6 +64,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               )}
               <Button
                 variant="subtle"
+                color="cyan"
                 radius="xl"
                 onClick={() => scrollIntoView()}
               >
@@ -73,6 +74,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                 component={Link}
                 href="/auth"
                 variant="subtle"
+                color="cyan"
                 radius="xl"
               >
                 Войти
