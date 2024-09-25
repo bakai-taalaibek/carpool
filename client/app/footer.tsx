@@ -66,30 +66,24 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
         <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
           <Paper bg="white" p="xl" shadow="lg" radius="md" w="100%">
             <TextInput
-              label="Имя"
-              placeholder="Асан Асанов"
-              {...form.getInputProps("name")}
-            />
-            <TextInput
               label="Электронная почта"
               placeholder="your@email.com"
               required
-              mt="md"
+              mt="xs"
               {...form.getInputProps("email")}
             />
             <Textarea
+              autosize
               required
               label="Ваше сообщение"
-              placeholder="У меня есть предложение о сотрудничестве"
-              minRows={4}
+              placeholder="Привет, меня зовут..."
+              minRows={2}
               mt="md"
               {...form.getInputProps("message")}
             />
 
             <Group justify="flex-end" mt="md">
-              <Button bg="var(--mantine-color-blue-6)">
-                Отправить сообщение
-              </Button>
+              <Button bg="var(--mantine-color-blue-6)">Отправить</Button>
             </Group>
           </Paper>
         </GridCol>

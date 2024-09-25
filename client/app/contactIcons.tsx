@@ -1,5 +1,12 @@
 import { Text, Box, Stack, rem, Flex } from "@mantine/core";
-import { IconSun, IconPhone, IconMapPin, IconAt } from "@tabler/icons-react";
+import {
+  IconSun,
+  IconPhone,
+  IconMapPin,
+  IconAt,
+  IconBrandWhatsapp,
+  IconBrandTelegram,
+} from "@tabler/icons-react";
 
 interface ContactIconProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "title"> {
@@ -31,8 +38,17 @@ function ContactIcon({
 }
 
 const MOCKDATA = [
-  { title: "Email", description: "hello@mantine.dev", icon: IconAt },
-  { title: "Phone", description: "+49 (800) 335 35 35", icon: IconPhone },
+  { title: "Email", description: "bakai.pochta@gmail.com", icon: IconAt },
+  {
+    title: "WhatsApp",
+    description: "+996 500 391990",
+    icon: IconBrandWhatsapp,
+  },
+  {
+    title: "Telegram",
+    description: "t.me/bakai_abc",
+    icon: IconBrandTelegram,
+  },
 ];
 
 export function ContactIconsList() {
