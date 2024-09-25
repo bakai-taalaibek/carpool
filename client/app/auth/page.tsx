@@ -17,6 +17,7 @@ import {
   Title,
 } from "@mantine/core";
 import GoogleIcon from "../../public/icons/GoogleIcon";
+import Link from "next/link";
 
 export default function AuthenticationForm(props: PaperProps) {
   const [type, toggle] = useToggle(["login", "register"]);
@@ -38,28 +39,28 @@ export default function AuthenticationForm(props: PaperProps) {
   });
 
   return (
-    <Stack
+    <Center
       style={{
         position: "absolute",
         width: "100%",
         height: "100%",
         top: 0,
         left: 0,
-        paddingTop: 80,
-        gap: 0,
-        alignItems: "center",
+        paddingTop: 40,
       }}
     >
-      <Title ta="center" fw={900} mb={5}>
-        Добро пожаловать!
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mb={20}>
-        {type === "register" ? "Уже есть аккаунт? " : "Нет аккаунта? "}
-        <Anchor size="sm" component="button" onClick={() => toggle()}>
-          {type === "register" ? "Войдите" : "Зарегистрируйтесь"}
-        </Anchor>
-      </Text>
       <Paper radius="md" p="xl" withBorder w={400} shadow="md" {...props}>
+        <Text ta="center" fw={900} mb={5} size="xl">
+          {type === "register"
+            ? "Зарегистрируйтесь с помощью..."
+            : "Войдите с помощью..."}
+        </Text>
+        <Text c="dimmed" size="sm" ta="center" mb={20}>
+          {type === "register" ? "Уже есть аккаунт? " : "Нет аккаунта? "}
+          <Anchor size="sm" component="button" onClick={() => toggle()}>
+            {type === "register" ? "Войдите" : "Зарегистрируйтесь"}
+          </Anchor>
+        </Text>
         <Button
           leftSection={<GoogleIcon />}
           variant="default"
@@ -70,10 +71,15 @@ export default function AuthenticationForm(props: PaperProps) {
           Google
         </Button>
 
-        <Divider label="Или используйте почту" labelPosition="center" my="lg" />
+        <Divider
+          label="Или используйте почту"
+          labelPosition="center"
+          mt="lg"
+          mb="xs"
+        />
 
         <form onSubmit={form.onSubmit(() => {})}>
-          <Stack gap={0}>
+          <Stack>
             {type === "register" && (
               <TextInput
                 label="Имя"
@@ -83,7 +89,6 @@ export default function AuthenticationForm(props: PaperProps) {
                   form.setFieldValue("name", event.currentTarget.value)
                 }
                 radius="md"
-                mb={16}
               />
             )}
 
@@ -97,7 +102,6 @@ export default function AuthenticationForm(props: PaperProps) {
               }
               error={form.errors.email && "Недействительная почта"}
               radius="md"
-              mb={16}
             />
 
             <PasswordInput
@@ -112,7 +116,6 @@ export default function AuthenticationForm(props: PaperProps) {
                 form.errors.password && "Минимальная длина пароля — 6 символов"
               }
               radius="md"
-              mb={8}
             />
 
             {type === "register" && (
@@ -127,7 +130,13 @@ export default function AuthenticationForm(props: PaperProps) {
           </Stack>
 
           <Group justify="space-between" mt="xl">
-            <Anchor href="/auth/restore" c="dimmed" size="sm" ta="start">
+            <Anchor
+              component={Link}
+              href="/auth/restore"
+              c="dimmed"
+              size="sm"
+              ta="start"
+            >
               Забыли пароль?
             </Anchor>
             <Button type="submit">
@@ -136,6 +145,6 @@ export default function AuthenticationForm(props: PaperProps) {
           </Group>
         </form>
       </Paper>
-    </Stack>
+    </Center>
   );
 }

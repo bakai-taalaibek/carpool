@@ -13,32 +13,30 @@ import {
   Stack,
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
+import Link from "next/link";
 
 export default function ForgotPassword() {
   return (
-    <Stack
+    <Center
       style={{
         position: "absolute",
         width: "100%",
         height: "100%",
         top: 0,
         left: 0,
-        paddingTop: 80,
-        gap: 0,
-        alignItems: "center",
+        paddingTop: 40,
       }}
     >
-      <Title ta="center" fw={900} mb={5}>
-        Забыли пароль?
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mb={20}>
-        Получите ссылку сброс пароля на почту
-      </Text>
-
       <Paper withBorder shadow="md" p={30} radius="md" w={400}>
+        <Text ta="center" fw={900} mb={5} size="xl">
+          Забыли пароль?
+        </Text>
+        <Text c="dimmed" size="sm" ta="center" mb={20}>
+          Получите ссылку сброс пароля на почту
+        </Text>
         <TextInput label="Почта" placeholder="your.name@email.com" required />
         <Group justify="space-between" mt="lg">
-          <Anchor href="/auth" c="dimmed" size="sm">
+          <Anchor component={Link} href="/auth" c="dimmed" size="sm">
             <Center inline>
               <IconArrowLeft
                 style={{ width: rem(12), height: rem(12) }}
@@ -47,9 +45,9 @@ export default function ForgotPassword() {
               <Box ml={5}>Назад </Box>
             </Center>
           </Anchor>
-          <Button >Получить ссылку</Button>
+          <Button>Получить ссылку</Button>
         </Group>
       </Paper>
-    </Stack>
+    </Center>
   );
 }
