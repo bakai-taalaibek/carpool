@@ -56,7 +56,7 @@ export default function AuthenticationForm(props: PaperProps) {
             : "Войдите с помощью..."}
         </Text>
         <Text c="dimmed" size="sm" ta="center" mb={20}>
-          {type === "register" ? "Уже есть аккаунт? " : "Нет аккаунта? "}
+          {type === "register" ? "Уже есть аккаунт? " : "Еще нет аккаунта? "}
           <Anchor size="sm" component="button" onClick={() => toggle()}>
             {type === "register" ? "Войдите" : "Зарегистрируйтесь"}
           </Anchor>

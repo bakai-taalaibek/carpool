@@ -27,7 +27,7 @@ export default function ForgotPassword() {
         paddingTop: 40,
       }}
     >
-      <Paper withBorder shadow="md" p={30} radius="md" w={400}>
+      <Paper withBorder shadow="md" p="xl" radius="md" w={400}>
         <Text ta="center" fw={900} mb={5} size="xl">
           Забыли пароль?
         </Text>

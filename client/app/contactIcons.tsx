@@ -1,16 +1,9 @@
 import { Text, Box, Stack, rem, Flex } from "@mantine/core";
-import {
-  IconSun,
-  IconPhone,
-  IconMapPin,
-  IconAt,
-  IconBrandWhatsapp,
-  IconBrandTelegram,
-} from "@tabler/icons-react";
+import { IconAt, IconBrandTelegram } from "@tabler/icons-react";
 
 interface ContactIconProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "title"> {
-  icon: typeof IconSun;
+  icon: typeof IconAt;
   title: React.ReactNode;
   description: React.ReactNode;
 }
@@ -39,11 +32,11 @@ function ContactIcon({
 
 const MOCKDATA = [
   { title: "Email", description: "bakai.pochta@gmail.com", icon: IconAt },
-  {
-    title: "WhatsApp",
-    description: "+996 500 391990",
-    icon: IconBrandWhatsapp,
-  },
+  // {
+  //   title: "WhatsApp",
+  //   description: "+996 500 391990",
+  //   icon: IconBrandWhatsapp,
+  // },
   {
     title: "Telegram",
     description: "t.me/bakai_abc",
