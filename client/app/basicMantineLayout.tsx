@@ -1,13 +1,37 @@
 "use client";
 import "@mantine/core/styles.css";
 import React from "react";
-import { AppShell, Group, Burger, Text, Button } from "@mantine/core";
+import {
+  AppShell,
+  Group,
+  Burger,
+  Text,
+  Button,
+  Avatar,
+  Indicator,
+  Menu,
+  MenuTarget,
+  MenuDropdown,
+  MenuLabel,
+  MenuItem,
+  MenuDivider,
+  Box,
+} from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Footer from "./footer";
 import { useScrollIntoView } from "@mantine/hooks";
+import {
+  IconArrowsLeftRight,
+  IconLogout2,
+  IconMessageCircle,
+  IconPhoto,
+  IconSearch,
+  IconSettings,
+  IconTrash,
+} from "@tabler/icons-react";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -79,6 +103,48 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               >
                 Войти
               </Button>
+
+              <Box mr={10}>
+                <Menu shadow="md" width={200} position="bottom-end">
+                  <MenuTarget>
+                    <Indicator
+                      position="top-end"
+                      color="red"
+                      label={2}
+                      size={16}
+                      offset={4}
+                    >
+                      <Avatar
+                        color="blue"
+                        radius="xl"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </Indicator>
+                  </MenuTarget>
+
+                  <MenuDropdown>
+                    <MenuLabel>Таалайбек уулу Бакай</MenuLabel>
+                    <MenuItem
+                      leftSection={
+                        <IconSettings style={{ width: 14, height: 14 }} />
+                      }
+                    >
+                      Профиль
+                    </MenuItem>
+                    <MenuItem
+                      leftSection={
+                        <IconLogout2 style={{ width: 14, height: 14 }} />
+                      }
+                    >
+                      Выйти
+                    </MenuItem>
+
+                    <MenuDivider />
+
+                    <MenuLabel>Уведомления</MenuLabel>
+                  </MenuDropdown>
+                </Menu>
+              </Box>
             </Group>
           </Group>
         </Group>
