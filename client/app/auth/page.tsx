@@ -24,17 +24,19 @@ export default function AuthenticationForm(props: PaperProps) {
   const form = useForm({
     initialValues: {
       email: "",
-      name: "",
       password: "",
+      passwordConfirmation: "",
       terms: false,
     },
 
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      email: (val) =>
+        /^\S+@\S+$/.test(val) ? null : "Недействительный формат почты",
       password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
+        val.length <= 6 ? "Минимальная длина пароля - 6 символов" : null,
+      passwordConfirmation: (val, values) =>
+        val === values.password ? null : "Введенные пароли не совпадают",
+      terms: (val) => !val,
     },
   });
 
@@ -80,18 +82,6 @@ export default function AuthenticationForm(props: PaperProps) {
 
         <form onSubmit={form.onSubmit(() => {})}>
           <Stack>
-            {type === "register" && (
-              <TextInput
-                label="Имя"
-                placeholder="Ваше имя"
-                value={form.values.name}
-                onChange={(event) =>
-                  form.setFieldValue("name", event.currentTarget.value)
-                }
-                radius="md"
-              />
-            )}
-
             <TextInput
               required
               label="Почта"
@@ -100,7 +90,7 @@ export default function AuthenticationForm(props: PaperProps) {
               onChange={(event) =>
                 form.setFieldValue("email", event.currentTarget.value)
               }
-              error={form.errors.email && "Недействительная почта"}
+              error={form.errors.email}
               radius="md"
             />
 
@@ -112,33 +102,50 @@ export default function AuthenticationForm(props: PaperProps) {
               onChange={(event) =>
                 form.setFieldValue("password", event.currentTarget.value)
               }
-              error={
-                form.errors.password && "Минимальная длина пароля — 6 символов"
-              }
+              error={form.errors.password}
               radius="md"
             />
 
             {type === "register" && (
+              <PasswordInput
+                required
+                label="Подтвердите пароль"
+                placeholder="Введите пароль снова"
+                value={form.values.passwordConfirmation}
+                onChange={(event) =>
+                  form.setFieldValue(
+                    "passwordConfirmation",
+                    event.currentTarget.value
+                  )
+                }
+                error={form.errors.passwordConfirmation}
+                radius="md"
+              />
+            )}
+          </Stack>
+
+          <Group justify="space-between" mt="xl">
+            {type === "register" ? (
               <Checkbox
                 label="Я принимаю условия"
                 checked={form.values.terms}
                 onChange={(event) =>
                   form.setFieldValue("terms", event.currentTarget.checked)
                 }
+                error={form.errors.terms}
               />
+            ) : (
+              <Anchor
+                component={Link}
+                href="/auth/restore"
+                c="dimmed"
+                size="sm"
+                ta="start"
+              >
+                Забыли пароль?
+              </Anchor>
             )}
-          </Stack>
 
-          <Group justify="space-between" mt="xl">
-            <Anchor
-              component={Link}
-              href="/auth/restore"
-              c="dimmed"
-              size="sm"
-              ta="start"
-            >
-              Забыли пароль?
-            </Anchor>
             <Button type="submit">
               {type === "login" ? "Войти" : "Далее"}
             </Button>

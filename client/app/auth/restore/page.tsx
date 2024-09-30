@@ -32,16 +32,13 @@ export default function ForgotPassword() {
           Забыли пароль?
         </Text>
         <Text c="dimmed" size="sm" ta="center" mb={20}>
-          Получите ссылку сброс пароля на почту
+          Получите ссылку на сброс пароля
         </Text>
         <TextInput label="Почта" placeholder="your.name@email.com" required />
         <Group justify="space-between" mt="lg">
           <Anchor component={Link} href="/auth" c="dimmed" size="sm">
             <Center inline>
-              <IconArrowLeft
-                style={{ width: rem(12), height: rem(12) }}
-                stroke={1.5}
-              />
+              <IconArrowLeft style={{ width: 12, height: 12 }} stroke={1.5} />
               <Box ml={5}>Назад </Box>
             </Center>
           </Anchor>

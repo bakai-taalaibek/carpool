@@ -17,7 +17,7 @@ function ContactIcon({
   return (
     <Flex align="center" c="white" {...others}>
       <Box mr="md">
-        <Icon style={{ width: rem(24), height: rem(24) }} />
+        <Icon style={{ width: 24, height: 24 }} />
       </Box>
 
       <div>

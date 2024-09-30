@@ -23,15 +23,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Footer from "./footer";
 import { useScrollIntoView } from "@mantine/hooks";
-import {
-  IconArrowsLeftRight,
-  IconLogout2,
-  IconMessageCircle,
-  IconPhoto,
-  IconSearch,
-  IconSettings,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconLogout2, IconSettings } from "@tabler/icons-react";
 
 export const metadata = {
   title: "Mantine Next.js template",

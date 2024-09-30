@@ -196,10 +196,7 @@ export default function HomePage() {
           placeholder="Поиск по всем объявлениям"
           mb="md"
           leftSection={
-            <IconSearch
-              style={{ width: rem(16), height: rem(16) }}
-              stroke={1.5}
-            />
+            <IconSearch style={{ width: 16, height: 16 }} stroke={1.5} />
           }
           value={searchString}
           onChange={handleSearchChange}
