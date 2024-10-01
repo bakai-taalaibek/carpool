@@ -16,6 +16,8 @@ import {
   MenuItem,
   MenuDivider,
   Box,
+  Notification,
+  Stack,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure } from "@mantine/hooks";
@@ -97,7 +99,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               </Button>
 
               <Box mr={10}>
-                <Menu shadow="md" width={200} position="bottom-end">
+                <Menu shadow="md" width={250} position="bottom-end">
                   <MenuTarget>
                     <Indicator
                       position="top-end"
@@ -130,10 +132,82 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                     >
                       Выйти
                     </MenuItem>
-
                     <MenuDivider />
-
-                    <MenuLabel>Уведомления</MenuLabel>
+                    <MenuLabel pb={0}>Уведомления</MenuLabel>
+                    <Stack gap={8}>
+                      <Group w="full">
+                        <Button
+                          variant="transparent"
+                          size="xs"
+                          color="blue"
+                          ml="auto"
+                          h={20}
+                        >
+                          Очистить все
+                        </Button>
+                      </Group>
+                      <Notification
+                        title="We notify you that"
+                        styles={{
+                          root: {
+                            boxShadow: "0px 0px 8px -5px rgba(0, 0, 0, 0.5)",
+                          },
+                          title: {
+                            fontSize: "12px",
+                          },
+                          description: {
+                            fontSize: "12px",
+                          },
+                        }}
+                      >
+                        You are now obligated to give a star to Mantine project
+                        on GitHub
+                      </Notification>
+                      <Notification
+                        title="We notify you that"
+                        styles={{
+                          root: {
+                            boxShadow: "0px 0px 8px -5px rgba(0, 0, 0, 0.5)",
+                          },
+                          title: {
+                            fontSize: "12px",
+                          },
+                          description: {
+                            fontSize: "12px",
+                          },
+                        }}
+                      >
+                        You are now obligated to give a star to Mantine project
+                        on GitHub
+                      </Notification>
+                      <Notification
+                        title="We notify you that"
+                        styles={{
+                          root: {
+                            boxShadow: "0px 0px 8px -5px rgba(0, 0, 0, 0.5)",
+                          },
+                          title: {
+                            fontSize: "12px",
+                          },
+                          description: {
+                            fontSize: "12px",
+                          },
+                        }}
+                      >
+                        You are now obligated to give a star to Mantine project
+                        on GitHub
+                      </Notification>
+                      <Group justify="center" w="full">
+                        <Button
+                          variant="light"
+                          radius="xl"
+                          color="gray"
+                          size="xs"
+                        >
+                          Просмотреть все
+                        </Button>
+                      </Group>
+                    </Stack>
                   </MenuDropdown>
                 </Menu>
               </Box>
