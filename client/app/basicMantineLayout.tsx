@@ -26,11 +26,30 @@ import { usePathname } from "next/navigation";
 import Footer from "./footer";
 import { useScrollIntoView } from "@mantine/hooks";
 import { IconLogout2, IconSettings } from "@tabler/icons-react";
+import NotificationCustom from "./notificationCustom";
 
 export const metadata = {
   title: "Mantine Next.js template",
   description: "I am using Mantine with Next.js!",
 };
+
+const notifications = [
+  {
+    id: 1,
+    title: "Ответ на комментарий",
+    description: "Привет, меня зовут Паша, сколько мест еще есть?",
+  },
+  {
+    id: 2,
+    title: "Комментарий к объявлению",
+    description: "Привет, меня зовут Паша, сколько мест еще есть?",
+  },
+  {
+    id: 3,
+    title: "Личное сообщение",
+    description: "Привет, меня зовут Паша, сколько мест еще есть?",
+  },
+];
 
 export default function BasicMantineLayout({ children }: { children: any }) {
   const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
@@ -99,7 +118,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               </Button>
 
               <Box mr={10}>
-                <Menu shadow="md" width={250} position="bottom-end">
+                <Menu shadow="md" width={280} position="bottom-end">
                   <MenuTarget>
                     <Indicator
                       position="top-end"
@@ -116,7 +135,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                     </Indicator>
                   </MenuTarget>
 
-                  <MenuDropdown>
+                  <MenuDropdown px={0}>
                     <MenuLabel>Таалайбек уулу Бакай</MenuLabel>
                     <MenuItem
                       leftSection={
@@ -134,7 +153,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                     </MenuItem>
                     <MenuDivider />
                     <MenuLabel pb={0}>Уведомления</MenuLabel>
-                    <Stack gap={8}>
+                    <Stack gap={0}>
                       <Group w="full">
                         <Button
                           variant="transparent"
@@ -142,67 +161,30 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                           color="blue"
                           ml="auto"
                           h={20}
+                          mb={5}
                         >
                           Очистить все
                         </Button>
                       </Group>
-                      <Notification
-                        title="We notify you that"
-                        styles={{
-                          root: {
-                            boxShadow: "0px 0px 8px -5px rgba(0, 0, 0, 0.5)",
-                          },
-                          title: {
-                            fontSize: "12px",
-                          },
-                          description: {
-                            fontSize: "12px",
-                          },
+                      {notifications.map((item) => (
+                        <NotificationCustom key={item.id} title={item.title}>
+                          {item.description}
+                        </NotificationCustom>
+                      ))}
+                      <Group
+                        justify="center"
+                        w="full"
+                        style={{
+                          borderTop: "1px solid var(--mantine-color-gray-2)",
                         }}
+                        py={3}
                       >
-                        You are now obligated to give a star to Mantine project
-                        on GitHub
-                      </Notification>
-                      <Notification
-                        title="We notify you that"
-                        styles={{
-                          root: {
-                            boxShadow: "0px 0px 8px -5px rgba(0, 0, 0, 0.5)",
-                          },
-                          title: {
-                            fontSize: "12px",
-                          },
-                          description: {
-                            fontSize: "12px",
-                          },
-                        }}
-                      >
-                        You are now obligated to give a star to Mantine project
-                        on GitHub
-                      </Notification>
-                      <Notification
-                        title="We notify you that"
-                        styles={{
-                          root: {
-                            boxShadow: "0px 0px 8px -5px rgba(0, 0, 0, 0.5)",
-                          },
-                          title: {
-                            fontSize: "12px",
-                          },
-                          description: {
-                            fontSize: "12px",
-                          },
-                        }}
-                      >
-                        You are now obligated to give a star to Mantine project
-                        on GitHub
-                      </Notification>
-                      <Group justify="center" w="full">
                         <Button
                           variant="light"
                           radius="xl"
                           color="gray"
                           size="xs"
+                          mt={5}
                         >
                           Просмотреть все
                         </Button>
