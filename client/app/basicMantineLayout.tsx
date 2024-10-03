@@ -166,17 +166,38 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                           Очистить все
                         </Button>
                       </Group>
-                      {notifications.map((item) => (
-                        <NotificationCustom key={item.id} title={item.title}>
+                      {notifications.map((item, index) => (
+                        // <Notification
+                        //   key={item.id}
+                        //   title={item.title}
+                        //   styles={{
+                        //     root: {
+                        //       boxShadow: "none",
+                        //     },
+                        //     title: {
+                        //       fontSize: "12px",
+                        //     },
+                        //     description: {
+                        //       fontSize: "12px",
+                        //     },
+                        //   }}
+                        // >
+                        //   {item.description}
+                        // </Notification>
+                        <NotificationCustom
+                          key={item.id}
+                          title={item.title}
+                          isLast={notifications.length - 1 === index}
+                        >
                           {item.description}
                         </NotificationCustom>
                       ))}
                       <Group
                         justify="center"
                         w="full"
-                        style={{
-                          borderTop: "1px solid var(--mantine-color-gray-2)",
-                        }}
+                        // style={{
+                        //   borderTop: "1px solid var(--mantine-color-gray-2)",
+                        // }}
                         py={3}
                       >
                         <Button
