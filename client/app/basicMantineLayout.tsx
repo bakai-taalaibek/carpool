@@ -1,6 +1,6 @@
 "use client";
 import "@mantine/core/styles.css";
-import React from "react";
+import React, { useState } from "react";
 import {
   AppShell,
   Group,
@@ -33,21 +33,24 @@ export const metadata = {
   description: "I am using Mantine with Next.js!",
 };
 
-const notifications = [
+export const notifications = [
   {
     id: 1,
     title: "Ответ на комментарий",
     description: "Привет, меня зовут Паша, сколько мест еще есть?",
+    isOpened: false,
   },
   {
     id: 2,
     title: "Комментарий к объявлению",
     description: "Привет, меня зовут Паша, сколько мест еще есть?",
+    isOpened: false,
   },
   {
     id: 3,
-    title: "Личное сообщение",
+    title: "Комментарий к объявлению",
     description: "Привет, меня зовут Паша, сколько мест еще есть?",
+    isOpened: true,
   },
 ];
 
@@ -57,6 +60,8 @@ export default function BasicMantineLayout({ children }: { children: any }) {
     duration: 800,
   });
   const pathname = usePathname();
+
+  const [opened, setOpened] = useState(false);
 
   return (
     <AppShell
@@ -118,7 +123,13 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               </Button>
 
               <Box mr={10}>
-                <Menu shadow="md" width={280} position="bottom-end">
+                <Menu
+                  shadow="md"
+                  width={280}
+                  position="bottom-end"
+                  opened={opened}
+                  onChange={setOpened}
+                >
                   <MenuTarget>
                     <Indicator
                       position="top-end"
@@ -141,6 +152,8 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                       leftSection={
                         <IconSettings style={{ width: 14, height: 14 }} />
                       }
+                      component={Link}
+                      href="/profile"
                     >
                       Профиль
                     </MenuItem>
@@ -201,6 +214,9 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                         py={3}
                       >
                         <Button
+                          onClick={() => setOpened(false)}
+                          component={Link}
+                          href="/notifications"
                           variant="light"
                           radius="xl"
                           color="gray"
