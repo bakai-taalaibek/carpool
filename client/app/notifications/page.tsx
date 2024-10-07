@@ -1,15 +1,17 @@
 "use client";
 import {
   ActionIcon,
+  alpha,
   Box,
   Flex,
   Group,
   Stack,
   Text,
   Title,
+  Tooltip,
 } from "@mantine/core";
 import { notifications } from "../basicMantineLayout";
-import { IconMailOpened } from "@tabler/icons-react";
+import { IconMail, IconMailOpened } from "@tabler/icons-react";
 
 export default function Notifications() {
   return (
@@ -21,7 +23,7 @@ export default function Notifications() {
         <Flex w="full" gap={0} align="stretch">
           <Box
             w={3}
-            bg={item.isOpened ? "white" : "blue"}
+            bg={item.isOpened ? "gray.3" : "blue.3"}
             // style={{
             //   borderTop: "1px solid var(--mantine-color-blue-6)",
             // }}
@@ -35,7 +37,11 @@ export default function Notifications() {
             // pl={5}
             p={12}
             // py={12}
-            bg={item.isOpened ? "white" : "gray.0"}
+            bg={
+              item.isOpened
+                ? "white"
+                : alpha("var(--mantine-color-gray-0)", 0.8)
+            }
             style={{
               cursor: "pointer",
               // borderLeft: "3px solid var(--mantine-color-blue-5)",
@@ -52,10 +58,28 @@ export default function Notifications() {
               <Box fw={500}>{item.title}</Box>
               <Box c="gray.7">{item.description}</Box>
             </Stack>
-            {item.isOpened || (
-              <ActionIcon variant="light" size="lg" aria-label="Gallery">
-                <IconMailOpened style={{ width: 20 }} stroke={1.5} />
-              </ActionIcon>
+            {item.isOpened ? (
+              <Tooltip label="Отметить как непрочитанное" position="bottom">
+                <ActionIcon
+                  color="gray"
+                  variant="subtle"
+                  size="lg"
+                  aria-label="Gallery"
+                >
+                  <IconMail style={{ width: 20 }} stroke={1.5} />
+                </ActionIcon>
+              </Tooltip>
+            ) : (
+              <Tooltip label="Отметить как прочитанное" position="bottom">
+                <ActionIcon
+                  color="gray"
+                  variant="subtle"
+                  size="lg"
+                  aria-label="Gallery"
+                >
+                  <IconMailOpened style={{ width: 20 }} stroke={1.5} />
+                </ActionIcon>
+              </Tooltip>
             )}
           </Flex>
         </Flex>
