@@ -30,7 +30,7 @@ export default function NewPage() {
         ]}
       />
       <SimpleGrid cols={{ base: 1, xs: 2 }}>
-        <TextInput label="Имя" placeholder="Асан" />
+        <TextInput label="Имя" placeholder="Асан Болотов" />
         <TextInput
           label="Номер телефона"
           placeholder="0 500 600 700"
