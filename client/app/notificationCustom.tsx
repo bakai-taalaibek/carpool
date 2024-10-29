@@ -27,6 +27,7 @@ export default function NotificationCustom({
         }`,
         // borderBottom: "1px solid var(--mantine-color-gray-2)",
       }}
+      className="hover:bg-gray-100"
     >
       <Stack gap={0}>
         <Box fw={500}>{title}</Box>

@@ -20,7 +20,7 @@ export default function Notifications() {
         Уведомления
       </Title>
       {notifications.map((item, index) => (
-        <Flex w="full" gap={0} align="stretch">
+        <Flex key={item.id} w="full" gap={0} align="stretch">
           <Box
             w={3}
             bg={item.isOpened ? "gray.3" : "blue.3"}
@@ -37,10 +37,15 @@ export default function Notifications() {
             // pl={5}
             p={12}
             // py={12}
-            bg={
+            // bg={
+            //   item.isOpened
+            //     ? "white"
+            //     : alpha("var(--mantine-color-gray-0)", 0.8)
+            // }
+            className={
               item.isOpened
-                ? "white"
-                : alpha("var(--mantine-color-gray-0)", 0.8)
+                ? "bg-white hover:bg-sky-100"
+                : "bg-gray-50 hover:bg-sky-100"
             }
             style={{
               cursor: "pointer",
