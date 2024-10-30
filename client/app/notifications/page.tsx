@@ -44,8 +44,8 @@ export default function Notifications() {
             // }
             className={
               item.isOpened
-                ? "bg-white hover:bg-sky-100"
-                : "bg-gray-50 hover:bg-sky-100"
+                ? "bg-white hover:bg-gray-100"
+                : "bg-gray-50 hover:bg-gray-100"
             }
             style={{
               cursor: "pointer",
