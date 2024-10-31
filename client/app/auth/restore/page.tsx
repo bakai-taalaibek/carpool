@@ -1,3 +1,4 @@
+"use client";
 import {
   Paper,
   Title,
@@ -14,8 +15,11 @@ import {
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ForgotPassword() {
+  const router = useRouter();
+
   return (
     <Center
       style={{
@@ -36,10 +40,12 @@ export default function ForgotPassword() {
         </Text>
         <TextInput label="Почта" placeholder="your.name@email.com" required />
         <Group justify="space-between" mt="lg">
-          <Anchor component={Link} href="/auth" c="dimmed" size="sm">
+          <Anchor component="button" onClick={router.back} c="dimmed" size="sm">
             <Center inline>
               <IconArrowLeft style={{ width: 12, height: 12 }} stroke={1.5} />
-              <Box ml={5}>Назад </Box>
+              <Anchor c="dimmed" size="sm" ml={5}>
+                Назад{" "}
+              </Anchor>
             </Center>
           </Anchor>
           <Button>Получить ссылку</Button>

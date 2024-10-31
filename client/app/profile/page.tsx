@@ -25,8 +25,10 @@ import {
   AccordionPanel,
   Space,
   FileButton,
+  PasswordInput,
 } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
+import { useForm } from "@mantine/form";
 import {
   IconClock,
   IconEdit,
@@ -47,6 +49,23 @@ const data = {
 export default function NewPage() {
   const [isBeingEdited, setIsBeingEdited] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+
+  const form = useForm({
+    initialValues: {
+      currentPassword: "",
+      newPassword: "",
+      passwordConfirmation: "",
+    },
+
+    validate: {
+      currentPassword: (val) =>
+        val.length <= 6 ? "Минимальная длина пароля - 6 символов" : null,
+      newPassword: (val) =>
+        val.length <= 6 ? "Минимальная длина пароля - 6 символов" : null,
+      passwordConfirmation: (val, values) =>
+        val === values.newPassword ? null : "Введенные пароли не совпадают",
+    },
+  });
 
   return (
     <Stack maw={600} mx="auto" gap={0} pt={30}>
@@ -151,9 +170,64 @@ export default function NewPage() {
             <Text fz={18}>Изменить пароль</Text>
           </AccordionControl>
           <AccordionPanel>
-            <Button w="max-content" variant="filled" mt={10}>
-              Изменить пароль
-            </Button>
+            <form onSubmit={form.onSubmit(() => {})}>
+              <Stack pt={5} gap={12}>
+                <PasswordInput
+                  required
+                  label="Текущий пароль"
+                  placeholder="Введите текущий снова"
+                  value={form.values.currentPassword}
+                  onChange={(event) =>
+                    form.setFieldValue(
+                      "currentPassword",
+                      event.currentTarget.value
+                    )
+                  }
+                  error={form.errors.currentPassword}
+                />
+
+                <PasswordInput
+                  required
+                  label="Новый пароль"
+                  placeholder="Ваш новый пароль"
+                  value={form.values.newPassword}
+                  onChange={(event) =>
+                    form.setFieldValue("newPassword", event.currentTarget.value)
+                  }
+                  error={form.errors.newPassword}
+                />
+
+                <PasswordInput
+                  required
+                  label="Подтвердите пароль"
+                  placeholder="Введите новый пароль снова"
+                  value={form.values.passwordConfirmation}
+                  onChange={(event) =>
+                    form.setFieldValue(
+                      "passwordConfirmation",
+                      event.currentTarget.value
+                    )
+                  }
+                  error={form.errors.passwordConfirmation}
+                />
+              </Stack>
+
+              <Group pb={7} justify="space-between" mt="lg">
+                <Anchor
+                  component={Link}
+                  href="/auth/restore"
+                  c="dimmed"
+                  size="sm"
+                  ta="start"
+                >
+                  Забыли пароль?
+                </Anchor>
+
+                <Button type="submit" w="max-content" variant="filled">
+                  Изменить пароль
+                </Button>
+              </Group>
+            </form>
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="exit">

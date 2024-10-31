@@ -150,7 +150,7 @@ export default function AuthenticationForm(props: PaperProps) {
               {type === "login" ? "Войти" : "Далее"}
             </Button>
           </Group>
-        </form>
+        </form> 
       </Paper>
     </Center>
   );
