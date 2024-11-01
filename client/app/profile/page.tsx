@@ -26,10 +26,14 @@ import {
   Space,
   FileButton,
   PasswordInput,
+  Modal,
+  Alert,
 } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import {
+  IconAlertTriangle,
   IconClock,
   IconEdit,
   IconLogout2,
@@ -49,6 +53,8 @@ const data = {
 export default function NewPage() {
   const [isBeingEdited, setIsBeingEdited] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [isModalOpened, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
 
   const form = useForm({
     initialValues: {
@@ -253,12 +259,47 @@ export default function NewPage() {
             <Text mb={5} fz={14} mt={5}>
               После удаления аккаунта, его невозможно восстановить
             </Text>
-            <Button w="max-content" variant="filled" color="red">
+            <Button
+              w="max-content"
+              variant="filled"
+              color="red"
+              onClick={openModal}
+            >
               Удалить аккаунт
             </Button>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
+      <Modal
+        opened={isModalOpened}
+        onClose={closeModal}
+        title="Подтвердить удаление аккаунта"
+      >
+        <Stack>
+          <Alert
+            variant="light"
+            color="red"
+            title="Внимание"
+            icon={<IconAlertTriangle />}
+          >
+            После удаления аккаунта, он будет недоступен без возможности
+            восстановления
+          </Alert>
+          <PasswordInput
+            required
+            label="Ваш пароль"
+            placeholder="Введите ваш пароль"
+            value={form.values.currentPassword}
+            onChange={(event) =>
+              form.setFieldValue("currentPassword", event.currentTarget.value)
+            }
+            error={form.errors.currentPassword}
+          />
+          <Button w="max-content" variant="filled" color="red">
+            Подтвердить удаление аккаунта
+          </Button>
+        </Stack>
+      </Modal>
     </Stack>
   );
 }
