@@ -1,5 +1,5 @@
 "use client";
-import { useToggle, upperFirst } from "@mantine/hooks";
+import { useToggle, useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import {
   TextInput,
@@ -14,12 +14,15 @@ import {
   Anchor,
   Stack,
   Center,
-  Title,
+  Modal,
 } from "@mantine/core";
 import GoogleIcon from "../../public/icons/GoogleIcon";
 import Link from "next/link";
 
 export default function AuthenticationForm(props: PaperProps) {
+  const [isModalOpened, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
+
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
@@ -41,16 +44,7 @@ export default function AuthenticationForm(props: PaperProps) {
   });
 
   return (
-    <Center
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        top: 0,
-        left: 0,
-        paddingTop: 40,
-      }}
-    >
+    <Center>
       <Paper radius="md" p="xl" withBorder w={400} shadow="md" {...props}>
         <Text ta="center" fw={900} mb={5} size="xl">
           {type === "register"
@@ -127,7 +121,14 @@ export default function AuthenticationForm(props: PaperProps) {
           <Group justify="space-between" mt="xl">
             {type === "register" ? (
               <Checkbox
-                label="Я принимаю условия"
+                label={
+                  <>
+                    Я принимаю{" "}
+                    <Anchor inherit component="button" onClick={openModal}>
+                      условия
+                    </Anchor>
+                  </>
+                }
                 checked={form.values.terms}
                 onChange={(event) =>
                   form.setFieldValue("terms", event.currentTarget.checked)
@@ -150,8 +151,11 @@ export default function AuthenticationForm(props: PaperProps) {
               {type === "login" ? "Войти" : "Далее"}
             </Button>
           </Group>
-        </form> 
+        </form>
       </Paper>
+      <Modal opened={isModalOpened} onClose={closeModal}>
+        zxcvx
+      </Modal>
     </Center>
   );
 }

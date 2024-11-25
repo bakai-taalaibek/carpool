@@ -242,7 +242,9 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         <Button>Support</Button>
       </AppShell.Navbar>
 
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main style={{ display: "flex", justifyContent: "center" }}>
+        {children}
+      </AppShell.Main>
       <Footer ref={targetRef} />
     </AppShell>
   );
