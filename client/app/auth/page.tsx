@@ -154,12 +154,17 @@ export default function AuthenticationForm(props: PaperProps) {
         </form>
       </Paper>
       <Modal
+        size="xl"
         opened={isModalOpened}
         onClose={closeModal}
-        title="Условия использования платформы POPUTKA.KG"
+        title={
+          <Text fw="600" fz="18">
+            Условия использования платформы POPUTKA.KG
+          </Text>
+        }
       >
         <Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             1. Введение
           </Text>
           <Text mb={10}>
@@ -167,7 +172,7 @@ export default function AuthenticationForm(props: PaperProps) {
             сервис, вы соглашаетесь с настоящими Условиями использования. Если
             вы не согласны с ними, пожалуйста, не пользуйтесь нашей платформой.
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             2. Описание сервиса
           </Text>
           <Text mb={10}>
@@ -177,7 +182,7 @@ export default function AuthenticationForm(props: PaperProps) {
             транспортных услуг и не несет ответственности за любые инциденты,
             которые могут произойти во время поездок.{" "}
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             3. Требования к пользователям
           </Text>
           <Text mb={10}>
@@ -185,7 +190,7 @@ export default function AuthenticationForm(props: PaperProps) {
             обязаны иметь действующее водительское удостоверение, страховку на
             автомобиль и исправное транспортное средство.{" "}
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             4. Обязанности пользователей
           </Text>
           <Text mb={10}>
@@ -197,7 +202,7 @@ export default function AuthenticationForm(props: PaperProps) {
             вести себя вежливо и корректно при взаимодействии друг с другом на
             платформе и во время поездок.
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             5. Ограничение ответственности
           </Text>
           <Text mb={10}>
@@ -208,7 +213,7 @@ export default function AuthenticationForm(props: PaperProps) {
             не несет ответственности за любые несчастные случаи, споры, травмы
             или убытки.
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             6. Оплата и возврат средств{" "}
           </Text>
           <Text mb={10}>
@@ -218,7 +223,7 @@ export default function AuthenticationForm(props: PaperProps) {
             не несёт ответственности за их результат и финансовые убытки,
             вызванные действиями или бездействием Водителей или Пассажиров.
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             7. Конфиденциальность
           </Text>
           <Text mb={10}>
@@ -232,7 +237,7 @@ export default function AuthenticationForm(props: PaperProps) {
             пользователей, но не несёт ответственности за возможные негативные
             последствия злонамеренных действий третьих лиц (например, хакеров).
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             8. Разрешение споров
           </Text>
           <Text mb={10}>
@@ -240,7 +245,7 @@ export default function AuthenticationForm(props: PaperProps) {
             непосредственно между сторонами. &quot;Попутка&quot; не несет
             ответственности за разрешение споров.
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             9. Прекращение использования
           </Text>
           <Text mb={10}>
@@ -248,7 +253,7 @@ export default function AuthenticationForm(props: PaperProps) {
             аккаунту, если пользователь нарушает настоящие Условия или ведет
             себя неподобающим образом.
           </Text>
-          <Text fw="700" mb={5}>
+          <Text fw="500" mb={5}>
             10. Изменения условий
           </Text>
           <Text mb={10}>

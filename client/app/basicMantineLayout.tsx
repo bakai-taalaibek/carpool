@@ -1,6 +1,6 @@
 "use client";
 import "@mantine/core/styles.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppShell,
   Group,
@@ -18,15 +18,17 @@ import {
   Box,
   Notification,
   Stack,
+  Drawer,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Footer from "./footer";
 import { useScrollIntoView } from "@mantine/hooks";
 import { IconLogout2, IconSettings } from "@tabler/icons-react";
 import NotificationCustom from "./notificationCustom";
+import dayjs from "dayjs";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -55,13 +57,28 @@ export const notifications = [
 ];
 
 export default function BasicMantineLayout({ children }: { children: any }) {
+  const [lastVisited, setLastVisited] = useLocalStorage({
+    key: "lastVisitedPoputka",
+  });
   const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
     duration: 800,
   });
   const pathname = usePathname();
+  const [avatarMenuOpened, setAvatarMenuOpened] = useState(false);
+  const [drawerOpened, setDrawerOpened] = useState(false);
 
-  const [opened, setOpened] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      if (dayjs().diff(lastVisited, "days") < 14) {
+        setDrawerOpened(true);
+      }
+    }, 50);
+  }, []);
+
+  if (!dayjs(lastVisited).isSame(dayjs(), "day")) {
+    setLastVisited(dayjs().toISOString());
+  }
 
   return (
     <AppShell
@@ -127,8 +144,8 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                   shadow="md"
                   width={280}
                   position="bottom-end"
-                  opened={opened}
-                  onChange={setOpened}
+                  opened={avatarMenuOpened}
+                  onChange={setAvatarMenuOpened}
                 >
                   <MenuTarget>
                     <Indicator
@@ -214,7 +231,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                         py={3}
                       >
                         <Button
-                          onClick={() => setOpened(false)}
+                          onClick={() => setAvatarMenuOpened(false)}
                           component={Link}
                           href="/notifications"
                           variant="light"
@@ -246,6 +263,18 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         {children}
       </AppShell.Main>
       <Footer ref={targetRef} />
+      <Drawer
+        opened={drawerOpened}
+        withCloseButton={false}
+        size="35%"
+        onClose={close}
+        position="bottom"
+        title="Authentication"
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+      >
+        <Button onClick={() => setDrawerOpened(false)}>Понятно</Button>
+      </Drawer>
     </AppShell>
   );
 }
