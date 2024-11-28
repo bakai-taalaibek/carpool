@@ -19,6 +19,8 @@ import {
   Notification,
   Stack,
   Drawer,
+  Anchor,
+  Modal,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
@@ -29,6 +31,7 @@ import { useScrollIntoView } from "@mantine/hooks";
 import { IconLogout2, IconSettings } from "@tabler/icons-react";
 import NotificationCustom from "./notificationCustom";
 import dayjs from "dayjs";
+import { TermsContent } from "./termsContent";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -67,16 +70,18 @@ export default function BasicMantineLayout({ children }: { children: any }) {
   const pathname = usePathname();
   const [avatarMenuOpened, setAvatarMenuOpened] = useState(false);
   const [drawerOpened, setDrawerOpened] = useState(false);
+  const [isModalOpened, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
 
   useEffect(() => {
     setTimeout(() => {
-      if (dayjs().diff(lastVisited, "days") < 14) {
+      if (dayjs().diff(lastVisited, "days") > 1) {
         setDrawerOpened(true);
       }
     }, 50);
   }, []);
 
-  if (!dayjs(lastVisited).isSame(dayjs(), "day")) {
+  if (!lastVisited || !dayjs(lastVisited).isSame(dayjs(), "day")) {
     setLastVisited(dayjs().toISOString());
   }
 
@@ -266,15 +271,53 @@ export default function BasicMantineLayout({ children }: { children: any }) {
       <Drawer
         opened={drawerOpened}
         withCloseButton={false}
-        size="35%"
+        size="28%"
         onClose={close}
         position="bottom"
-        title="Authentication"
+        title={
+          <Text fz={24} fw={700} lh={1} c="blue.6">
+            Добро пожаловать на платформу POPUTKA.KG
+          </Text>
+        }
         closeOnClickOutside={false}
         closeOnEscape={false}
+        styles={{
+          content: {
+            display: "flex",
+            flexDirection: "column",
+          },
+          body: {
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "start",
+          },
+        }}
       >
-        <Button onClick={() => setDrawerOpened(false)}>Понятно</Button>
+        <Text>
+          Продолжая использовать наш ресурс Вы выражаете согласие с нашими{" "}
+          <Anchor inherit component="button" onClick={openModal}>
+            условиями
+          </Anchor>
+          .
+        </Text>
+        <Button data-autofocus onClick={() => setDrawerOpened(false)}>
+          Понятно
+        </Button>
       </Drawer>
+      <Modal
+        size="xl"
+        opened={isModalOpened}
+        onClose={closeModal}
+        title={
+          <Text fw="600" fz="18">
+            Условия использования платформы POPUTKA.KG
+          </Text>
+        }
+      >
+        <TermsContent />
+      </Modal>
     </AppShell>
   );
 }
