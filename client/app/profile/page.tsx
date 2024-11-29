@@ -74,7 +74,7 @@ export default function NewPage() {
   });
 
   return (
-    <Stack maw={600} mx="auto" gap={0} pt={30}>
+    <Stack w={600} mx="auto" gap={0} pt={30}>
       <Flex align="start" gap={50} justify="stretch">
         <Stack align="center" gap={5}>
           <Avatar color="blue" radius={100} size={120} />

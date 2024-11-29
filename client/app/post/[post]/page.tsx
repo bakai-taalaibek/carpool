@@ -27,7 +27,7 @@ export default function Post({ params }: { params: { post: string } }) {
   dayjs.extend(relativeTime);
 
   return post ? (
-    <Stack maw={600} mx="auto" gap={24} pt={20}>
+    <Stack w={600} mx="auto" gap={24} pt={20}>
       <Stack gap={3}>
         <Title order={3} mx="auto">
           {dayjs(post.departureDatetime).format("D MMMM YYYY (dddd)")}

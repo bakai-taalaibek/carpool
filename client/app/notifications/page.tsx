@@ -15,7 +15,7 @@ import { IconMail, IconMailOpened } from "@tabler/icons-react";
 
 export default function Notifications() {
   return (
-    <Stack maw={600} mx="auto" gap={0}>
+    <Stack w={600} mx="auto" gap={0}>
       <Title order={3} mb={12}>
         Уведомления
       </Title>
