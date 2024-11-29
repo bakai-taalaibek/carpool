@@ -60,9 +60,6 @@ export const notifications = [
 ];
 
 export default function BasicMantineLayout({ children }: { children: any }) {
-  const [lastVisited, setLastVisited] = useLocalStorage({
-    key: "lastVisitedPoputka",
-  });
   const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
     duration: 800,
@@ -74,16 +71,18 @@ export default function BasicMantineLayout({ children }: { children: any }) {
     useDisclosure(false);
 
   useEffect(() => {
+    const lastVisited = localStorage.getItem("lastVisitedPoputka");
+
+    if (!lastVisited || !dayjs(lastVisited).isSame(dayjs(), "day")) {
+      localStorage.setItem("lastVisitedPoputka", dayjs().toISOString());
+    }
+
     setTimeout(() => {
       if (dayjs().diff(lastVisited, "days") > 1) {
         setDrawerOpened(true);
       }
     }, 50);
   }, []);
-
-  if (!lastVisited || !dayjs(lastVisited).isSame(dayjs(), "day")) {
-    setLastVisited(dayjs().toISOString());
-  }
 
   return (
     <AppShell
@@ -272,7 +271,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         opened={drawerOpened}
         withCloseButton={false}
         size="28%"
-        onClose={close}
+        onClose={() => setDrawerOpened(false)}
         position="bottom"
         title={
           <Text fz={24} fw={700} lh={1} c="blue.6">
