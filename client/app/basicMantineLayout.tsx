@@ -111,7 +111,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               fw={700}
               size="lg"
             >
-              Poputka.pro
+              POPUTKA.KG
             </Text>
             <Group gap={20} visibleFrom="sm">
               {pathname !== "/new" && (

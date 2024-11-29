@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 dayjs.locale("ru");
 
 export const metadata = {
-  title: "Poputka.pro - междугородняя попутка для Кыргызстана",
+  title: "POPUTKA.KG - междугородняя попутка для Кыргызстана",
   description: "Найди свою попутку!",
 };
 
