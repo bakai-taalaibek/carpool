@@ -14,7 +14,6 @@ import {
   Stack,
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function ForgotPassword() {
