@@ -21,6 +21,7 @@ import {
   Drawer,
   Anchor,
   Modal,
+  Collapse,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
@@ -61,6 +62,7 @@ export const notifications = [
 
 export default function BasicMantineLayout({ children }: { children: any }) {
   const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
+  const [isFilterOpened, { toggle: toggleFilter }] = useDisclosure(false);
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
     duration: 800,
   });
@@ -114,6 +116,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               POPUTKA.KG
             </Text>
             <Group gap={20} visibleFrom="sm">
+              <Button onClick={toggleFilter}>Toggle content</Button>
               {pathname !== "/new" && (
                 <Button
                   component={Link}
@@ -263,7 +266,17 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         <Button>Support</Button>
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ display: "flex", justifyContent: "center" }}>
+      <AppShell.Main
+        style={{
+          display: "flex",
+          // justifyContent: "center",
+          alignContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Collapse in={isFilterOpened}>
+          <Text>Filter will be here</Text>
+        </Collapse>
         {children}
       </AppShell.Main>
       <Footer ref={targetRef} />
