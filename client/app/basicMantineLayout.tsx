@@ -22,6 +22,7 @@ import {
   Anchor,
   Modal,
   Collapse,
+  Flex,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
@@ -269,15 +270,15 @@ export default function BasicMantineLayout({ children }: { children: any }) {
       <AppShell.Main
         style={{
           display: "flex",
-          // justifyContent: "center",
-          alignContent: "center",
           flexDirection: "column",
         }}
       >
         <Collapse in={isFilterOpened}>
           <Text>Filter will be here</Text>
         </Collapse>
-        {children}
+        <Flex justify="center" style={{ flexGrow: "1" }}>
+          {children}
+        </Flex>
       </AppShell.Main>
       <Footer ref={targetRef} />
       <Drawer
