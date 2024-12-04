@@ -117,7 +117,9 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               POPUTKA.KG
             </Text>
             <Group gap={20} visibleFrom="sm">
-              <Button onClick={toggleFilter}>Toggle content</Button>
+              {pathname == "/" && (
+                <Button onClick={toggleFilter}>Фильтры</Button>
+              )}
               {pathname !== "/new" && (
                 <Button
                   component={Link}
@@ -273,7 +275,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
           flexDirection: "column",
         }}
       >
-        <Collapse in={isFilterOpened}>
+        <Collapse in={isFilterOpened && pathname == "/"}>
           <Text>Filter will be here</Text>
         </Collapse>
         <Flex justify="center" style={{ flexGrow: "1" }}>
