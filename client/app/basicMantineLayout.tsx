@@ -30,7 +30,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Footer from "./footer";
 import { useScrollIntoView } from "@mantine/hooks";
-import { IconLogout2, IconSettings } from "@tabler/icons-react";
+import {
+  IconCaretDown,
+  IconCaretDownFilled,
+  IconCaretUpFilled,
+  IconChevronDown,
+  IconLogout2,
+  IconSettings,
+} from "@tabler/icons-react";
 import NotificationCustom from "./notificationCustom";
 import dayjs from "dayjs";
 import { TermsContent } from "./termsContent";
@@ -118,7 +125,20 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             </Text>
             <Group gap={20} visibleFrom="sm">
               {pathname == "/" && (
-                <Button onClick={toggleFilter}>Фильтры</Button>
+                <Button
+                  variant="subtle"
+                  onClick={toggleFilter}
+                  radius="xl"
+                  rightSection={
+                    isFilterOpened ? (
+                      <IconCaretUpFilled size={14} />
+                    ) : (
+                      <IconCaretDownFilled size={14} />
+                    )
+                  }
+                >
+                  Фильтры
+                </Button>
               )}
               {pathname !== "/new" && (
                 <Button
