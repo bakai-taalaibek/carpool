@@ -23,6 +23,7 @@ import {
   Modal,
   Collapse,
   Flex,
+  lighten,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
@@ -41,6 +42,7 @@ import {
 import NotificationCustom from "./notificationCustom";
 import dayjs from "dayjs";
 import { TermsContent } from "./termsContent";
+import Filters from "./filters";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -126,9 +128,14 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             <Group gap={20} visibleFrom="sm">
               {pathname == "/" && (
                 <Button
-                  variant="subtle"
+                  variant="transparent"
+                  bg={
+                    isFilterOpened
+                      ? lighten("var(--mantine-color-blue-0)", 0)
+                      : "none"
+                  }
                   onClick={toggleFilter}
-                  radius="xl"
+                  radius="5px"
                   rightSection={
                     isFilterOpened ? (
                       <IconCaretUpFilled size={14} />
@@ -296,7 +303,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         }}
       >
         <Collapse in={isFilterOpened && pathname == "/"}>
-          <Text>Filter will be here</Text>
+          <Filters />
         </Collapse>
         <Flex justify="center" style={{ flexGrow: "1" }}>
           {children}
