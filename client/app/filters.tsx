@@ -38,8 +38,16 @@ function Filters() {
           />
         </Card>
         <Card w="fit-content">
-          <Text mb="5px">Поиск по имени или фамилии:</Text>
+          <Text mb="5px">Поиск по имени:</Text>
           <TextInput placeholder="Асан Болотов" />
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">Откуда?</Text>
+          <TextInput placeholder="Каракол" />
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">Куда?</Text>
+          <TextInput placeholder="Ош" />
         </Card>
       </Group>
     </Box>
