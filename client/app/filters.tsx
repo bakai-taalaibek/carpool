@@ -49,6 +49,10 @@ function Filters() {
           <Text mb="5px">Куда?</Text>
           <TextInput placeholder="Ош" />
         </Card>
+        <Card w="fit-content">
+          <Text mb="5px">Максимальная цена (сом/место):</Text>
+          <TextInput placeholder="500" />
+        </Card>
       </Group>
     </Box>
   );
