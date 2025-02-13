@@ -53,6 +53,13 @@ function Filters() {
           <Text mb="5px">Максимальная цена (сом/место):</Text>
           <TextInput placeholder="500" />
         </Card>
+        <Card w="fit-content">
+          <Text mb="5px">Поиск по номеру телефона:</Text>
+          <TextInput
+            placeholder="0 500 600 700"
+            required
+          />
+        </Card>
       </Group>
     </Box>
   );
