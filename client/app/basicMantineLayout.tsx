@@ -128,6 +128,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             <Group gap={20} visibleFrom="sm">
               {pathname == "/" && (
                 <Button
+                  bd={isFilterOpened ? "1.5px solid indigo.1" : "none"}
                   color={isFilterOpened ? "indigo" : "blue"}
                   variant="transparent"
                   bg={isFilterOpened ? "indigo.0" : "none"}

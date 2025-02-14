@@ -50,15 +50,30 @@ function Filters() {
           <TextInput placeholder="Ош" />
         </Card>
         <Card w="fit-content">
-          <Text mb="5px">Максимальная цена (сом/место):</Text>
-          <TextInput placeholder="500" />
+          <Text mb="5px">Цена (сомов за место):</Text>
+          <Group gap={8}>
+            <Text mb="5px">от:</Text>
+            <TextInput placeholder="0" w={80} />
+            <Text mb="5px" ml={8}>
+              до:
+            </Text>
+            <TextInput placeholder="500" w={80} />
+          </Group>
         </Card>
         <Card w="fit-content">
           <Text mb="5px">Поиск по номеру телефона:</Text>
-          <TextInput
-            placeholder="0 500 600 700"
-            required
-          />
+          <TextInput placeholder="0 500 600 700" required />
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">Сколько мест?</Text>
+          <Group gap={8}>
+            <Text mb="5px">от:</Text>
+            <TextInput placeholder="0" w={80} />
+            <Text mb="5px" ml={8}>
+              до:
+            </Text>
+            <TextInput placeholder="3" w={80} />
+          </Group>
         </Card>
       </Group>
     </Box>
