@@ -54,9 +54,7 @@ function Filters() {
           <Group gap={8}>
             <Text mb="5px">от:</Text>
             <TextInput placeholder="0" w={80} />
-            <Text mb="5px" ml={8}>
-              до:
-            </Text>
+            <Text mb="5px">до:</Text>
             <TextInput placeholder="500" w={80} />
           </Group>
         </Card>
@@ -69,11 +67,13 @@ function Filters() {
           <Group gap={8}>
             <Text mb="5px">от:</Text>
             <TextInput placeholder="0" w={80} />
-            <Text mb="5px" ml={8}>
-              до:
-            </Text>
+            <Text mb="5px">до:</Text>
             <TextInput placeholder="3" w={80} />
           </Group>
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">Поиск по комментарию:</Text>
+          <TextInput placeholder="Не курю" />
         </Card>
       </Group>
     </Box>
