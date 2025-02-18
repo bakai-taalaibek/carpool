@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   Group,
   Input,
@@ -9,6 +10,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import { IconClearAll } from "@tabler/icons-react";
 
 function Filters() {
   return (
@@ -21,9 +23,20 @@ function Filters() {
       p="10px"
       bd="solid 1.5px var(--mantine-color-indigo-1)"
     >
-      <Title order={3} mt={5} mb={10}>
-        Фильтры:
-      </Title>
+      <Group justify="space-between">
+        <Title order={3} mt={5} mb={10}>
+          Фильтры:
+        </Title>
+        <Button
+          rightSection={<IconClearAll size={16} />}
+          variant="default"
+          radius="xl"
+          bd="none"
+          fw="500"
+        >
+          Очистить
+        </Button>
+      </Group>
       <Group align="start">
         <Card w="fit-content">
           <Text mb="5px">Кого показывать?</Text>
