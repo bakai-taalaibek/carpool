@@ -2,10 +2,12 @@ import {
   Box,
   Button,
   Card,
+  Chip,
   Group,
   Input,
   lighten,
   SegmentedControl,
+  Switch,
   Text,
   TextInput,
   Title,
@@ -34,10 +36,37 @@ function Filters() {
           bd="none"
           fw="500"
         >
-          Очистить
+          Сбросить
         </Button>
       </Group>
       <Group align="start">
+        <Chip
+          styles={{
+            label: {
+              backgroundColor: "white",
+              color: "black",
+              fontSize: 16,
+              padding: "14px 12px",
+              flexDirection: "column-reverse",
+              justifyContent: "start",
+              alignItems: "start",
+              minHeight: 98,
+            },
+            iconWrapper: {
+              margin: 5,
+              minHeight: 20,
+              minWidth: 20,
+            },
+            checkIcon: {
+              minHeight: 20,
+              minWidth: 20,
+            },
+          }}
+          radius="sm"
+          className="[&>label[data-checked]]:!bg-blue-500 [&>label[data-checked]]:!text-white"
+        >
+          Показать только мои объявления
+        </Chip>
         <Card w="fit-content">
           <Text mb="5px">Кого показывать?</Text>
           <SegmentedControl
