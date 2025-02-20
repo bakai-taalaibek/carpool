@@ -13,6 +13,7 @@ import {
   Title,
 } from "@mantine/core";
 import { IconClearAll } from "@tabler/icons-react";
+import ShowMyPostsInFilter from "./showMyPostsInFilter";
 
 function Filters() {
   return (
@@ -40,33 +41,7 @@ function Filters() {
         </Button>
       </Group>
       <Group align="start">
-        <Chip
-          styles={{
-            label: {
-              backgroundColor: "white",
-              color: "black",
-              fontSize: 16,
-              padding: "14px 12px",
-              flexDirection: "column-reverse",
-              justifyContent: "start",
-              alignItems: "start",
-              minHeight: 98,
-            },
-            iconWrapper: {
-              margin: 5,
-              minHeight: 20,
-              minWidth: 20,
-            },
-            checkIcon: {
-              minHeight: 20,
-              minWidth: 20,
-            },
-          }}
-          radius="sm"
-          className="[&>label[data-checked]]:!bg-blue-500 [&>label[data-checked]]:!text-white"
-        >
-          Показать только мои объявления
-        </Chip>
+        <ShowMyPostsInFilter />
         <Card w="fit-content">
           <Text mb="5px">Кого показывать?</Text>
           <SegmentedControl
