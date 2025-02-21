@@ -1,5 +1,5 @@
-import { Text, Card, lighten } from "@mantine/core";
-import { IconCheck, IconQuestionMark } from "@tabler/icons-react";
+import { Text, Card } from "@mantine/core";
+import { IconCheck, IconUserSearch } from "@tabler/icons-react";
 import { useState } from "react";
 
 export default function ShowMyPostsInFilter() {
@@ -21,7 +21,7 @@ export default function ShowMyPostsInFilter() {
       {isSelected ? (
         <IconCheck size={iconSize} color="var(--mantine-color-blue-5)" />
       ) : (
-        <IconQuestionMark color="var(--mantine-color-gray-5)" size={iconSize} />
+        <IconUserSearch color="var(--mantine-color-gray-5)" size={iconSize} />
       )}
     </Card>
   );

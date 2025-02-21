@@ -12,15 +12,14 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { IconClearAll } from "@tabler/icons-react";
+import { IconClearAll, IconClock } from "@tabler/icons-react";
 import ShowMyPostsInFilter from "./showMyPostsInFilter";
+import { DatePickerInput, TimeInput } from "@mantine/dates";
 
 function Filters() {
   return (
     <Box
-      // bg={lighten("var(--mantine-color-indigo-0)", 0.5)}
       bg="indigo.0"
-      // bg="white"
       style={{ borderRadius: "5px" }}
       mb="10px"
       p="10px"
@@ -43,7 +42,7 @@ function Filters() {
       <Group align="start">
         <ShowMyPostsInFilter />
         <Card w="fit-content">
-          <Text mb="5px">Кого показывать?</Text>
+          <Text mb="5px">Чьи объявления показывать?</Text>
           <SegmentedControl
             // value={role}
             // onChange={(role) => setRole(role)}
@@ -91,6 +90,36 @@ function Filters() {
         <Card w="fit-content">
           <Text mb="5px">Поиск по комментарию:</Text>
           <TextInput placeholder="Не курю" />
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">С какого момента вести поиск?</Text>
+          <Group gap={8}>
+            <Text mb="5px">день:</Text>
+            <DatePickerInput miw={100} />
+            <Text mb="5px">время:</Text>
+            <TimeInput
+              miw={100}
+              placeholder="Укажите время"
+              rightSection={
+                <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
+              }
+            />
+          </Group>
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">До какого момента вести поиск?</Text>
+          <Group gap={8}>
+            <Text mb="5px">день:</Text>
+            <DatePickerInput miw={100} />
+            <Text mb="5px">время:</Text>
+            <TimeInput
+              miw={100}
+              placeholder="Укажите время"
+              rightSection={
+                <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
+              }
+            />
+          </Group>
         </Card>
       </Group>
     </Box>
