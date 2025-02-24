@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function ShowMyPostsInFilter() {
   const [isSelected, setIsSelected] = useState(false);
-  const iconSize = 34;
+  const iconSize = 33;
 
   return (
     <Card

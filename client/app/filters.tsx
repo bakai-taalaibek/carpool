@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Chip,
+  darken,
   Group,
   Input,
   lighten,
@@ -25,8 +26,12 @@ function Filters() {
       p="10px"
       bd="solid 1.5px var(--mantine-color-indigo-1)"
     >
-      <Group justify="space-between">
-        <Title order={3} mt={5} mb={10}>
+      <Group justify="space-between" mb={13}>
+        <Title
+          order={3}
+          ml={3}
+          c={darken("var(--mantine-color-indigo-9)", 0.2)}
+        >
           Фильтры:
         </Title>
         <Button
@@ -40,7 +45,6 @@ function Filters() {
         </Button>
       </Group>
       <Group align="start">
-        <ShowMyPostsInFilter />
         <Card w="fit-content">
           <Text mb="5px">Чьи объявления показывать?</Text>
           <SegmentedControl
@@ -53,10 +57,7 @@ function Filters() {
             ]}
           />
         </Card>
-        <Card w="fit-content">
-          <Text mb="5px">Поиск по имени:</Text>
-          <TextInput placeholder="Асан Болотов" />
-        </Card>
+        <ShowMyPostsInFilter />
         <Card w="fit-content">
           <Text mb="5px">Откуда?</Text>
           <TextInput placeholder="Каракол" />
@@ -75,8 +76,34 @@ function Filters() {
           </Group>
         </Card>
         <Card w="fit-content">
-          <Text mb="5px">Поиск по номеру телефона:</Text>
-          <TextInput placeholder="0 500 600 700" required />
+          <Text mb="5px">С какого времени вести поиск?</Text>
+          <Group gap={8}>
+            <Text mb="5px">день:</Text>
+            <DatePickerInput miw={100} />
+            <Text mb="5px">время:</Text>
+            <TimeInput
+              miw={100}
+              placeholder="Укажите время"
+              rightSection={
+                <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
+              }
+            />
+          </Group>
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">До какого времени вести поиск?</Text>
+          <Group gap={8}>
+            <Text mb="5px">день:</Text>
+            <DatePickerInput miw={100} />
+            <Text mb="5px">время:</Text>
+            <TimeInput
+              miw={100}
+              placeholder="Укажите время"
+              rightSection={
+                <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
+              }
+            />
+          </Group>
         </Card>
         <Card w="fit-content">
           <Text mb="5px">Сколько мест?</Text>
@@ -88,38 +115,16 @@ function Filters() {
           </Group>
         </Card>
         <Card w="fit-content">
+          <Text mb="5px">Поиск по имени:</Text>
+          <TextInput placeholder="Асан Болотов" />
+        </Card>
+        <Card w="fit-content">
+          <Text mb="5px">Поиск по номеру телефона:</Text>
+          <TextInput placeholder="0 500 600 700" required />
+        </Card>
+        <Card w="fit-content">
           <Text mb="5px">Поиск по комментарию:</Text>
           <TextInput placeholder="Не курю" />
-        </Card>
-        <Card w="fit-content">
-          <Text mb="5px">С какого момента вести поиск?</Text>
-          <Group gap={8}>
-            <Text mb="5px">день:</Text>
-            <DatePickerInput miw={100} />
-            <Text mb="5px">время:</Text>
-            <TimeInput
-              miw={100}
-              placeholder="Укажите время"
-              rightSection={
-                <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
-              }
-            />
-          </Group>
-        </Card>
-        <Card w="fit-content">
-          <Text mb="5px">До какого момента вести поиск?</Text>
-          <Group gap={8}>
-            <Text mb="5px">день:</Text>
-            <DatePickerInput miw={100} />
-            <Text mb="5px">время:</Text>
-            <TimeInput
-              miw={100}
-              placeholder="Укажите время"
-              rightSection={
-                <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
-              }
-            />
-          </Group>
         </Card>
       </Group>
     </Box>
