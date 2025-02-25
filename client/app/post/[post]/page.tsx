@@ -21,6 +21,7 @@ import {
   IconPencil,
   IconPhoneCall,
 } from "@tabler/icons-react";
+import { Comment } from "../comment";
 
 export default function Post({ params }: { params: { post: string } }) {
   const post = posts.find((item) => item.postId === Number(params.post));
@@ -123,7 +124,7 @@ export default function Post({ params }: { params: { post: string } }) {
           styles={{ root: { padding: 26 } }}
           color="blue.3"
           icon={<IconMessage2 />}
-          cite="Комментарий автора"
+          cite="— Комментарий автора"
           mt="xs"
         >
           {post.details}
@@ -146,6 +147,9 @@ export default function Post({ params }: { params: { post: string } }) {
           </>
         )}
       </Group>
+      <Stack>
+        <Comment />
+      </Stack>
     </Stack>
   ) : (
     <Center>Данное объявление не найдено</Center>

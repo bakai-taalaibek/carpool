@@ -30,7 +30,7 @@ function Filters() {
         <Title
           order={3}
           ml={3}
-          c={darken("var(--mantine-color-indigo-9)", 0.2)}
+          c={darken("var(--mantine-color-indigo-9)", 0.1)}
         >
           Фильтры:
         </Title>
