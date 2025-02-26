@@ -190,3 +190,73 @@ export const posts: RowData[] = [
     isOwnPost: false,
   },
 ];
+
+export interface Comment {
+  avatar: string;
+  name: string;
+  dateTime: string;
+  commentText: string;
+  id: number;
+}
+
+export const comments: Comment[] = [
+  {
+    avatar:
+      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png",
+    name: "Jacob Warnhalter",
+    dateTime: "2024-08-20T15:00:00Z",
+    commentText: `This Pokémon likes to lick its palms that are sweetened by being soaked
+        in honey. Teddiursa concocts its own honey by blending fruits and pollen
+        collected by Beedrill. Blastoise has water spouts that protrude from its
+        shell. The water spouts are very accurate.`,
+    id: 1,
+  },
+  {
+    avatar:
+      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png",
+    name: "Sophia Carter",
+    dateTime: "2024-08-21T10:30:00Z",
+    commentText: `I love how the game keeps evolving with each new generation! The new Pokémon designs are so creative, and the battle mechanics feel smoother than ever.`,
+    id: 2,
+  },
+  {
+    avatar:
+      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-3.png",
+    name: "Liam Thompson",
+    dateTime: "2024-08-22T08:45:00Z",
+    commentText: `Blastoise is my all-time favorite! I still remember training my first Squirtle back in the day and finally evolving it into this tank of a Pokémon.`,
+    id: 3,
+  },
+  {
+    avatar:
+      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-4.png",
+    name: "Emma Johnson",
+    dateTime: "2024-08-22T18:20:00Z",
+    commentText: `The strategy behind type advantages is what makes Pokémon battles so fun! Fire-types might seem strong, but a well-placed Water attack can turn the tide in an instant.`,
+    id: 4,
+  },
+  {
+    avatar:
+      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-5.png",
+    name: "Daniel Evans",
+    dateTime: "2024-08-23T12:10:00Z",
+    commentText: `I recently replayed Pokémon Gold, and the nostalgia hit so hard. The day-night cycle was such a groundbreaking feature at the time!`,
+    id: 5,
+  },
+  {
+    avatar:
+      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-6.png",
+    name: "Olivia Martinez",
+    dateTime: "2024-08-24T16:40:00Z",
+    commentText: `Teddiursa’s honey-making lore is so cute! The way Pokémon lore builds small ecosystems around them makes the world feel so alive.`,
+    id: 6,
+  },
+  {
+    avatar:
+      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png",
+    name: "Michael Anderson",
+    dateTime: "2024-08-25T14:05:00Z",
+    commentText: `The Pokémon anime was my childhood. Seeing Ash finally become a champion was such a full-circle moment after all these years!`,
+    id: 7,
+  },
+];

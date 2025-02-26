@@ -11,7 +11,7 @@ import {
   TimelineItem,
   Title,
 } from "@mantine/core";
-import { posts } from "../../mock";
+import { comments, posts } from "../../mock";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {
@@ -148,7 +148,19 @@ export default function Post({ params }: { params: { post: string } }) {
         )}
       </Group>
       <Stack>
-        <Comment />
+        {comments ? (
+          comments.map((comment) => (
+            <Comment
+              key={comment.id}
+              avatar={comment.avatar}
+              name={comment.name}
+              dateTime={comment.dateTime}
+              commentText={comment.commentText}
+            />
+          ))
+        ) : (
+          <div>hello</div>
+        )}
       </Stack>
     </Stack>
   ) : (

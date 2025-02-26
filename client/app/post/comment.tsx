@@ -1,26 +1,27 @@
 import { Avatar, Group, Text } from "@mantine/core";
+import dayjs from "dayjs";
 
-export function Comment() {
+type CommentProps = {
+  avatar: string;
+  name: string;
+  dateTime: string;
+  commentText: string;
+};
+
+export function Comment({ avatar, name, dateTime, commentText }: CommentProps) {
   return (
     <div>
       <Group>
-        <Avatar
-          src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png"
-          alt="Jacob Warnhalter"
-          radius="xl"
-        />
+        <Avatar src={avatar} alt={name} radius="xl" />
         <div>
-          <Text size="sm">Jacob Warnhalter</Text>
+          <Text size="sm">{name}</Text>
           <Text size="xs" c="dimmed">
-            10 minutes ago
+            {dayjs(dateTime).fromNow()}
           </Text>
         </div>
       </Group>
       <Text pl={54} pt="sm" size="sm">
-        This Pokémon likes to lick its palms that are sweetened by being soaked
-        in honey. Teddiursa concocts its own honey by blending fruits and pollen
-        collected by Beedrill. Blastoise has water spouts that protrude from its
-        shell. The water spouts are very accurate.
+        {commentText}
       </Text>
     </div>
   );
