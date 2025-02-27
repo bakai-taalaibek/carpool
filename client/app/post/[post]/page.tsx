@@ -1,9 +1,11 @@
 import {
   Avatar,
   Blockquote,
+  Button,
   Center,
   Divider,
   Group,
+  lighten,
   Space,
   Stack,
   Text,
@@ -147,19 +149,38 @@ export default function Post({ params }: { params: { post: string } }) {
           </>
         )}
       </Group>
-      <Stack>
+      <Stack my={20}>
+        <Group justify="space-between">
+          <Text fz={26} c="gray.5">
+            Комментарии
+          </Text>
+          <Button radius="xl" size="xs">
+            <Text fz={14}>+ Добавить комментарий</Text>
+          </Button>
+        </Group>
+        <Divider />
         {comments ? (
-          comments.map((comment) => (
-            <Comment
-              key={comment.id}
-              avatar={comment.avatar}
-              name={comment.name}
-              dateTime={comment.dateTime}
-              commentText={comment.commentText}
-            />
-          ))
+          <Stack my={20}>
+            {comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                avatar={comment.avatar}
+                name={comment.name}
+                dateTime={comment.dateTime}
+                commentText={comment.commentText}
+              />
+            ))}
+          </Stack>
         ) : (
-          <div>hello</div>
+          <Text
+            fz={17}
+            ta="center"
+            fw={500}
+            c={lighten("var(--mantine-color-gray-7)", 0.4)}
+            mt={5}
+          >
+            Тут пока пусто
+          </Text>
         )}
       </Stack>
     </Stack>
