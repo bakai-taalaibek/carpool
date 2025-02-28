@@ -1,14 +1,18 @@
+"use client";
+
 import {
   Avatar,
   Blockquote,
   Button,
   Center,
   Divider,
+  FocusTrap,
   Group,
   lighten,
   Space,
   Stack,
   Text,
+  Textarea,
   Timeline,
   TimelineItem,
   Title,
@@ -19,13 +23,16 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import {
   IconAlignBoxLeftTop,
   IconCar,
+  IconChevronsRight,
   IconMessage2,
   IconPencil,
   IconPhoneCall,
 } from "@tabler/icons-react";
 import { Comment } from "../comment";
+import { useState } from "react";
 
 export default function Post({ params }: { params: { post: string } }) {
+  const [isCommentFieldOpen, setIsCommentFieldOpen] = useState(false);
   const post = posts.find((item) => item.postId === Number(params.post));
   dayjs.extend(relativeTime);
 
@@ -154,10 +161,40 @@ export default function Post({ params }: { params: { post: string } }) {
           <Text fz={26} c="gray.5">
             Комментарии
           </Text>
-          <Button radius="xl" size="xs">
-            <Text fz={14}>+ Добавить комментарий</Text>
-          </Button>
+          {isCommentFieldOpen ? (
+            <Group>
+              <Button
+                color="blue.8"
+                variant="outline"
+                size="xs"
+                onClick={() => setIsCommentFieldOpen(false)}
+              >
+                <Text fz={14}>Отмена</Text>
+              </Button>
+              <Button
+                color="green.7"
+                size="xs"
+                onClick={() => setIsCommentFieldOpen(false)}
+                rightSection={<IconChevronsRight />}
+              >
+                <Text fz={14}>Отправить</Text>
+              </Button>
+            </Group>
+          ) : (
+            <Button
+              radius="xl"
+              size="xs"
+              onClick={() => setIsCommentFieldOpen(true)}
+            >
+              <Text fz={14}>+ Добавить комментарий</Text>
+            </Button>
+          )}
         </Group>
+        {isCommentFieldOpen && (
+          <FocusTrap>
+            <Textarea placeholder="Введите комментарий" />
+          </FocusTrap>
+        )}
         <Divider />
         {comments ? (
           <Stack my={20}>
