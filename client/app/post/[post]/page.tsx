@@ -153,7 +153,7 @@ export default function Post({ params }: { params: { post: string } }) {
         <CommentsHeader />
         <Divider />
         {comments ? (
-          <Stack my={20}>
+          <Stack my={20} gap={10}>
             {comments.map((comment) => (
               <Comment
                 key={comment.id}
@@ -161,6 +161,7 @@ export default function Post({ params }: { params: { post: string } }) {
                 name={comment.name}
                 dateTime={comment.dateTime}
                 commentText={comment.commentText}
+                isMyPost={comment.isMyPost}
               />
             ))}
           </Stack>

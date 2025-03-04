@@ -197,6 +197,7 @@ export interface Comment {
   dateTime: string;
   commentText: string;
   id: number;
+  isMyPost: boolean;
 }
 
 export const comments: Comment[] = [
@@ -210,6 +211,7 @@ export const comments: Comment[] = [
         collected by Beedrill. Blastoise has water spouts that protrude from its
         shell. The water spouts are very accurate.`,
     id: 1,
+    isMyPost: false,
   },
   {
     avatar:
@@ -218,6 +220,7 @@ export const comments: Comment[] = [
     dateTime: "2024-08-21T10:30:00Z",
     commentText: `I love how the game keeps evolving with each new generation! The new Pokémon designs are so creative, and the battle mechanics feel smoother than ever.`,
     id: 2,
+    isMyPost: true,
   },
   {
     avatar:
@@ -226,6 +229,7 @@ export const comments: Comment[] = [
     dateTime: "2024-08-22T08:45:00Z",
     commentText: `Blastoise is my all-time favorite! I still remember training my first Squirtle back in the day and finally evolving it into this tank of a Pokémon.`,
     id: 3,
+    isMyPost: false,
   },
   {
     avatar:
@@ -234,6 +238,7 @@ export const comments: Comment[] = [
     dateTime: "2024-08-22T18:20:00Z",
     commentText: `The strategy behind type advantages is what makes Pokémon battles so fun! Fire-types might seem strong, but a well-placed Water attack can turn the tide in an instant.`,
     id: 4,
+    isMyPost: false,
   },
   {
     avatar:
@@ -242,6 +247,7 @@ export const comments: Comment[] = [
     dateTime: "2024-08-23T12:10:00Z",
     commentText: `I recently replayed Pokémon Gold, and the nostalgia hit so hard. The day-night cycle was such a groundbreaking feature at the time!`,
     id: 5,
+    isMyPost: false,
   },
   {
     avatar:
@@ -250,6 +256,7 @@ export const comments: Comment[] = [
     dateTime: "2024-08-24T16:40:00Z",
     commentText: `Teddiursa’s honey-making lore is so cute! The way Pokémon lore builds small ecosystems around them makes the world feel so alive.`,
     id: 6,
+    isMyPost: false,
   },
   {
     avatar:
@@ -258,5 +265,8 @@ export const comments: Comment[] = [
     dateTime: "2024-08-25T14:05:00Z",
     commentText: `The Pokémon anime was my childhood. Seeing Ash finally become a champion was such a full-circle moment after all these years!`,
     id: 7,
+    isMyPost: false,
   },
 ];
+
+
