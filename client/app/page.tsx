@@ -3,36 +3,26 @@ import { useState } from "react";
 import {
   Table,
   ScrollArea,
-  UnstyledButton,
   Group,
   Text,
   Center,
-  TextInput,
-  rem,
   Box,
   Flex,
+  Avatar,
 } from "@mantine/core";
 import {
   IconSelector,
   IconChevronDown,
   IconChevronUp,
-  IconSearch,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { posts, RowData } from "./mock";
+import { postAuthorRole } from "../enums/postAuthorRole";
 
 const headers: { name: string; value: keyof RowData }[] = [
   {
     name: "Кто",
     value: "role",
-  },
-  {
-    name: "Имя",
-    value: "name",
-  },
-  {
-    name: "Телефон",
-    value: "phone",
   },
   {
     name: "Откуда",
@@ -49,6 +39,14 @@ const headers: { name: string; value: keyof RowData }[] = [
   {
     name: "Цена/место",
     value: "pricePerSeat",
+  },
+  {
+    name: "Имя",
+    value: "name",
+  },
+  {
+    name: "Телефон",
+    value: "phone",
   },
 ];
 
@@ -166,13 +164,41 @@ export default function HomePage() {
 
   const rows = sortedData.map((row) => (
     <Table.Tr
+      // bg={lighten(
+      //   row.role === postAuthorRole.Driver
+      //     ? "var(--mantine-color-yellow-0)"
+      //     : "var(--mantine-color-green-0)",
+      //   0.7
+      // )}
+      className={
+        row.role === postAuthorRole.Driver
+          ? "bg-yellow-50/60 hover:bg-[#f2f2e1]"
+          : "hover:bg-[#f0f0f0]"
+      }
       key={row.postId}
       style={{ cursor: "pointer" }}
       onClick={() => router.push(`/post/${row.postId}`)}
     >
-      <Table.Td>{row.role}</Table.Td>
-      <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.phone.phoneCode + " " + row.phone.phoneNumber}</Table.Td>
+      <Table.Td>
+        <Group
+        // className={
+        //   row.role === postAuthorRole.Driver
+        //     ? "text-yellow-600 font-medium"
+        //     : "text-green-800 font-medium"
+        // }
+        >
+          <Avatar
+            src={
+              row.role === postAuthorRole.Driver
+                ? "/driver8.jpg"
+                : "/passenger2.jpg"
+            }
+            size={20}
+            radius="sm"
+          />
+          {row.role}
+        </Group>
+      </Table.Td>
       <Table.Td>{row.origin}</Table.Td>
       <Table.Td>{row.destination}</Table.Td>
       <Table.Td>
@@ -186,13 +212,15 @@ export default function HomePage() {
       <Table.Td style={{ textAlign: "center" }}>
         {row.pricePerSeat && row.pricePerSeat + " сом"}
       </Table.Td>
+      <Table.Td>{row.name}</Table.Td>
+      <Table.Td>{row.phone.phoneCode + " " + row.phone.phoneNumber}</Table.Td>
     </Table.Tr>
   ));
 
   return (
     <Box>
       <ScrollArea>
-        <TextInput
+        {/* <TextInput
           placeholder="Поиск по всем объявлениям"
           mb="md"
           leftSection={
@@ -200,7 +228,7 @@ export default function HomePage() {
           }
           value={searchString}
           onChange={handleSearchChange}
-        />
+        /> */}
         <Table
           horizontalSpacing="md"
           verticalSpacing="xs"
