@@ -24,6 +24,7 @@ import {
 } from "@tabler/icons-react";
 import { Comment } from "../comment";
 import CommentsHeader from "../commentsHeader";
+import { postAuthorRole } from "../../../enums/postAuthorRole";
 
 export default function Post({ params }: { params: { post: string } }) {
   const post = posts.find((item) => item.postId === Number(params.post));
@@ -46,7 +47,11 @@ export default function Post({ params }: { params: { post: string } }) {
           // style={{
           //   boxShadow: "0 0 3px var(--mantine-color-dark-1)",
           // }}
-          src={post.role === "Водитель" ? "/driver8.jpg" : "/passenger2.jpg"}
+          src={
+            post.role === postAuthorRole.Driver
+              ? "/driver8.jpg"
+              : "/passenger2.jpg"
+          }
           size={90}
           radius="lg"
         />
