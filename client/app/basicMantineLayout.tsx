@@ -24,6 +24,8 @@ import {
   Collapse,
   Flex,
   lighten,
+  Title,
+  darken,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
@@ -307,8 +309,9 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         <Drawer
           opened={isFilterOpened && pathname == "/"}
           onClose={toggleFilter}
-          title="Фильтры:"
+          title={<Text fz={20}>Фильтры</Text>}
           position="right"
+          styles={{ body: { padding: 0 } }}
         >
           <Filters />
         </Drawer>

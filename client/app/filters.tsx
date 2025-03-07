@@ -5,41 +5,24 @@ import {
   darken,
   Group,
   SegmentedControl,
+  Stack,
   Text,
   TextInput,
   Title,
 } from "@mantine/core";
-import { IconClearAll, IconClock } from "@tabler/icons-react";
+import {
+  IconAdjustmentsCheck,
+  IconCheck,
+  IconChecks,
+  IconClearAll,
+  IconClock,
+} from "@tabler/icons-react";
 import ShowMyPostsInFilter from "./showMyPostsInFilter";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 
 function Filters() {
   return (
-    <Box
-      bg="indigo.0"
-      style={{ borderRadius: "5px" }}
-      mb="10px"
-      p="10px"
-      bd="solid 1.5px var(--mantine-color-indigo-1)"
-    >
-      <Group justify="space-between" mb={13}>
-        <Title
-          order={3}
-          ml={3}
-          c={darken("var(--mantine-color-indigo-9)", 0.1)}
-        >
-          Фильтры:
-        </Title>
-        <Button
-          rightSection={<IconClearAll size={16} />}
-          variant="default"
-          radius="xl"
-          bd="none"
-          fw="500"
-        >
-          Сбросить
-        </Button>
-      </Group>
+    <Stack>
       <Group align="start">
         <Card w="fit-content">
           <Text mb="5px">Чьи объявления показывать?</Text>
@@ -123,7 +106,32 @@ function Filters() {
           <TextInput placeholder="Не курю" />
         </Card>
       </Group>
-    </Box>
+      <Group
+        style={{
+          position: "sticky",
+          bottom: 0,
+          boxShadow: "0 -2px 4px rgba(0, 0, 0, 0.1)",
+        }}
+        bg="white"
+        p="12 15"
+        justify="space-between"
+      >
+        <Button
+          rightSection={<IconClearAll size={16} />}
+          variant="light"
+          fw="500"
+        >
+          Сбросить всё
+        </Button>
+
+        <Button
+          color="green.7"
+          rightSection={<IconCheck />}
+        >
+          <Text fz={14}>Применить</Text>
+        </Button>
+      </Group>
+    </Stack>
   );
 }
 export default Filters;
