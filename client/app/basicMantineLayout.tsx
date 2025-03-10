@@ -16,28 +16,22 @@ import {
   MenuItem,
   MenuDivider,
   Box,
-  Notification,
   Stack,
   Drawer,
   Anchor,
   Modal,
-  Collapse,
   Flex,
   lighten,
-  Title,
-  darken,
 } from "@mantine/core";
 import "@mantine/dates/styles.css";
-import { useDisclosure, useLocalStorage } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Footer from "./footer";
 import { useScrollIntoView } from "@mantine/hooks";
 import {
-  IconCaretDown,
-  IconCaretDownFilled,
-  IconCaretUpFilled,
-  IconChevronDown,
+  IconAdjustments,
+  IconFilterSearch,
   IconLogout2,
   IconSettings,
 } from "@tabler/icons-react";
@@ -130,23 +124,15 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             <Group gap={20} visibleFrom="sm">
               {pathname == "/" && (
                 <Button
-                  bd={
-                    isFilterOpened
-                      ? "1.5px solid indigo.1"
-                      : "1.5px solid transparent"
-                  }
-                  color={isFilterOpened ? "indigo" : "blue"}
-                  variant="transparent"
-                  bg={isFilterOpened ? "indigo.0" : "none"}
+                  // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
+                  // h={30}
+                  // c="blue"
+                  // bd="1px solid blue"
+                  variant="subtle"
+                  color="cyan"
                   onClick={toggleFilter}
-                  radius="5px"
-                  rightSection={
-                    isFilterOpened ? (
-                      <IconCaretUpFilled size={14} />
-                    ) : (
-                      <IconCaretDownFilled size={14} />
-                    )
-                  }
+                  radius="xl"
+                  leftSection={<IconFilterSearch size={22} />}  
                 >
                   Фильтры
                 </Button>
