@@ -1,44 +1,42 @@
 "use client";
-import "@mantine/core/styles.css";
-import React, { useEffect, useState } from "react";
 import {
-  AppShell,
-  Group,
-  Burger,
-  Text,
-  Button,
-  Avatar,
-  Indicator,
-  Menu,
-  MenuTarget,
-  MenuDropdown,
-  MenuLabel,
-  MenuItem,
-  MenuDivider,
-  Box,
-  Stack,
-  Drawer,
   Anchor,
-  Modal,
+  AppShell,
+  Avatar,
+  Box,
+  Burger,
+  Button,
+  Drawer,
   Flex,
+  Group,
+  Indicator,
   lighten,
+  Menu,
+  MenuDivider,
+  MenuDropdown,
+  MenuItem,
+  MenuLabel,
+  MenuTarget,
+  Modal,
+  Stack,
+  Text,
 } from "@mantine/core";
+import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
-import { useDisclosure } from "@mantine/hooks";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import Footer from "./footer";
-import { useScrollIntoView } from "@mantine/hooks";
+import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
 import {
-  IconAdjustments,
   IconFilterSearch,
   IconLogout2,
   IconSettings,
 } from "@tabler/icons-react";
-import NotificationCustom from "./notificationCustom";
 import dayjs from "dayjs";
-import { TermsContent } from "./termsContent";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import Filters from "./filters";
+import Footer from "./footer";
+import NotificationCustom from "./notificationCustom";
+import { TermsContent } from "./termsContent";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -125,14 +123,11 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               {pathname == "/" && (
                 <Button
                   // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
-                  // h={30}
-                  // c="blue"
-                  // bd="1px solid blue"
                   variant="subtle"
                   color="cyan"
                   onClick={toggleFilter}
                   radius="xl"
-                  leftSection={<IconFilterSearch size={22} />}  
+                  leftSection={<IconFilterSearch size={22} />}
                 >
                   Фильтры
                 </Button>
@@ -297,7 +292,16 @@ export default function BasicMantineLayout({ children }: { children: any }) {
           onClose={toggleFilter}
           title={<Text fz={20}>Фильтры</Text>}
           position="right"
-          styles={{ body: { padding: 0 } }}
+          styles={{
+            body: { padding: 0 },
+            header: {
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              minHeight: "50px",
+              maxHeight: "50px"
+              // backgroundColor: lighten("var(--mantine-color-indigo-0)", 0.2),
+            },
+          }}
+          size="sm"
         >
           <Filters />
         </Drawer>

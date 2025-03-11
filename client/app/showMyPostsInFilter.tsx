@@ -1,14 +1,13 @@
-import { Text, Card } from "@mantine/core";
+import { Text, Card, CardProps } from "@mantine/core";
 import { IconCheck, IconUserSearch } from "@tabler/icons-react";
 import { useState } from "react";
 
-export default function ShowMyPostsInFilter() {
+export default function ShowMyPostsInFilter(props: CardProps) {
   const [isSelected, setIsSelected] = useState(false);
   const iconSize = 33;
 
   return (
     <Card
-      w="fit-content"
       onClick={() => setIsSelected(!isSelected)}
       bd={
         isSelected
@@ -16,8 +15,11 @@ export default function ShowMyPostsInFilter() {
           : "1.5px solid transparent"
       }
       style={{ cursor: "pointer" }}
+      {...props}
     >
-      <Text mb="5px">Показать только мои объявления</Text>
+      <Text mb="5px" fw="500">
+        Показать только мои объявления
+      </Text>
       {isSelected ? (
         <IconCheck size={iconSize} color="var(--mantine-color-blue-5)" />
       ) : (
