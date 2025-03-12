@@ -2,23 +2,15 @@ import {
   Box,
   Button,
   Card,
-  darken,
   Group,
   lighten,
   SegmentedControl,
   Stack,
   Text,
   TextInput,
-  Title,
   Tooltip,
 } from "@mantine/core";
-import {
-  IconAdjustmentsCheck,
-  IconCheck,
-  IconChecks,
-  IconClearAll,
-  IconClock,
-} from "@tabler/icons-react";
+import { IconCheck, IconClearAll, IconClock } from "@tabler/icons-react";
 import ShowMyPostsInFilter from "./showMyPostsInFilter";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 
@@ -34,7 +26,6 @@ function Filters() {
         align="start"
         p="16 18 18 12"
         gap={12}
-        // bg="gray.0"
         bg={lighten("var(--mantine-color-gray-1)", 0.1)}
       >
         <Card w="100%" radius="lg" py={cardVerticalPadding}>
@@ -42,8 +33,6 @@ function Filters() {
             Чьи объявления показать?
           </Text>
           <SegmentedControl
-            // value={role}
-            // onChange={(role) => setRole(role)}
             data={[
               { label: "Всех", value: "all" },
               { label: "Водителей", value: "drivers" },
@@ -51,7 +40,7 @@ function Filters() {
             ]}
           />
         </Card>
-        <ShowMyPostsInFilter w="100%" radius="lg" />
+        <ShowMyPostsInFilter w="100%" radius="lg" py={cardVerticalPadding} />
 
         <Card w="100%" radius="lg" py={cardVerticalPadding}>
           <Text mb={largerVerticalCardSpacing} fw="500">
