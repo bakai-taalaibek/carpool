@@ -218,53 +218,42 @@ export default function HomePage() {
   ));
 
   return (
-    <Box>
-      <ScrollArea>
-        {/* <TextInput
-          placeholder="Поиск по всем объявлениям"
-          mb="md"
-          leftSection={
-            <IconSearch style={{ width: 16, height: 16 }} stroke={1.5} />
-          }
-          value={searchString}
-          onChange={handleSearchChange}
-        /> */}
-        <Table
-          horizontalSpacing="md"
-          verticalSpacing="xs"
-          miw={700}
-          layout="fixed"
-          highlightOnHover
-        >
-          <Table.Thead>
+    <Table.ScrollContainer minWidth={1100}>
+      <Table
+        horizontalSpacing="md"
+        verticalSpacing="xs"
+        miw={700}
+        layout="fixed"
+        highlightOnHover
+      >
+        <Table.Thead>
+          <Table.Tr>
+            {headers.map((item) => (
+              <Th
+                key={item.value}
+                isCurrentSortingKey={sortKey === item.value}
+                isReversed={isSortingReversed}
+                onSort={() => setSorting(item.value)}
+              >
+                {item.name}
+              </Th>
+            ))}
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {rows.length > 0 ? (
+            rows
+          ) : (
             <Table.Tr>
-              {headers.map((item) => (
-                <Th
-                  key={item.value}
-                  isCurrentSortingKey={sortKey === item.value}
-                  isReversed={isSortingReversed}
-                  onSort={() => setSorting(item.value)}
-                >
-                  {item.name}
-                </Th>
-              ))}
+              <Table.Td colSpan={7}>
+                <Text fw={500} ta="center">
+                  Nothing found
+                </Text>
+              </Table.Td>
             </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {rows.length > 0 ? (
-              rows
-            ) : (
-              <Table.Tr>
-                <Table.Td colSpan={7}>
-                  <Text fw={500} ta="center">
-                    Nothing found
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-            )}
-          </Table.Tbody>
-        </Table>
-      </ScrollArea>
-    </Box>
+          )}
+        </Table.Tbody>
+      </Table>
+    </Table.ScrollContainer>
   );
 }
