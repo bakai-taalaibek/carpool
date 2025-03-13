@@ -119,7 +119,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             >
               POPUTKA.KG
             </Text>
-            <Group gap={20} visibleFrom="sm">
+            <Group gap={20}>
               {pathname == "/" && (
                 <Button
                   // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
@@ -128,6 +128,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                   onClick={toggleFilter}
                   radius="xl"
                   leftSection={<IconFilterSearch size={22} />}
+                  visibleFrom="sm"
                 >
                   Фильтры
                 </Button>
@@ -139,6 +140,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                   radius="xl"
                   variant="gradient"
                   gradient={{ from: "orange", to: "red", deg: 90 }}
+                  visibleFrom="sm"
                 >
                   + Новая попутка
                 </Button>
@@ -148,6 +150,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                 color="cyan"
                 radius="xl"
                 onClick={() => scrollIntoView()}
+                visibleFrom="sm"
               >
                 Оставить отзыв
               </Button>
@@ -157,6 +160,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                 variant="subtle"
                 color="cyan"
                 radius="xl"
+                visibleFrom="sm"
               >
                 Войти
               </Button>
@@ -285,6 +289,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         style={{
           display: "flex",
           flexDirection: "column",
+          paddingInline: 0,
         }}
       >
         <Drawer
@@ -297,7 +302,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             header: {
               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
               minHeight: "50px",
-              maxHeight: "50px"
+              maxHeight: "50px",
               // backgroundColor: lighten("var(--mantine-color-indigo-0)", 0.2),
             },
           }}
