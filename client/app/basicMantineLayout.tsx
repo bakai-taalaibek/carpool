@@ -278,11 +278,58 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar py="md" px={4}>
-        <Button>Home</Button>
-        <Button>Blog</Button>
-        <Button>Contacts</Button>
-        <Button>Support</Button>
+      <AppShell.Navbar py="lg" px={4}>
+        <Stack align="center">
+          {pathname !== "/new" && (
+            <Button
+              component={Link}
+              href="/new"
+              radius="xl"
+              variant="gradient"
+              gradient={{ from: "orange", to: "red", deg: 90 }}
+              onClick={() => toggleSidebar()}
+            >
+              + Новая попутка
+            </Button>
+          )}
+          {pathname == "/" && (
+            <Button
+              // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
+              variant="subtle"
+              color="cyan"
+              onClick={() => {
+                toggleFilter();
+                toggleSidebar();
+              }}
+              radius="xl"
+              leftSection={<IconFilterSearch size={22} />}
+            >
+              Фильтры
+            </Button>
+          )}
+
+          <Button
+            variant="subtle"
+            color="cyan"
+            radius="xl"
+            onClick={() => {
+              scrollIntoView();
+              toggleSidebar();
+            }}
+          >
+            Оставить отзыв
+          </Button>
+          <Button
+            component={Link}
+            href="/auth"
+            variant="subtle"
+            color="cyan"
+            radius="xl"
+            onClick={() => toggleSidebar()}
+          >
+            Войти
+          </Button>
+        </Stack>
       </AppShell.Navbar>
 
       <AppShell.Main
