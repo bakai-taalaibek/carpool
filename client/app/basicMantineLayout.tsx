@@ -18,15 +18,17 @@ import {
   MenuLabel,
   MenuTarget,
   Modal,
+  Portal,
   Stack,
   Text,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
-import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
+import { useDisclosure, useHeadroom, useScrollIntoView } from "@mantine/hooks";
 import {
   IconFilterSearch,
   IconLogout2,
+  IconPlus,
   IconSettings,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -76,6 +78,8 @@ export default function BasicMantineLayout({ children }: { children: any }) {
   const [isModalOpened, { open: openModal, close: closeModal }] =
     useDisclosure(false);
 
+  const isSecondHeaderPinned = useHeadroom({ fixedAt: 0 });
+
   useEffect(() => {
     const lastVisited = localStorage.getItem("lastVisitedPoputka");
 
@@ -93,21 +97,26 @@ export default function BasicMantineLayout({ children }: { children: any }) {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{
-        width: 300,
-        breakpoint: "sm",
-        collapsed: { desktop: true, mobile: !isSidebarOpened },
-      }}
+      // navbar={{
+      //   width: 300,
+      //   breakpoint: "sm",
+      //   collapsed: { desktop: true, mobile: !isSidebarOpened },
+      // }}
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
-          <Burger
+        <Group
+          h="100%"
+          px="md"
+          bg="white"
+          style={{ zIndex: 2, position: "relative" }}
+        >
+          {/* <Burger
             opened={isSidebarOpened}
             onClick={toggleSidebar}
             hiddenFrom="sm"
             size="sm"
-          />
+          /> */}
           <Group justify="space-between" style={{ flex: 1 }}>
             <Text
               component={Link}
@@ -160,7 +169,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                 variant="subtle"
                 color="cyan"
                 radius="xl"
-                visibleFrom="sm"
               >
                 Войти
               </Button>
@@ -276,38 +284,45 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             </Group>
           </Group>
         </Group>
-      </AppShell.Header>
-
-      <AppShell.Navbar py="lg" px={4}>
-        <Stack align="center">
-          {pathname !== "/new" && (
-            <Button
-              component={Link}
-              href="/new"
-              radius="xl"
-              variant="gradient"
-              gradient={{ from: "orange", to: "red", deg: 90 }}
-              onClick={() => toggleSidebar()}
-            >
-              + Новая попутка
-            </Button>
-          )}
-          {pathname == "/" && (
+        {pathname === "/" && (
+          <Group
+            hiddenFrom="sm"
+            w="100%"
+            bg="gray.0"
+            h={45}
+            justify="space-evenly"
+            style={{
+              transform: `translateY(${isSecondHeaderPinned ? "0" : "-45px"})`,
+              transition: "transform 400ms ease",
+            }}
+          >
             <Button
               // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
               variant="subtle"
               color="cyan"
-              onClick={() => {
-                toggleFilter();
-                toggleSidebar();
-              }}
+              onClick={() => toggleFilter()}
               radius="xl"
               leftSection={<IconFilterSearch size={22} />}
             >
               Фильтры
             </Button>
-          )}
+            <Button
+              className="[&_*[data-position='left']]:[margin-inline-end:6px]"
+              component={Link}
+              href="/new"
+              radius="xl"
+              variant="subtle"
+              color="cyan"
+              leftSection={<IconPlus />}
+            >
+              Новая попутка
+            </Button>
+          </Group>
+        )}
+      </AppShell.Header>
 
+      {/* <AppShell.Navbar py="lg" px={4}>
+        <Stack align="center">
           <Button
             variant="subtle"
             color="cyan"
@@ -319,18 +334,8 @@ export default function BasicMantineLayout({ children }: { children: any }) {
           >
             Оставить отзыв
           </Button>
-          <Button
-            component={Link}
-            href="/auth"
-            variant="subtle"
-            color="cyan"
-            radius="xl"
-            onClick={() => toggleSidebar()}
-          >
-            Войти
-          </Button>
         </Stack>
-      </AppShell.Navbar>
+      </AppShell.Navbar> */}
 
       <AppShell.Main
         style={{
@@ -357,9 +362,12 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         >
           <Filters />
         </Drawer>
-        <Flex justify="center" style={{ flexGrow: "1" }}>
+        <Stack pt={0} style={{ flexGrow: "1" }}>
+          <Box h={25} w="100%" hiddenFrom="sm">
+            {""}
+          </Box>
           {children}
-        </Flex>
+        </Stack>
       </AppShell.Main>
       <Footer ref={targetRef} />
       <Drawer
