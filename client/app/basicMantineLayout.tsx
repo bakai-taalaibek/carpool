@@ -4,13 +4,10 @@ import {
   AppShell,
   Avatar,
   Box,
-  Burger,
   Button,
   Drawer,
-  Flex,
   Group,
   Indicator,
-  lighten,
   Menu,
   MenuDivider,
   MenuDropdown,
@@ -18,7 +15,6 @@ import {
   MenuLabel,
   MenuTarget,
   Modal,
-  Portal,
   Stack,
   Text,
 } from "@mantine/core";
@@ -78,8 +74,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
   const [isModalOpened, { open: openModal, close: closeModal }] =
     useDisclosure(false);
 
-  const isSecondHeaderPinned = useHeadroom({ fixedAt: 0 });
-
   useEffect(() => {
     const lastVisited = localStorage.getItem("lastVisitedPoputka");
 
@@ -95,15 +89,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
   }, []);
 
   return (
-    <AppShell
-      header={{ height: 60 }}
-      // navbar={{
-      //   width: 300,
-      //   breakpoint: "sm",
-      //   collapsed: { desktop: true, mobile: !isSidebarOpened },
-      // }}
-      padding="md"
-    >
+    <AppShell header={{ height: 60 }} padding="md">
       <AppShell.Header>
         <Group
           h="100%"
@@ -111,12 +97,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
           bg="white"
           style={{ zIndex: 2, position: "relative" }}
         >
-          {/* <Burger
-            opened={isSidebarOpened}
-            onClick={toggleSidebar}
-            hiddenFrom="sm"
-            size="sm"
-          /> */}
           <Group justify="space-between" style={{ flex: 1 }}>
             <Text
               component={Link}
@@ -231,23 +211,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                         </Button>
                       </Group>
                       {notifications.map((item, index) => (
-                        // <Notification
-                        //   key={item.id}
-                        //   title={item.title}
-                        //   styles={{
-                        //     root: {
-                        //       boxShadow: "none",
-                        //     },
-                        //     title: {
-                        //       fontSize: "12px",
-                        //     },
-                        //     description: {
-                        //       fontSize: "12px",
-                        //     },
-                        //   }}
-                        // >
-                        //   {item.description}
-                        // </Notification>
                         <NotificationCustom
                           key={item.id}
                           title={item.title}
@@ -256,14 +219,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                           {item.description}
                         </NotificationCustom>
                       ))}
-                      <Group
-                        justify="center"
-                        w="full"
-                        // style={{
-                        //   borderTop: "1px solid var(--mantine-color-gray-2)",
-                        // }}
-                        py={3}
-                      >
+                      <Group justify="center" w="full" py={3}>
                         <Button
                           onClick={() => setAvatarMenuOpened(false)}
                           component={Link}
@@ -291,10 +247,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             bg="gray.0"
             h={45}
             justify="space-evenly"
-            style={{
-              transform: `translateY(${isSecondHeaderPinned ? "0" : "-45px"})`,
-              transition: "transform 400ms ease",
-            }}
           >
             <Button
               // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
@@ -321,22 +273,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         )}
       </AppShell.Header>
 
-      {/* <AppShell.Navbar py="lg" px={4}>
-        <Stack align="center">
-          <Button
-            variant="subtle"
-            color="cyan"
-            radius="xl"
-            onClick={() => {
-              scrollIntoView();
-              toggleSidebar();
-            }}
-          >
-            Оставить отзыв
-          </Button>
-        </Stack>
-      </AppShell.Navbar> */}
-
       <AppShell.Main
         style={{
           display: "flex",
@@ -355,7 +291,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
               minHeight: "50px",
               maxHeight: "50px",
-              // backgroundColor: lighten("var(--mantine-color-indigo-0)", 0.2),
             },
           }}
           size="sm"
