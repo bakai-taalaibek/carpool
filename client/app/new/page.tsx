@@ -17,7 +17,7 @@ export default function NewPage() {
   const [role, setRole] = useState<string>("driver");
 
   return (
-    <Stack maw={600} mx="auto" gap={33}>
+    <Stack w="80%" maw={600} mx="auto" mb={50} gap={33}>
       <Text fz={{ base: 16, xs: 18, sm: 20 }}>
         Укажите детали вашей поездки:
       </Text>
