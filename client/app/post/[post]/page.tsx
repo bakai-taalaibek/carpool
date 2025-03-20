@@ -31,9 +31,9 @@ export default function Post({ params }: { params: { post: string } }) {
   dayjs.extend(relativeTime);
 
   return post ? (
-    <Stack w={600} mx="auto" gap={24} pt={20}>
+    <Stack w="90%" maw={600} mx="auto" gap={24} pt={20}>
       <Stack gap={3}>
-        <Title order={3} mx="auto">
+        <Title order={3} ta="center">
           {dayjs(post.departureDatetime).format("D MMMM YYYY (dddd)")}
         </Title>
         <Title order={4} c="gray.5" mx="auto">
@@ -44,9 +44,6 @@ export default function Post({ params }: { params: { post: string } }) {
       <Divider />
       <Group wrap="nowrap" justify="center">
         <Avatar
-          // style={{
-          //   boxShadow: "0 0 3px var(--mantine-color-dark-1)",
-          // }}
           src={
             post.role === postAuthorRole.Driver
               ? "/driver8.jpg"
@@ -89,7 +86,7 @@ export default function Post({ params }: { params: { post: string } }) {
       </Group>
       <Divider />
 
-      <Group justify="space-between" align="start" px="md" py="sm">
+      <Group justify="space-between" align="start" px="md" py="sm" gap={40}>
         <Timeline active={1} bulletSize={24} lineWidth={2} color="green.7">
           <TimelineItem title={post.origin}>
             <Text c="dimmed" size="sm">
@@ -101,7 +98,7 @@ export default function Post({ params }: { params: { post: string } }) {
           <TimelineItem title={post.destination}></TimelineItem>
         </Timeline>
         {(post.seats || post.pricePerSeat || post.pricePerCar) && (
-          <Stack align="end" gap={8}>
+          <Stack align="end" gap={8} ml="auto">
             <Text fz={24} fw={900} lh={1} c="orange.7">
               {post.pricePerSeat}
               <Text ml={6} c="dark" lh={1} component="span" fz={16} fw={400}>
