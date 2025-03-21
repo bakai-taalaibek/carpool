@@ -45,7 +45,7 @@ import { useState } from "react";
 const data = {
   name: "Асан Болотов",
   phone: "0 500 500500",
-  email: "bakai.pochta@gmail.com",
+  email: " bakai_taalaibekuulu@epam.com",
   auto: "Toyota Corolla",
   about: "Я опытный водитель",
 };
@@ -74,8 +74,13 @@ export default function NewPage() {
   });
 
   return (
-    <Stack w={600} mx="auto" gap={0} pt={30}>
-      <Flex align="start" gap={50} justify="stretch">
+    <Stack w="90%" maw={600} mx="auto" gap={0} pt={30}>
+      <Flex
+        align={{ base: "center", xs: "start" }}
+        gap={50}
+        justify="stretch"
+        direction={{ base: "column", xs: "row" }}
+      >
         <Stack align="center" gap={5}>
           <Avatar color="blue" radius={100} size={120} />
           <FileButton onChange={setFile} accept="image/png,image/jpeg">
@@ -86,87 +91,93 @@ export default function NewPage() {
             )}
           </FileButton>
         </Stack>
-        <div className="grid grid-cols-[auto_1fr] align-items-center gap-x-4 gap-y-1 w-full">
-          <Text ta="end" h="36px" lh="36px">
-            Имя:
-          </Text>
-          {isBeingEdited ? (
-            <TextInput placeholder="Асан Болотов" />
-          ) : (
-            <Text h="36px" lh="36px" c="gray.7">
-              {data.name}
+        <Stack w="100%">
+          <div className="grid grid-cols-[auto_1fr] align-items-center gap-x-4 gap-y-1 w-full">
+            <Text ta="end" h="36px" lh="36px">
+              Имя:
             </Text>
-          )}
+            {isBeingEdited ? (
+              <TextInput placeholder="Асан Болотов" />
+            ) : (
+              <Text h="36px" lh="36px" c="gray.7">
+                {data.name}
+              </Text>
+            )}
 
-          <Text ta="end" h="36px" lh="36px">
-            Номер телефона:
-          </Text>
-          {isBeingEdited ? (
-            <TextInput placeholder="0 500 600 700" required />
-          ) : (
-            <Text h="36px" lh="36px" c="gray.7">
-              {data.phone}
+            <Text ta="end" h="36px" lh="36px">
+              Телефон:
             </Text>
-          )}
-          <Text ta="end" h="36px" lh="36px">
-            Почта:
-          </Text>
-          {isBeingEdited ? (
-            <TextInput required placeholder="your.name@email.com" />
-          ) : (
-            <Text h="36px" lh="36px" c="gray.7">
-              {data.email}
+            {isBeingEdited ? (
+              <TextInput placeholder="0 500 600 700" required />
+            ) : (
+              <Text h="36px" lh="36px" c="gray.7">
+                {data.phone}
+              </Text>
+            )}
+            <Text ta="end" h="36px" lh="36px">
+              Почта:
             </Text>
-          )}
-          <Text ta="end" h="36px" lh="36px">
-            Авто:
-          </Text>
+            {isBeingEdited ? (
+              <TextInput required placeholder="your.name@email.com" />
+            ) : (
+              <Text h="36px" lh="36px" c="gray.7">
+                {data.email}
+              </Text>
+            )}
+            <Text ta="end" h="36px" lh="36px">
+              Авто:
+            </Text>
 
-          {isBeingEdited ? (
-            <TextInput required placeholder="Тойота Королла" />
-          ) : (
-            <Text h="36px" lh="36px" c="gray.7">
-              {data.auto}
+            {isBeingEdited ? (
+              <TextInput required placeholder="Тойота Королла" />
+            ) : (
+              <Text h="36px" lh="36px" c="gray.7">
+                {data.auto}
+              </Text>
+            )}
+            <Text ta="end" h="36px" lh="36px">
+              О себе:
             </Text>
-          )}
-          <Text ta="end" h="36px" lh="36px">
-            О себе:
-          </Text>
+            {isBeingEdited ? (
+              <TextInput required placeholder="Водитель категории В" />
+            ) : (
+              <Text h="36px" lh="36px" c="gray.7">
+                {data.about}
+              </Text>
+            )}
+          </div>
           {isBeingEdited ? (
-            <Textarea required placeholder="Водитель категории В" />
+            <Group ml="auto">
+              <Button
+                w="fit-content"
+                color="blue"
+                variant="outline"
+                onClick={() => setIsBeingEdited(false)}
+              >
+                Отмена
+              </Button>
+              <Button
+                w="fit-content"
+                ml="auto"
+                variant="filled"
+                color="green.7"
+                onClick={() => setIsBeingEdited(false)}
+              >
+                Сохранить
+              </Button>
+            </Group>
           ) : (
-            <Text h="36px" lh="36px" c="gray.7">
-              {data.about}
-            </Text>
+            <Button
+              w="fit-content"
+              ml="auto"
+              variant="filled"
+              onClick={() => setIsBeingEdited(true)}
+            >
+              Редактировать
+            </Button>
           )}
-        </div>
-
-        {isBeingEdited || (
-          <ActionIcon
-            fw={100}
-            color="blue"
-            variant="subtle"
-            size="md"
-            aria-label="Edit"
-            onClick={() => setIsBeingEdited(true)}
-          >
-            <IconPencil />
-          </ActionIcon>
-        )}
+        </Stack>
       </Flex>
-
-      <Space h="xs" />
-
-      {isBeingEdited && (
-        <Button
-          w="fit-content"
-          ml="auto"
-          variant="filled"
-          onClick={() => setIsBeingEdited(false)}
-        >
-          Сохранить
-        </Button>
-      )}
 
       <Divider mt={20} mb={0} />
 
