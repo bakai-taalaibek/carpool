@@ -15,12 +15,13 @@ import {
   MenuLabel,
   MenuTarget,
   Modal,
+  Space,
   Stack,
   Text,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
-import { useDisclosure, useHeadroom, useScrollIntoView } from "@mantine/hooks";
+import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
 import {
   IconFilterSearch,
   IconLogout2,
@@ -63,16 +64,19 @@ export const notifications = [
 ];
 
 export default function BasicMantineLayout({ children }: { children: any }) {
-  const [isSidebarOpened, { toggle: toggleSidebar }] = useDisclosure();
-  const [isFilterOpened, { toggle: toggleFilter }] = useDisclosure(false);
-  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
-    duration: 800,
-  });
-  const pathname = usePathname();
-  const [avatarMenuOpened, setAvatarMenuOpened] = useState(false);
-  const [drawerOpened, setDrawerOpened] = useState(false);
-  const [isModalOpened, { open: openModal, close: closeModal }] =
+  const [isFilterDrawerOpen, { toggle: toggleFilterDrawer }] =
     useDisclosure(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isTermsDrawerOpen, setIsTermsDrawerOpen] = useState(false);
+  const [isTermsModalOpen, { open: openTermsModal, close: closeTermsModal }] =
+    useDisclosure(false);
+
+  const { scrollIntoView: scrollFooterIntoView, targetRef: footerTargetRef } =
+    useScrollIntoView<HTMLDivElement>({
+      duration: 800,
+    });
+
+  const pathname = usePathname();
 
   useEffect(() => {
     const lastVisited = localStorage.getItem("lastVisitedPoputka");
@@ -83,12 +87,16 @@ export default function BasicMantineLayout({ children }: { children: any }) {
 
     setTimeout(() => {
       if (dayjs().diff(lastVisited, "days") > 1) {
-        setDrawerOpened(true);
+        setIsTermsDrawerOpen(true);
       }
     }, 50);
   }, []);
 
   return (
+    // height: 60 is the height of header,
+    // padding="md" is applied to all pages, it is the distance from header to main
+    // in mobile viewport on index page, there is additional Space to account to sub-header
+    // for some reason when sub-header exists, header border is hidden, which is desired
     <AppShell header={{ height: 60 }} padding="md">
       <AppShell.Header>
         <Group
@@ -114,7 +122,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                   // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
                   variant="subtle"
                   color="cyan"
-                  onClick={toggleFilter}
+                  onClick={toggleFilterDrawer}
                   radius="xl"
                   leftSection={<IconFilterSearch size={22} />}
                   visibleFrom="sm"
@@ -138,7 +146,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                 variant="subtle"
                 color="cyan"
                 radius="xl"
-                onClick={() => scrollIntoView()}
+                onClick={() => scrollFooterIntoView()}
                 visibleFrom="sm"
               >
                 Оставить отзыв
@@ -158,8 +166,8 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                   shadow="md"
                   width={280}
                   position="bottom-end"
-                  opened={avatarMenuOpened}
-                  onChange={setAvatarMenuOpened}
+                  opened={isUserMenuOpen}
+                  onChange={setIsUserMenuOpen}
                 >
                   <MenuTarget>
                     <Indicator
@@ -221,7 +229,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                       ))}
                       <Group justify="center" w="full" py={3}>
                         <Button
-                          onClick={() => setAvatarMenuOpened(false)}
+                          onClick={() => setIsUserMenuOpen(false)}
                           component={Link}
                           href="/notifications"
                           variant="light"
@@ -240,6 +248,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             </Group>
           </Group>
         </Group>
+        {/* only in mobile viewport on index page show sub-header */}
         {pathname === "/" && (
           <Group
             hiddenFrom="sm"
@@ -252,7 +261,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
               variant="subtle"
               color="cyan"
-              onClick={() => toggleFilter()}
+              onClick={() => toggleFilterDrawer()}
               radius="xl"
               leftSection={<IconFilterSearch size={22} />}
             >
@@ -281,8 +290,8 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         }}
       >
         <Drawer
-          opened={isFilterOpened && pathname == "/"}
-          onClose={toggleFilter}
+          opened={isFilterDrawerOpen && pathname == "/"}
+          onClose={toggleFilterDrawer}
           title={<Text fz={20}>Фильтры</Text>}
           position="right"
           styles={{
@@ -298,18 +307,17 @@ export default function BasicMantineLayout({ children }: { children: any }) {
           <Filters />
         </Drawer>
         <Stack pt={0} style={{ flexGrow: "1" }}>
-          <Box h={25} w="100%" hiddenFrom="sm">
-            {""}
-          </Box>
+          {/* in mobile viewport on index page add additional Space to account for sub-header */}
+          {pathname === "/" && <Space h={25} hiddenFrom="sm" />}
           {children}
         </Stack>
       </AppShell.Main>
-      <Footer ref={targetRef} />
+      <Footer ref={footerTargetRef} />
       <Drawer
-        opened={drawerOpened}
+        opened={isTermsDrawerOpen}
         withCloseButton={false}
         size="28%"
-        onClose={() => setDrawerOpened(false)}
+        onClose={() => setIsTermsDrawerOpen(false)}
         position="bottom"
         title={
           <Text fz={24} fw={700} lh={1} c="blue.6">
@@ -334,19 +342,19 @@ export default function BasicMantineLayout({ children }: { children: any }) {
       >
         <Text>
           Продолжая использовать наш ресурс Вы выражаете согласие с нашими{" "}
-          <Anchor inherit component="button" onClick={openModal}>
+          <Anchor inherit component="button" onClick={openTermsModal}>
             условиями
           </Anchor>
           .
         </Text>
-        <Button data-autofocus onClick={() => setDrawerOpened(false)}>
+        <Button data-autofocus onClick={() => setIsTermsDrawerOpen(false)}>
           Понятно
         </Button>
       </Drawer>
       <Modal
         size="xl"
-        opened={isModalOpened}
-        onClose={closeModal}
+        opened={isTermsModalOpen}
+        onClose={closeTermsModal}
         title={
           <Text fw="600" fz="18">
             Условия использования платформы POPUTKA.KG
