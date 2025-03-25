@@ -1,21 +1,11 @@
 "use client";
-import {
-  ActionIcon,
-  alpha,
-  Box,
-  Flex,
-  Group,
-  Stack,
-  Text,
-  Title,
-  Tooltip,
-} from "@mantine/core";
+import { ActionIcon, Box, Flex, Stack, Title, Tooltip } from "@mantine/core";
 import { notifications } from "../basicMantineLayout";
 import { IconMail, IconMailOpened } from "@tabler/icons-react";
 
 export default function Notifications() {
   return (
-    <Stack w={600} mx="auto" gap={0}>
+    <Stack w="90%" maw={600} mx="auto" gap={0}>
       <Title order={3} mb={12}>
         Уведомления
       </Title>
@@ -24,9 +14,6 @@ export default function Notifications() {
           <Box
             w={3}
             bg={item.isOpened ? "gray.3" : "blue.3"}
-            // style={{
-            //   borderTop: "1px solid var(--mantine-color-blue-6)",
-            // }}
           ></Box>
           <Flex
             w="100%"
@@ -34,14 +21,7 @@ export default function Notifications() {
             justify="space-between"
             gap={2}
             fz={12}
-            // pl={5}
             p={12}
-            // py={12}
-            // bg={
-            //   item.isOpened
-            //     ? "white"
-            //     : alpha("var(--mantine-color-gray-0)", 0.8)
-            // }
             className={
               item.isOpened
                 ? "bg-white hover:bg-gray-100"
@@ -49,14 +29,6 @@ export default function Notifications() {
             }
             style={{
               cursor: "pointer",
-              // borderLeft: "3px solid var(--mantine-color-blue-5)",
-              // borderTop: "1px solid var(--mantine-color-gray-2)",
-              // borderBottom: `${
-              //   notifications.length - 1 === index
-              //     ? "1px solid var(--mantine-color-gray-2)"
-              //     : "none"
-              // }`,
-              // borderBottom: "1px solid var(--mantine-color-gray-2)",
             }}
           >
             <Stack gap={0}>
