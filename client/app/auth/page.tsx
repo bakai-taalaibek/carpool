@@ -46,7 +46,13 @@ export default function AuthenticationForm(props: PaperProps) {
 
   return (
     <Center>
-      <Paper radius="md" p="xl" withBorder w={400} shadow="md">
+      <Paper
+        radius="md"
+        p="xl"
+        withBorder
+        w={400}
+        className="border-transparent shadow-none min-[500px]:border-gray-200 min-[500px]:shadow-md"
+      >
         <Text ta="center" fw={900} mb={5} size="xl">
           {type === "register"
             ? "Зарегистрируйтесь с помощью..."
