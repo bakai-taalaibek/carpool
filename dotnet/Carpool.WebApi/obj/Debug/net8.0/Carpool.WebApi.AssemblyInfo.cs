@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Carpool.WebApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+76ddb1f40295543c66374cdcd484967d7916b320")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5d83dd360dc95973aab157803f2a4522423a231")]
 [assembly: System.Reflection.AssemblyProductAttribute("Carpool.WebApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Carpool.WebApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
