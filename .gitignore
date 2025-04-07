@@ -130,3 +130,7 @@ dist
 .pnp.*
 
 .DS_Store
+
+# dotnet bin and intermediate files
+/dotnet/Carpool.WebApi/bin
+/dotnet/Carpool.WebApi/obj
