@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carpool.Models;
 
-[Table("UserRole")]
+[Table("UserRoles")]
 public class UserRole
 {
     [Key]

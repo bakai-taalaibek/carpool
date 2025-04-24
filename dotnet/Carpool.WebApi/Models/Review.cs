@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carpool.Models;
 
-[Table("Review")]
+[Table("Reviews")]
 public class Review
 {
     [Key]

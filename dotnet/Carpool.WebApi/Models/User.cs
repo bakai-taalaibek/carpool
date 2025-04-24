@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carpool.Models;
 
-[Table("User")]
+[Table("Users")]
 public class User
 {
     [Key]
@@ -12,7 +12,7 @@ public class User
 
     [Required]
     [MaxLength(50)]
-    public string UserRoleId { get; set; } = null!;
+    public int UserRoleId { get; set; }
 
     [Required]
     [MaxLength(50)]
