@@ -1,4 +1,4 @@
-using Carpool.Models;
+using Carpool.DAL;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
