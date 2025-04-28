@@ -20,5 +20,5 @@ public class Region
     [Required]
     public Country Country { get; set; } = null!;
 
-    public ICollection<District>? Districts { get; set; }
+    public ICollection<District>? Districts { get; set; } = new List<District>();
 }

@@ -31,6 +31,26 @@ namespace Carpool.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Country>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
+
+            modelBuilder.Entity<Region>()
+            .HasIndex(r => r.Name)
+            .IsUnique();
+
+            modelBuilder.Entity<District>()
+            .HasIndex(d => d.Name)
+            .IsUnique();
+
+            modelBuilder.Entity<UserRole>()
+            .HasIndex(r => r.RoleName)
+            .IsUnique();
+
+            modelBuilder.Entity<RideRole>()
+            .HasIndex(r => r.Name)
+            .IsUnique();
         }
     }
 }

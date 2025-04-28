@@ -14,5 +14,5 @@ public class Country
     [MaxLength(50)]
     public string Name { get; set; } = null!;
 
-    public ICollection<Region>? Regions { get; set; }
+    public ICollection<Region>? Regions { get; set; } = new List<Region>();
 }

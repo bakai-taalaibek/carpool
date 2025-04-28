@@ -14,5 +14,5 @@ public class RideRole
     [MaxLength(50)]
     public string Name { get; set; } = null!;
 
-    public ICollection<Post>? Posts { get; set; }
+    public ICollection<Post>? Posts { get; set; } = new List<Post>();
 }

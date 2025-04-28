@@ -20,5 +20,5 @@ public class District
     [Required]
     public Region Region { get; set; } = null!;
 
-    public ICollection<Locality>? Localities { get; set; }
+    public ICollection<Locality>? Localities { get; set; } = new List<Locality>();
 }

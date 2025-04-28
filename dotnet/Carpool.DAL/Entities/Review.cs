@@ -10,14 +10,15 @@ public class Review
     [Required]
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     [Required]
-    [MaxLength(50)]
+    [MaxLength(500)]
     public string Text { get; set; } = null!;
 
     [Required]
     [MaxLength(50)]
+    [EmailAddress]
     public string AnonEmail { get; set; } = null!;
 
     [Required]

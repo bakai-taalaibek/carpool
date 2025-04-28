@@ -11,33 +11,33 @@ public class User
     public int Id { get; set; }
 
     [Required]
-    [MaxLength(50)]
     public int UserRoleId { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Required]
-    public string? Phone { get; set; } = null!;
+    [MaxLength(20)]
+    public string Phone { get; set; } = null!;
 
-    [Required]
-    public string? Email { get; set; } = null!;
+    [MaxLength(50)]
+    [EmailAddress]
+    public string? Email { get; set; }
 
-    [Required]
-    public string? Car { get; set; } = null!;
+    [MaxLength(50)]
+    public string? Car { get; set; }
 
-    [Required]
-    public string? About { get; set; } = null!;
+    [MaxLength(100)]
+    public string? About { get; set; }
 
-    [Required]
-    public string? Avatar { get; set; } = null!;
+    public string? Avatar { get; set; }
 
     [Required]
     public DateTime DateCreated { get; set; }
 
     [Required]
-    public string? Password { get; set; } = null!;
+    public string PasswordHash { get; set; } = null!;
 
     [Required]
     public UserRole UserRole { get; set; } = null!;
