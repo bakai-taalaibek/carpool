@@ -17,8 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces/" />
-    <Folder Include="Repositories/" />
+    <ProjectReference Include="../Carpool.Shared/Carpool.Shared.csproj" />
   </ItemGroup>
 
 </Project>
