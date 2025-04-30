@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Carpool.Entities;
 
 [Table("PostComments")]
-public class PostComments
+public class PostComment
 {
     [Key]
     [Required]
