@@ -23,7 +23,7 @@ namespace Carpool.DAL
 
         public DbSet<UserRole> UserRoles { get; set; }
 
-        public DbSet<PostComments> PostComments { get; set; }
+        public DbSet<PostComment> PostComments { get; set; }
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
