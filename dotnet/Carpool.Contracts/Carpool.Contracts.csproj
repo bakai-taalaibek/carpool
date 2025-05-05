@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="../Carpool.Contracts/Carpool.Contracts.csproj" />
-    <ProjectReference Include="../Carpool.DAL/Carpool.DAL.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpool.BLL", "Carpool.BLL\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpool.Shared", "Carpool.Shared\Carpool.Shared.csproj", "{17EEF3D8-5C65-425A-8C9A-0638153B6320}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpool.Contracts", "Carpool.Contracts\Carpool.Contracts.csproj", "{30DB0CE9-2B60-4797-8D27-EFCE5878ADC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{17EEF3D8-5C65-425A-8C9A-0638153B6320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17EEF3D8-5C65-425A-8C9A-0638153B6320}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17EEF3D8-5C65-425A-8C9A-0638153B6320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30DB0CE9-2B60-4797-8D27-EFCE5878ADC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30DB0CE9-2B60-4797-8D27-EFCE5878ADC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30DB0CE9-2B60-4797-8D27-EFCE5878ADC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30DB0CE9-2B60-4797-8D27-EFCE5878ADC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
