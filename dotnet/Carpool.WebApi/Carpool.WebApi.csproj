@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="../Carpool.BLL/Carpool.BLL.csproj" />
   </ItemGroup>
 

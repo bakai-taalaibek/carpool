@@ -21,7 +21,7 @@ public class Post
     [Required]
     public int DestinationId { get; set; }
 
-    public DateTime DepartureDateTime { get; set; }
+    public DateTimeOffset DepartureDateTime { get; set; }
 
     public int Seats { get; set; }
 
@@ -32,9 +32,9 @@ public class Post
     [MaxLength(200)]
     public string? Comment { get; set; }
 
-    public DateTime DateCreated { get; set; }
+    public DateTimeOffset DateCreated { get; set; }
 
-    public DateTime DateModified { get; set; }
+    public DateTimeOffset DateModified { get; set; }
 
     [MaxLength(50)]
     public string? AnonName { get; set; }

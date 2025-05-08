@@ -34,7 +34,7 @@ public class User
     public string? Avatar { get; set; }
 
     [Required]
-    public DateTime DateCreated { get; set; }
+    public DateTimeOffset DateCreated { get; set; }
 
     [Required]
     public string PasswordHash { get; set; } = null!;

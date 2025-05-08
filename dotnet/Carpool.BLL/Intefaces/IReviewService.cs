@@ -11,5 +11,5 @@ public interface IReviewService
 
     Task<IEnumerable<ReviewFullDto>> GetByUserIdAsync(int userId);
 
-    Task<ReviewFullDto> AddAsync(Review review);
+    Task<ReviewFullDto> AddAsync(ReviewFullDto review);
 }
