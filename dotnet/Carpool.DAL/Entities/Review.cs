@@ -14,11 +14,11 @@ public class Review
 
     [Required]
     [MaxLength(500)]
-    public string Text { get; set; } = null!;
+    public required string Text { get; set; }
 
     [MaxLength(50)]
     [EmailAddress]
-    public string? AnonEmail { get; set; } = null!;
+    public string? AnonEmail { get; set; }
 
     [Required]
     public DateTimeOffset DateCreated { get; set; }

@@ -15,12 +15,10 @@ public class User
 
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; } = null!;
-
+    public required string Name { get; set; }
     [Required]
     [MaxLength(20)]
-    public string Phone { get; set; } = null!;
-
+    public required string Phone { get; set; }
     [MaxLength(50)]
     [EmailAddress]
     public string? Email { get; set; }
@@ -37,8 +35,6 @@ public class User
     public DateTimeOffset DateCreated { get; set; }
 
     [Required]
-    public string PasswordHash { get; set; } = null!;
-
+    public required string PasswordHash { get; set; }
     [Required]
-    public UserRole UserRole { get; set; } = null!;
-}
+    public required UserRole UserRole { get; set; }}

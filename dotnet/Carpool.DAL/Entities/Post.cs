@@ -47,9 +47,9 @@ public class Post
 
     public User? User { get; set; }
     
-    public RideRole RideRole { get; set; } = null!;
+    public required RideRole RideRole { get; set; }
 
-    public Locality Source { get; set; } = null!;
+    public required Locality Source { get; set; }
     
-    public Locality Destination { get; set; } = null!;
+    public required Locality Destination { get; set; }
 }

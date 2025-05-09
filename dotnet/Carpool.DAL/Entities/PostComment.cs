@@ -16,7 +16,7 @@ public class PostComment
 
     [Required]
     [MaxLength(50)]
-    public string Text { get; set; } = null!;
+    public required string Text { get; set; }
 
     public DateTimeOffset DateCreated { get; set; }
 
@@ -24,5 +24,5 @@ public class PostComment
 
     public User? User { get; set; }
     
-    public Post Post { get; set; } = null!;
+    public required Post Post { get; set; }
 }

@@ -12,7 +12,7 @@ public class Locality
 
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [MaxLength(50)]
     public string? OldName { get; set; }
@@ -21,5 +21,5 @@ public class Locality
     public int DistrictId { get; set; }
 
     [Required]
-    public District District { get; set; } = null!;
+    public required District District { get; set; }
 }

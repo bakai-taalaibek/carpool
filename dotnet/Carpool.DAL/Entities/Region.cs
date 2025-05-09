@@ -12,13 +12,13 @@ public class Region
 
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [Required]
     public int CountryId { get; set; }
 
     [Required]
-    public Country Country { get; set; } = null!;
+    public required Country Country { get; set; }
 
-    public ICollection<District>? Districts { get; set; } = new List<District>();
+    public ICollection<District>? Districts { get; set; } = [];
 }

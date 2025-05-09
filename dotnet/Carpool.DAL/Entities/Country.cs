@@ -12,7 +12,7 @@ public class Country
 
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
-    public ICollection<Region>? Regions { get; set; } = new List<Region>();
+    public ICollection<Region>? Regions { get; set; } = [];
 }

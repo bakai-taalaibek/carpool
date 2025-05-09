@@ -12,7 +12,7 @@ public class UserRole
 
     [Required]
     [MaxLength(50)]
-    public string RoleName { get; set; } = null!;
+    public required string RoleName { get; set; }
 
-    public ICollection<User>? Users { get; set; } = new List<User>();
+    public ICollection<User>? Users { get; set; } = [];
 }

@@ -12,13 +12,13 @@ public class District
 
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [Required]
     public int RegionId { get; set; }
 
     [Required]
-    public Region Region { get; set; } = null!;
+    public required Region Region { get; set; }
 
-    public ICollection<Locality>? Localities { get; set; } = new List<Locality>();
+    public ICollection<Locality>? Localities { get; set; } = [];
 }
