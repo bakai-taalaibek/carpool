@@ -45,7 +45,7 @@ public class ReviewService(IUnitOfWork unitOfWork) : IReviewService
             Text = reviewFullDto.Text,
             UserId = reviewFullDto.UserId,
             AnonEmail = reviewFullDto.AnonEmail,
-            DateCreated = DateTimeOffset.Now
+            DateCreated = DateTimeOffset.UtcNow
         };
 
         var createdReview = await _unitOfWork.Reviews.AddAsync(review);
