@@ -1,29 +1,43 @@
 import {
+  Button,
+  Grid,
+  GridCol,
+  Group,
+  Paper,
   Text,
   TextInput,
   Textarea,
-  Group,
   Title,
-  Button,
-  Grid,
-  Paper,
-  GridCol,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { forwardRef } from "react";
+import { usePostReviewMutation } from "../services/reviewApi";
 import { ContactIconsList } from "./contactIcons";
 
 const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
   const form = useForm({
+    mode: "uncontrolled",
     initialValues: {
-      email: "",
-      message: "",
+      anonEmail: "",
+      text: "",
     },
     validate: {
-      // email: (value) => !/^\S+@\S+$/.test(value),
-      message: (value) => value.trim().length === 0,
+      anonEmail: isEmail("Пожалуйста укажите электронную почту"),
+      text: isNotEmpty("Пожалуйста добавьте сообщение"),
     },
   });
+
+  const [postReview, { isLoading, isError, isSuccess }] =
+    usePostReviewMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await postReview(form.getValues()).unwrap(); 
+    } catch (err) {
+      console.error("Failed to post review:", err);
+    }
+  };
 
   return (
     <Grid
@@ -53,26 +67,30 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
 
       <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
         <Paper bg="white" px="xl" py="lg" shadow="lg" radius="md" w="100%">
-          <TextInput
-            label="Электронная почта"
-            placeholder="your@email.com"
-            // required
-            {...form.getInputProps("email")}
-            mt="xs"
-          />
-          <Textarea
-            autosize
-            required
-            label="Ваше сообщение"
-            placeholder="Привет, меня зовут..."
-            minRows={2}
-            mt="md"
-            {...form.getInputProps("message")}
-          />
+          <form onSubmit={handleSubmit}>
+            <TextInput
+              label="Электронная почта"
+              placeholder="your@email.com"
+              // required
+              {...form.getInputProps("anonEmail")}
+              mt="xs"
+            />
+            <Textarea
+              autosize
+              required
+              label="Ваше сообщение"
+              placeholder="Привет, меня зовут..."
+              minRows={2}
+              mt="md"
+              {...form.getInputProps("text")}
+            />
 
-          <Group justify="flex-end" mt="md">
-            <Button bg="var(--mantine-color-blue-6)">Отправить</Button>
-          </Group>
+            <Group justify="flex-end" mt="md">
+              <Button type="submit" bg="var(--mantine-color-blue-6)">
+                Отправить
+              </Button>
+            </Group>
+          </form>
         </Paper>
       </GridCol>
       <GridCol span={12} p="md" pt="xs">

@@ -1,14 +1,13 @@
 import "/styles/globals.css";
 
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.layer.css";
 import "@mantine/dates/styles.layer.css";
-import React from "react";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import dayjs from "dayjs";
+import "dayjs/locale/ru";
 import { theme } from "../theme";
 import BasicMantineLayout from "./basicMantineLayout";
 import DatesProviderWrapper from "./datesProvider";
-import "dayjs/locale/ru";
-import dayjs from "dayjs";
 
 dayjs.locale("ru");
 
