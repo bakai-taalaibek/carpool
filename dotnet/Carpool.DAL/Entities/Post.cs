@@ -10,23 +10,27 @@ public class Post
     [Required]
     public int Id { get; set; }
 
+    [ForeignKey(nameof(User))]
     public int? UserId { get; set; }
     
-    [Required]
+    [ForeignKey(nameof(RideRole))]
     public int RideRoleId { get; set; }
 
-    [Required]
+    [ForeignKey(nameof(Source))]
     public int SourceId { get; set; }
 
-    [Required]
+    [ForeignKey(nameof(Destination))]
     public int DestinationId { get; set; }
 
     public DateTimeOffset DepartureDateTime { get; set; }
 
+    [Range(1, int.MaxValue)]
     public int Seats { get; set; }
 
+    [Range(0, int.MaxValue)]
     public int? PricePerSeat { get; set; }
 
+    [Range(0, int.MaxValue)]
     public int? PricePerCar { get; set; }
 
     [MaxLength(200)]
@@ -47,9 +51,9 @@ public class Post
 
     public User? User { get; set; }
     
-    public required RideRole RideRole { get; set; }
+    public RideRole? RideRole { get; set; }
 
-    public required Locality Source { get; set; }
+    public Locality? Source { get; set; }
     
-    public required Locality Destination { get; set; }
+    public Locality? Destination { get; set; }
 }
