@@ -37,4 +37,5 @@ public class User
     [Required]
     public required string PasswordHash { get; set; }
     [Required]
-    public required UserRole UserRole { get; set; }}
+    public required UserRole UserRole { get; set; }
+}

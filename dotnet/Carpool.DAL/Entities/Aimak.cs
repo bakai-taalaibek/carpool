@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carpool.Entities;
 
-[Table("Districts")]
-public class District
+[Table("Aimaks")]
+public class Aimak
 {
     [Key]
     [Required]
@@ -15,10 +15,10 @@ public class District
     public required string Name { get; set; }
 
     [Required]
-    public int RegionId { get; set; }
+    public int DistrictId { get; set; }
 
     [Required]
-    public required Region Region { get; set; }
+    public required District District { get; set; }
 
-    public ICollection<Aimak>? Aimaks { get; set; } = [];
+    public ICollection<Locality>? Localities { get; set; } = [];
 }
