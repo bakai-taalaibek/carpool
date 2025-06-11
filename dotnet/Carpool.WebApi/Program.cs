@@ -3,6 +3,7 @@ using Carpool.BLL.Services;
 using Carpool.DAL;
 using Carpool.DAL.Interfaces;
 using Carpool.DAL.Repositories;
+using Carpool.WebApi.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ILocalityRepository, LocalityRepository>();
+builder.Services.AddScoped<ISeeder, Seeder>();
 
 string? allowedOrigins = builder.Configuration["AllowedOrigins"];
 builder.Services.AddCors(options =>
@@ -45,6 +47,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 
 var app = builder.Build();
+
+if (args.Contains("--seed"))
+{
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
+    
+    var localities = CsvLoader.LoadLocalities("SeedData/localities.csv");
+    await seeder.SeedLocalitiesAsync(localities);
+
+    Console.WriteLine("✅ Database seeding completed.");
+    return;
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
