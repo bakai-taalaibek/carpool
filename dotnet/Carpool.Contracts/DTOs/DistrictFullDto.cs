@@ -1,5 +1,3 @@
-using System;
-
 namespace Carpool.Contracts.DTOs;
 
 public class DistrictFullDto
@@ -8,5 +6,5 @@ public class DistrictFullDto
 
     public required string Name { get; set; }
 
-    public required RegionFullDto Region { get; set; }
+    public RegionFullDto? Region { get; set; }
 }

@@ -9,4 +9,6 @@ public class LocalityFullDto
     public string? OldName { get; set; }
 
     public DistrictFullDto? District { get; set; }
+
+    public AimakFullDto? Aimak { get; set; }
 }
