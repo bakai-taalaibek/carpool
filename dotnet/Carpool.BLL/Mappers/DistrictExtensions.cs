@@ -11,7 +11,7 @@ public static class DistrictExtensions
         {
             Id = district.Id,
             Name = district.Name,
-            Region = district.Region.ToFullDto(),
+            Region = district?.Region?.ToFullDto(),
         };
     }
 }

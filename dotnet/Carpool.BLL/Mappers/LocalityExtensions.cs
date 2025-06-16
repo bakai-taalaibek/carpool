@@ -12,7 +12,7 @@ public static class LocalityExtensions
         {
             Id = locality.Id,
             Name = locality.Name,
-            District = locality.District.ToFullDto(),
+            Aimak = locality?.Aimak?.ToFullDto(),
         };
     }
 

@@ -12,7 +12,7 @@ public static class RegionExtensions
         {
             Id = region.Id,
             Name = region.Name,
-            Country = region.Country.ToFullDto(),
+            Country = region?.Country?.ToFullDto(),
         };
     }
 }
