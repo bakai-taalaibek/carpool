@@ -15,16 +15,16 @@ public class Locality
     public required string Name { get; set; }
 
     [MaxLength(50)]
-    public string? AltName { get; set; }
+    public string? OldName { get; set; }
 
     [MaxLength(50)]
-    public string? OldName { get; set; }
+    public string? SearchString { get; set; }
 
     [MaxLength(50)]
     public int LocalityTypeId { get; set; }
 
     [MaxLength(50)]
-    public required LocalityType LocalityType { get; set; }
+    public LocalityType? LocalityType { get; set; }
 
     public int Population { get; set; }
 

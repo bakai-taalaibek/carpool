@@ -17,8 +17,9 @@ public class Region
     [Required]
     public int CountryId { get; set; }
 
-    [Required]
-    public required Country Country { get; set; }
+    public Country? Country { get; set; }
 
-    public ICollection<District>? Districts { get; set; } = [];
+    public ICollection<District> Districts { get; set; } = [];
+
+    public ICollection<Locality> Localities { get; set; } = [];
 }

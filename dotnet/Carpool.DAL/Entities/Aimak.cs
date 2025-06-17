@@ -17,8 +17,7 @@ public class Aimak
     [Required]
     public int DistrictId { get; set; }
 
-    [Required]
-    public required District District { get; set; }
+    public District? District { get; set; }
 
-    public ICollection<Locality>? Localities { get; set; } = [];
+    public ICollection<Locality> Localities { get; set; } = [];
 }

@@ -18,7 +18,9 @@ public class District
     public int RegionId { get; set; }
 
     [Required]
-    public required Region Region { get; set; }
+    public Region? Region { get; set; }
 
-    public ICollection<Aimak>? Aimaks { get; set; } = [];
+    public ICollection<Aimak> Aimaks { get; set; } = [];
+
+    public ICollection<Locality> Localities { get; set; } = [];
 }

@@ -14,5 +14,7 @@ public class Country
     [MaxLength(50)]
     public required string Name { get; set; }
 
-    public ICollection<Region>? Regions { get; set; } = [];
+    public ICollection<Region> Regions { get; set; } = [];
+
+    public ICollection<Locality> Localities { get; set; } = [];
 }
