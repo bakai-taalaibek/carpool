@@ -7,7 +7,12 @@ public class UnitOfWork(
     IPostRepository postRepository, 
     IPostCommentRepository postCommentRepository, 
     IReviewRepository reviewRepository, 
-    ILocalityRepository localityRepository) : IUnitOfWork
+    ILocalityRepository localityRepository,
+    ICountryRepository countryRepository,
+    ILocalityTypeRepository localityTypeRepository,
+    IRegionRepository regionRepository,
+    IDistrictRepository districtRepository,
+    IAimakRepository aimakRepository) : IUnitOfWork
 {
     public IPostRepository Posts { get; } = postRepository;
 
@@ -17,7 +22,17 @@ public class UnitOfWork(
 
     public ILocalityRepository Localities { get; } = localityRepository;
 
-    public Task SaveAsyncAsync()
+    public ICountryRepository Countries { get; } = countryRepository;
+
+    public ILocalityTypeRepository LocalityTypes { get; } = localityTypeRepository;
+
+    public IRegionRepository Regions { get; } = regionRepository;
+
+    public IDistrictRepository Districts { get; } = districtRepository;
+
+    public IAimakRepository Aimaks { get; } = aimakRepository;
+
+    public Task SaveChangesAsync()
     {
         return _context.SaveChangesAsync();
     }

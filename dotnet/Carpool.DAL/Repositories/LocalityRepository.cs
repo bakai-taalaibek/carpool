@@ -9,6 +9,12 @@ namespace Carpool.DAL.Repositories;
 public class LocalityRepository(ApplicationDbContext context) : ILocalityRepository
 {
     private readonly ApplicationDbContext _context = context;
+
+    public async Task<IEnumerable<Locality>> GetAllAsTrackingAsync()
+    {
+        return await _context.Localities.ToListAsync();
+    }
+    
     public async Task<IEnumerable<Locality>> GetAllAsync()
     {
         return await _context.Localities.AsNoTracking().ToListAsync();
@@ -30,8 +36,28 @@ public class LocalityRepository(ApplicationDbContext context) : ILocalityReposit
             .Where(l => l.Name.Contains(name))
             .ToListAsync();
 
-        return localities.Count > 0 
-                ? localities 
+        return localities.Count > 0
+                ? localities
                 : throw new NotFoundException($"Locality with name {name} not found");
+    }
+    
+    public async Task<Locality> EnsureTrackedAsync(Locality locality)
+    {
+        var tracked = _context.ChangeTracker
+            .Entries<Locality>()
+            .FirstOrDefault(e => e.Entity.Name == locality.Name
+                && e.Entity.AimakId == locality.AimakId
+                && e.Entity.DistrictId == locality.DistrictId
+                && e.Entity.RegionId == locality.RegionId
+                && e.Entity.CountryId == locality.CountryId)?
+            .Entity;
+
+        if (tracked is not null)
+        {
+            return tracked;
+        }
+
+        await _context.Localities.AddAsync(locality);
+        return locality;
     }
 }
