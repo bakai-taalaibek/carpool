@@ -24,6 +24,10 @@ namespace Carpool.DAL
         public DbSet<UserRole> UserRoles { get; set; }
 
         public DbSet<PostComment> PostComments { get; set; }
+
+        public DbSet<LocalityType> LocalityTypes { get; set; }
+
+        public DbSet<Aimak> Aimaks { get; set; }
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
@@ -41,6 +45,14 @@ namespace Carpool.DAL
             .IsUnique();
 
             modelBuilder.Entity<District>()
+            .HasIndex(d => d.Name)
+            .IsUnique();
+
+            modelBuilder.Entity<Aimak>()
+            .HasIndex(d => d.Name)
+            .IsUnique();
+
+            modelBuilder.Entity<LocalityType>()
             .HasIndex(d => d.Name)
             .IsUnique();
 
