@@ -1,0 +1,16 @@
+services:
+  carpool-postgres:
+    image: postgres
+    container_name: carpool-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: QqqU3HrGsO5f0&
+      POSTGRES_DB: carpool_db
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
