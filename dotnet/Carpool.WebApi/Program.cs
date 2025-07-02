@@ -19,7 +19,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostCommentRepository, PostCommentRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
+builder.Services.AddScoped<IAimakRepository, AimakRepository>();
 builder.Services.AddScoped<ILocalityRepository, LocalityRepository>();
+builder.Services.AddScoped<ILocalityTypeRepository, LocalityTypeRepository>();
 builder.Services.AddScoped<ISeeder, Seeder>();
 
 string? allowedOrigins = builder.Configuration["AllowedOrigins"];
@@ -66,8 +73,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
+else
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors();
 
