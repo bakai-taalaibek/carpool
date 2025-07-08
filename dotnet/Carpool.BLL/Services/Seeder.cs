@@ -20,6 +20,7 @@ public class Seeder(IUnitOfWork unitOfWork) : ISeeder
         await _unitOfWork.LocalityTypes.GetAllAsTrackingAsync();
         await _unitOfWork.Localities.GetAllAsTrackingAsync();
 
+
         foreach (var localityDto in localities)
         {
             var country = await _unitOfWork.Countries.EnsureTrackedAsync(localityDto.Country);
@@ -28,6 +29,7 @@ public class Seeder(IUnitOfWork unitOfWork) : ISeeder
             var locality = new Locality
             {
                 Country = country,
+                CountryId = country.Id,
                 Name = localityDto.Locality,
                 OldName = localityDto.OldName,
                 SearchString = SearchStringBuilder.Build([
@@ -35,6 +37,7 @@ public class Seeder(IUnitOfWork unitOfWork) : ISeeder
                     localityDto.OldName,
                     localityDto.AltNames ]),
                 LocalityType = localityType,
+                LocalityTypeId = localityType.Id,
                 Population = localityDto.Population
             };
 
@@ -43,18 +46,21 @@ public class Seeder(IUnitOfWork unitOfWork) : ISeeder
                 var region = await _unitOfWork.Regions
                     .EnsureTrackedAsync(localityDto.Region, country);
                 locality.Region = region;
+                locality.RegionId = region.Id;
 
                 if (!string.IsNullOrWhiteSpace(localityDto.District))
                 {
                     var district = await _unitOfWork.Districts
                         .EnsureTrackedAsync(localityDto.District, region);
                     locality.District = district;
+                    locality.DistrictId = district.Id;
 
                     if (!string.IsNullOrWhiteSpace(localityDto.Aimak))
                     {
                         var aimak = await _unitOfWork.Aimaks
                             .EnsureTrackedAsync(localityDto.Aimak, district);
                         locality.Aimak = aimak;
+                        locality.AimakId = aimak.Id;
                     }
                 }
             }

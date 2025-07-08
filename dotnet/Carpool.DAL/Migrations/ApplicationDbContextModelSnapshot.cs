@@ -42,9 +42,6 @@ namespace Carpool.WebApi.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("Aimaks");
                 });
 
@@ -86,9 +83,6 @@ namespace Carpool.WebApi.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("RegionId");
 

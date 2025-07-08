@@ -14,7 +14,7 @@ namespace Carpool.DAL
         public DbSet<Post> Posts { get; set; }
 
         public DbSet<Region> Regions { get; set; }
-    
+
         public DbSet<Review> Reviews { get; set; }
 
         public DbSet<RideRole> RideRoles { get; set; }
@@ -28,7 +28,7 @@ namespace Carpool.DAL
         public DbSet<LocalityType> LocalityTypes { get; set; }
 
         public DbSet<Aimak> Aimaks { get; set; }
-        
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
@@ -42,14 +42,6 @@ namespace Carpool.DAL
 
             modelBuilder.Entity<Region>()
             .HasIndex(r => r.Name)
-            .IsUnique();
-
-            modelBuilder.Entity<District>()
-            .HasIndex(d => d.Name)
-            .IsUnique();
-
-            modelBuilder.Entity<Aimak>()
-            .HasIndex(d => d.Name)
             .IsUnique();
 
             modelBuilder.Entity<LocalityType>()

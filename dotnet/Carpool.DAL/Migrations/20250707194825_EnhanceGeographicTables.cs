@@ -15,6 +15,10 @@ namespace Carpool.WebApi.Migrations
                 name: "FK_Localities_Districts_DistrictId",
                 table: "Localities");
 
+            migrationBuilder.DropIndex(
+                name: "IX_Districts_Name",
+                table: "Districts");
+
             migrationBuilder.AlterColumn<int>(
                 name: "DistrictId",
                 table: "Localities",
@@ -120,12 +124,6 @@ namespace Carpool.WebApi.Migrations
                 name: "IX_Aimaks_DistrictId",
                 table: "Aimaks",
                 column: "DistrictId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aimaks_Name",
-                table: "Aimaks",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_LocalityTypes_Name",
@@ -248,6 +246,12 @@ namespace Carpool.WebApi.Migrations
                 oldClrType: typeof(int),
                 oldType: "integer",
                 oldNullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Districts_Name",
+                table: "Districts",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Localities_Districts_DistrictId",

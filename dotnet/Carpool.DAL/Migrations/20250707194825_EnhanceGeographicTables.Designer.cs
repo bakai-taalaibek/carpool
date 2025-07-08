@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Carpool.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250612172518_EnhanceGeographicTables")]
+    [Migration("20250707194825_EnhanceGeographicTables")]
     partial class EnhanceGeographicTables
     {
         /// <inheritdoc />
@@ -44,9 +44,6 @@ namespace Carpool.WebApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DistrictId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Aimaks");
                 });
@@ -89,9 +86,6 @@ namespace Carpool.WebApi.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("RegionId");
 
