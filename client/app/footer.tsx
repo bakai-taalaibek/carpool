@@ -14,7 +14,7 @@ import { forwardRef } from "react";
 import { usePostReviewMutation } from "../services/reviewApi";
 import { ContactIconsList } from "./contactIcons";
 
-const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
+const Footer = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -33,7 +33,7 @@ const Footer = forwardRef<HTMLDivElement>(function Footer(_, ref) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await postReview(form.getValues()).unwrap(); 
+      await postReview(form.getValues()).unwrap();
     } catch (err) {
       console.error("Failed to post review:", err);
     }
