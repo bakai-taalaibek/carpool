@@ -8,7 +8,13 @@ public class LocalityFullDto
 
     public string? OldName { get; set; }
 
-    public DistrictFullDto? District { get; set; }
+    public string? SearchString { get; set; }
 
-    public AimakFullDto? Aimak { get; set; }
+    public string? AimakName { get; set; }
+
+    public string? DistrictName { get; set; }
+
+    public string? RegionName { get; set; }
+
+    public string? CountryName { get; set; }
 }
