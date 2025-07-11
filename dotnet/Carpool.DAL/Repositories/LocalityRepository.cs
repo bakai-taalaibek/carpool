@@ -14,10 +14,15 @@ public class LocalityRepository(ApplicationDbContext context) : ILocalityReposit
     {
         return await _context.Localities.ToListAsync();
     }
-    
+
     public async Task<IEnumerable<Locality>> GetAllAsync()
     {
-        return await _context.Localities.AsNoTracking().ToListAsync();
+        return await _context.Localities
+            .Include(l => l.Aimak)
+            .Include(a => a.District)
+            .Include(d => d.Region)
+            .Include(r => r.Country)
+            .ToListAsync();
     }
 
     public async Task<Locality> GetByIdAsync(int id)
@@ -40,7 +45,7 @@ public class LocalityRepository(ApplicationDbContext context) : ILocalityReposit
                 ? localities
                 : throw new NotFoundException($"Locality with name {name} not found");
     }
-    
+
     public async Task<Locality> EnsureTrackedAsync(Locality locality)
     {
         var tracked = _context.ChangeTracker

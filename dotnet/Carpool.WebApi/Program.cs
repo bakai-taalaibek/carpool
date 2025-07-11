@@ -18,6 +18,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<ILocalityService, LocalityService>();
+
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostCommentRepository, PostCommentRepository>();
@@ -59,7 +61,7 @@ if (args.Contains("--seed"))
 {
     using var scope = app.Services.CreateScope();
     var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
-    
+
     var localities = CsvLoader.LoadLocalities("SeedData/localities.csv");
     await seeder.SeedLocalitiesAsync(localities);
 
