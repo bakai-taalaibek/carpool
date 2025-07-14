@@ -3,15 +3,16 @@ import {
   Button,
   NumberInput,
   SegmentedControl,
+  SimpleGrid,
   Stack,
+  Text,
   Textarea,
   TextInput,
-  Text,
-  SimpleGrid,
 } from "@mantine/core";
-import { DatePickerInput, TimeInput } from "@mantine/dates";
+import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { IconClock } from "@tabler/icons-react";
 import { useState } from "react";
+import LocalitySelect from "./localitySelect";
 
 export default function NewPage() {
   const [role, setRole] = useState<string>("driver");
@@ -39,13 +40,18 @@ export default function NewPage() {
       </SimpleGrid>
 
       <SimpleGrid cols={{ base: 1, xs: 4 }}>
-        <TextInput label="Откуда" placeholder="Бишкек" required />
-        <TextInput label="Куда" placeholder="Чолпон-Ата" required />
-        <DatePickerInput label="День" required />
-        <TimeInput
-          label="Время"
-          placeholder="Укажите время"
+        <LocalitySelect placeholder="Бишкек" label="Откуда" />
+        <LocalitySelect placeholder="Чолпон-Ата" label="Куда" />
+        <DatePickerInput label="День" required valueFormat="D MMM YYYY" />
+        <TimePicker
+          label="Время выезда"
           required
+          withDropdown
+          minutesStep={5}
+          popoverProps={{
+            position: "top-start",
+            middlewares: { flip: false, shift: false },
+          }}
           rightSection={
             <IconClock style={{ width: 16, aspectRatio: 1 }} stroke={1.5} />
           }

@@ -305,7 +305,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                 maxHeight: "50px",
               },
             }}
-            size="sm"
+            size="md"
           >
             <Filters />
           </Drawer>

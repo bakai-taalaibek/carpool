@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   Group,
@@ -10,9 +9,10 @@ import {
   TextInput,
   Tooltip,
 } from "@mantine/core";
+import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { IconCheck, IconClearAll, IconClock } from "@tabler/icons-react";
 import ShowMyPostsInFilter from "./showMyPostsInFilter";
-import { DatePickerInput, TimeInput } from "@mantine/dates";
+import LocalitySelect from "./new/localitySelect";
 
 const largerVerticalCardSpacing = 16;
 const smallerVerticalCardSpacing = 9;
@@ -48,9 +48,9 @@ function Filters() {
           </Text>
           <Group gap={8} wrap="nowrap">
             <Text mb={marginBottomForTextNextToInput}>откуда:</Text>
-            <TextInput placeholder="Бишкек" />
+            <LocalitySelect placeholder="Бишкек"  />
             <Text mb={marginBottomForTextNextToInput}>куда:</Text>
-            <TextInput placeholder="Ош" />
+            <LocalitySelect placeholder="Ош"  />
           </Group>
         </Card>
         <Card w="100%" radius="lg" py={cardVerticalPadding}>
@@ -70,11 +70,12 @@ function Filters() {
           </Text>
           <Group gap={7} wrap="nowrap">
             <Text mb={marginBottomForTextNextToInput}>день:</Text>
-            <DatePickerInput w="100%" valueFormat="DD MMM YYYY" />
+            <DatePickerInput w="100%" valueFormat="D MMM YYYY" />
             <Text mb={marginBottomForTextNextToInput}>время:</Text>
             <Tooltip label="Нажмите и наберите время">
-              <TimeInput
-                placeholder="Укажите время"
+              <TimePicker
+                withDropdown
+                minutesStep={5}
                 miw={90}
                 styles={{ input: { paddingRight: "30px" } }}
                 rightSection={
@@ -93,11 +94,12 @@ function Filters() {
           </Text>
           <Group gap={7} wrap="nowrap">
             <Text mb={marginBottomForTextNextToInput}>день:</Text>
-            <DatePickerInput w="100%" valueFormat="DD MMM YYYY" />
+            <DatePickerInput w="100%" valueFormat="D MMM YYYY" />
             <Text mb={marginBottomForTextNextToInput}>время:</Text>
             <Tooltip label="Нажмите и наберите время">
-              <TimeInput
-                placeholder="Укажите время"
+              <TimePicker
+                withDropdown
+                minutesStep={5}
                 miw={90}
                 styles={{ input: { paddingRight: "30px" } }}
                 rightSection={
