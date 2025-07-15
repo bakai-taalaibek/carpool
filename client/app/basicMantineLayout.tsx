@@ -95,160 +95,161 @@ export default function BasicMantineLayout({ children }: { children: any }) {
   }, []);
 
   return (
-    // height: 60 is the height of header,
     // padding="md" is padding of the main part, so this is additional distance from header to main
     // in mobile viewport on index page I added additional Space to account for sub-header
-    // for some reason when sub-header exists, header border is hidden, which is desired
     <Provider store={store}>
-      <AppShell header={{ height: 60 }} padding="md">
-        <AppShell.Header>
-          <Group
-            h="100%"
-            px="md"
-            bg="white"
-            style={{ zIndex: 2, position: "relative" }}
-          >
-            <Group justify="space-between" style={{ flex: 1 }}>
-              <Text
-                component={Link}
-                href="/"
-                tt="uppercase"
-                c="cyan.8"
-                fw={700}
-                size="lg"
-              >
-                POPUTKA.KG
-              </Text>
-              <Group gap={20}>
-                {pathname == "/" && (
-                  <Button
-                    // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
-                    variant="subtle"
-                    color="cyan"
-                    onClick={toggleFilterDrawer}
-                    radius="xl"
-                    leftSection={<IconFilterSearch size={22} />}
-                    visibleFrom="sm"
-                  >
-                    Фильтры
-                  </Button>
-                )}
-                {pathname !== "/new" && (
-                  <Button
-                    component={Link}
-                    href="/new"
-                    radius="xl"
-                    variant="gradient"
-                    gradient={{ from: "orange", to: "red", deg: 90 }}
-                    visibleFrom="sm"
-                  >
-                    + Новая попутка
-                  </Button>
-                )}
+      <AppShell padding="md">
+        {/* <AppShell.Header></AppShell.Header> */}
+        <Box
+          h={60}
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 3,
+            borderBottom: "1px solid var(--mantine-color-gray-3)",
+          }}
+          bg="white"
+        >
+          <Group px="md" h="100%" justify="space-between">
+            <Text
+              component={Link}
+              href="/"
+              tt="uppercase"
+              c="cyan.8"
+              fw={700}
+              size="lg"
+            >
+              POPUTKA.KG
+            </Text>
+            <Group gap={20}>
+              {pathname == "/" && (
                 <Button
+                  // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
                   variant="subtle"
                   color="cyan"
+                  onClick={toggleFilterDrawer}
                   radius="xl"
-                  onClick={() => scrollFooterIntoView()}
+                  leftSection={<IconFilterSearch size={22} />}
                   visibleFrom="sm"
                 >
-                  Оставить отзыв
+                  Фильтры
                 </Button>
+              )}
+              {pathname !== "/new" && (
                 <Button
                   component={Link}
-                  href="/auth"
-                  variant="subtle"
-                  color="cyan"
+                  href="/new"
                   radius="xl"
+                  variant="gradient"
+                  gradient={{ from: "orange", to: "red", deg: 90 }}
+                  visibleFrom="sm"
                 >
-                  Войти
+                  + Новая попутка
                 </Button>
+              )}
+              <Button
+                variant="subtle"
+                color="cyan"
+                radius="xl"
+                onClick={() => scrollFooterIntoView()}
+                visibleFrom="md"
+              >
+                Оставить отзыв
+              </Button>
+              <Button
+                component={Link}
+                href="/auth"
+                variant="subtle"
+                color="cyan"
+                radius="xl"
+              >
+                Войти
+              </Button>
 
-                <Box mr={10}>
-                  <Menu
-                    shadow="md"
-                    width={280}
-                    position="bottom-end"
-                    opened={isUserMenuOpen}
-                    onChange={setIsUserMenuOpen}
-                  >
-                    <MenuTarget>
-                      <Indicator
-                        position="top-end"
-                        color="red"
-                        label={2}
-                        size={16}
-                        offset={4}
-                      >
-                        <Avatar
+              <Box mr={10}>
+                <Menu
+                  shadow="md"
+                  width={280}
+                  position="bottom-end"
+                  opened={isUserMenuOpen}
+                  onChange={setIsUserMenuOpen}
+                >
+                  <MenuTarget>
+                    <Indicator
+                      position="top-end"
+                      color="red"
+                      label={2}
+                      size={16}
+                      offset={4}
+                    >
+                      <Avatar
+                        color="blue"
+                        radius="xl"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </Indicator>
+                  </MenuTarget>
+
+                  <MenuDropdown px={0}>
+                    <MenuLabel>Таалайбек уулу Бакай</MenuLabel>
+                    <MenuItem
+                      leftSection={
+                        <IconSettings style={{ width: 14, height: 14 }} />
+                      }
+                      component={Link}
+                      href="/profile"
+                    >
+                      Профиль
+                    </MenuItem>
+                    <MenuItem
+                      leftSection={
+                        <IconLogout2 style={{ width: 14, height: 14 }} />
+                      }
+                    >
+                      Выйти
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuLabel pb={0}>Уведомления</MenuLabel>
+                    <Stack gap={0}>
+                      <Group w="full">
+                        <Button
+                          variant="transparent"
+                          size="xs"
                           color="blue"
+                          ml="auto"
+                          h={20}
+                          mb={5}
+                        >
+                          Очистить все
+                        </Button>
+                      </Group>
+                      {notifications.map((item, index) => (
+                        <NotificationCustom
+                          key={item.id}
+                          title={item.title}
+                          isLast={notifications.length - 1 === index}
+                        >
+                          {item.description}
+                        </NotificationCustom>
+                      ))}
+                      <Group justify="center" w="full" py={3}>
+                        <Button
+                          onClick={() => setIsUserMenuOpen(false)}
+                          component={Link}
+                          href="/notifications"
+                          variant="light"
                           radius="xl"
-                          style={{ cursor: "pointer" }}
-                        />
-                      </Indicator>
-                    </MenuTarget>
-
-                    <MenuDropdown px={0}>
-                      <MenuLabel>Таалайбек уулу Бакай</MenuLabel>
-                      <MenuItem
-                        leftSection={
-                          <IconSettings style={{ width: 14, height: 14 }} />
-                        }
-                        component={Link}
-                        href="/profile"
-                      >
-                        Профиль
-                      </MenuItem>
-                      <MenuItem
-                        leftSection={
-                          <IconLogout2 style={{ width: 14, height: 14 }} />
-                        }
-                      >
-                        Выйти
-                      </MenuItem>
-                      <MenuDivider />
-                      <MenuLabel pb={0}>Уведомления</MenuLabel>
-                      <Stack gap={0}>
-                        <Group w="full">
-                          <Button
-                            variant="transparent"
-                            size="xs"
-                            color="blue"
-                            ml="auto"
-                            h={20}
-                            mb={5}
-                          >
-                            Очистить все
-                          </Button>
-                        </Group>
-                        {notifications.map((item, index) => (
-                          <NotificationCustom
-                            key={item.id}
-                            title={item.title}
-                            isLast={notifications.length - 1 === index}
-                          >
-                            {item.description}
-                          </NotificationCustom>
-                        ))}
-                        <Group justify="center" w="full" py={3}>
-                          <Button
-                            onClick={() => setIsUserMenuOpen(false)}
-                            component={Link}
-                            href="/notifications"
-                            variant="light"
-                            radius="xl"
-                            color="gray"
-                            size="xs"
-                            mt={5}
-                          >
-                            Просмотреть все
-                          </Button>
-                        </Group>
-                      </Stack>
-                    </MenuDropdown>
-                  </Menu>
-                </Box>
-              </Group>
+                          color="gray"
+                          size="xs"
+                          mt={5}
+                        >
+                          Просмотреть все
+                        </Button>
+                      </Group>
+                    </Stack>
+                  </MenuDropdown>
+                </Menu>
+              </Box>
             </Group>
           </Group>
           {/* only in mobile viewport on index page show sub-header (hiddenFrom="sm") */}
@@ -283,7 +284,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               </Button>
             </Group>
           )}
-        </AppShell.Header>
+        </Box>
 
         <AppShell.Main
           style={{
