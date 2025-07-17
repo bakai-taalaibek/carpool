@@ -1,9 +1,11 @@
+using Carpool.DAL.Entities;
 using Carpool.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Carpool.DAL
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Country> Countries { get; set; }
 
@@ -18,10 +20,6 @@ namespace Carpool.DAL
         public DbSet<Review> Reviews { get; set; }
 
         public DbSet<RideRole> RideRoles { get; set; }
-
-        public DbSet<User> Users { get; set; }
-
-        public DbSet<UserRole> UserRoles { get; set; }
 
         public DbSet<PostComment> PostComments { get; set; }
 
@@ -46,10 +44,6 @@ namespace Carpool.DAL
 
             modelBuilder.Entity<LocalityType>()
             .HasIndex(d => d.Name)
-            .IsUnique();
-
-            modelBuilder.Entity<UserRole>()
-            .HasIndex(r => r.RoleName)
             .IsUnique();
 
             modelBuilder.Entity<RideRole>()
