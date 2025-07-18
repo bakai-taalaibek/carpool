@@ -10,9 +10,6 @@ public class Post
     [Required]
     public int Id { get; set; }
 
-    [ForeignKey(nameof(User))]
-    public int? UserId { get; set; }
-    
     [ForeignKey(nameof(RideRole))]
     public int RideRoleId { get; set; }
 
@@ -49,11 +46,9 @@ public class Post
     [MaxLength(50)]
     public string? AnonCar { get; set; }
 
-    public User? User { get; set; }
-    
     public RideRole? RideRole { get; set; }
 
     public Locality? Source { get; set; }
-    
+
     public Locality? Destination { get; set; }
 }

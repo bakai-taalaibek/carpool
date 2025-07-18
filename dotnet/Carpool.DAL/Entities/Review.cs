@@ -22,6 +22,4 @@ public class Review
 
     [Required]
     public DateTimeOffset DateCreated { get; set; }
-
-    public User? User { get; set; }
 }

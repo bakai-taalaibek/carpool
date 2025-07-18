@@ -22,7 +22,5 @@ public class PostComment
 
     public DateTimeOffset DateModified { get; set; }
 
-    public User? User { get; set; }
-    
     public required Post Post { get; set; }
 }
