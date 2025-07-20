@@ -25,7 +25,7 @@ public class PostService(IUnitOfWork unitOfWork) : IPostService
         return post.ToFullDto();
     }
 
-    public async Task<IEnumerable<PostFullDto>> GetByUserIdAsync(int userId)
+    public async Task<IEnumerable<PostFullDto>> GetByUserIdAsync(string userId)
     {
         var posts = await _unitOfWord.Posts.GetByUserIdAsync(userId);
 

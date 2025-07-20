@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Carpool.DAL.Entities;
 
 namespace Carpool.Entities;
 
@@ -10,9 +11,11 @@ public class PostComment
     [Required]
     public int Id { get; set; }
 
+    [ForeignKey(nameof(Post))]
     public int PostId { get; set; }
 
-    public int? UserId { get; set; }
+    [ForeignKey(nameof(User))]
+    public string? UserId { get; set; }
 
     [Required]
     [MaxLength(50)]
@@ -22,7 +25,7 @@ public class PostComment
 
     public DateTimeOffset DateModified { get; set; }
 
-    public User? User { get; set; }
-    
     public required Post Post { get; set; }
+
+    public ApplicationUser? User { get; set; }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Carpool.DAL.Entities;
 
 namespace Carpool.Entities;
 
@@ -10,7 +11,8 @@ public class Review
     [Required]
     public int Id { get; set; }
 
-    public int? UserId { get; set; }
+    [ForeignKey(nameof(User))]
+    public string? UserId { get; set; }
 
     [Required]
     [MaxLength(500)]
@@ -23,5 +25,5 @@ public class Review
     [Required]
     public DateTimeOffset DateCreated { get; set; }
 
-    public User? User { get; set; }
+    public ApplicationUser? User { get; set; }
 }

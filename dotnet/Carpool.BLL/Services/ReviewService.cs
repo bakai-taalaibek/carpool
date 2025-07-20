@@ -25,7 +25,7 @@ public class ReviewService(IUnitOfWork unitOfWork) : IReviewService
         return review.ToFullDto();
     }
 
-    public async Task<IEnumerable<ReviewFullDto>> GetByUserIdAsync(int userId)
+    public async Task<IEnumerable<ReviewFullDto>> GetByUserIdAsync(string userId)
     {
         var reviews = await _unitOfWork.Reviews.GetByUserIdAsync(userId);
         

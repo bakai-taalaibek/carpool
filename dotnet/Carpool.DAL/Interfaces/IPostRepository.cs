@@ -8,7 +8,7 @@ public interface IPostRepository
 
     Task<Post> GetByIdAsync(int id);
 
-    Task<IEnumerable<Post>> GetByUserIdAsync(int userId);
+    Task<IEnumerable<Post>> GetByUserIdAsync(string userId);
 
     Task<Post> AddAsync(Post post);
 

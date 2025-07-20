@@ -8,7 +8,7 @@ public interface IReviewRepository
 
     Task<Review> GetByIdAsync(int id);
 
-    Task<IEnumerable<Review>> GetByUserIdAsync(int userId);
+    Task<IEnumerable<Review>> GetByUserIdAsync(string userId);
 
     Task<Review> AddAsync(Review review);
 }

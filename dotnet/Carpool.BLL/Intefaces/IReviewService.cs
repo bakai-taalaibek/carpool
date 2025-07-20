@@ -9,7 +9,7 @@ public interface IReviewService
 
     Task<ReviewFullDto> GetByIdAsync(int id);
 
-    Task<IEnumerable<ReviewFullDto>> GetByUserIdAsync(int userId);
+    Task<IEnumerable<ReviewFullDto>> GetByUserIdAsync(string userId);
 
     Task<ReviewFullDto> AddAsync(ReviewFullDto review);
 }

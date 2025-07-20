@@ -9,7 +9,7 @@ public interface IPostService
 
     Task<PostFullDto> GetByIdAsync(int id);
 
-    Task<IEnumerable<PostFullDto>> GetByUserIdAsync(int userId);
+    Task<IEnumerable<PostFullDto>> GetByUserIdAsync(string userId);
 
     Task<PostFullDto> AddAsync(PostFullDto post);
 

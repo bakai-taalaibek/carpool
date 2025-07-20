@@ -4,16 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Carpool.WebApi.Controllers;
 
+[Route("api/[controller]")]
 [ApiController]
-[Route("[controller]")]
-public class ReviewsController : ControllerBase
+public class ReviewsController(IReviewService reviewService) : ControllerBase
 {
-    private readonly IReviewService _reviewService;
-
-    public ReviewsController(IReviewService reviewService)
-    {
-        _reviewService = reviewService;
-    }
+    private readonly IReviewService _reviewService = reviewService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -30,7 +25,7 @@ public class ReviewsController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetByUserId(int userId)
+    public async Task<IActionResult> GetByUserId(string userId)
     {
         var reviews = await _reviewService.GetByUserIdAsync(userId);
         return Ok(reviews);

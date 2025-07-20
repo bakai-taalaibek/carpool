@@ -21,7 +21,7 @@ public class PostRepository(ApplicationDbContext context) : IPostRepository
         return post;
     }
 
-    public async Task<IEnumerable<Post>> GetByUserIdAsync(int userId)
+    public async Task<IEnumerable<Post>> GetByUserIdAsync(string userId)
     {
         return await _context.Posts.AsNoTracking().Where(p => p.UserId == userId).ToListAsync();
     }

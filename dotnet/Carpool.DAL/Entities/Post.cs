@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Carpool.DAL.Entities;
 
 namespace Carpool.Entities;
 
@@ -7,12 +8,11 @@ namespace Carpool.Entities;
 public class Post
 {
     [Key]
-    [Required]
     public int Id { get; set; }
 
     [ForeignKey(nameof(User))]
-    public int? UserId { get; set; }
-    
+    public string? UserId { get; set; }
+
     [ForeignKey(nameof(RideRole))]
     public int RideRoleId { get; set; }
 
@@ -49,11 +49,11 @@ public class Post
     [MaxLength(50)]
     public string? AnonCar { get; set; }
 
-    public User? User { get; set; }
-    
     public RideRole? RideRole { get; set; }
 
     public Locality? Source { get; set; }
-    
+
     public Locality? Destination { get; set; }
+
+    public ApplicationUser? User { get; set; }
 }

@@ -23,7 +23,7 @@ public class ReviewRepository(ApplicationDbContext context) : IReviewRepository
         return review ?? throw new NotFoundException($"Review with id {id} not found");
     }
 
-    public async Task<IEnumerable<Review>> GetByUserIdAsync(int userId)
+    public async Task<IEnumerable<Review>> GetByUserIdAsync(string userId)
     {
         var reviews = await _context.Reviews
             .AsNoTracking()
