@@ -1,8 +1,11 @@
 import "/styles/globals.css";
 
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
 import "@mantine/core/styles.layer.css";
 import "@mantine/dates/styles.layer.css";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
 import { theme } from "../theme";
@@ -29,6 +32,7 @@ export default function RootLayout({ children }: { children: any }) {
       </head>
       <body>
         <MantineProvider theme={theme}>
+          <Notifications />
           <DatesProviderWrapper>
             <BasicMantineLayout>{children}</BasicMantineLayout>
           </DatesProviderWrapper>
