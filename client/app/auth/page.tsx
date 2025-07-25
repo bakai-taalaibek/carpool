@@ -1,30 +1,47 @@
 "use client";
-import { useToggle, useDisclosure } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
 import {
-  TextInput,
-  PasswordInput,
-  Text,
-  Paper,
-  Group,
-  PaperProps,
-  Button,
-  Divider,
-  Checkbox,
   Anchor,
-  Stack,
+  Button,
   Center,
+  Checkbox,
+  CheckIcon,
+  Divider,
+  Group,
   Modal,
+  Paper,
+  PaperProps,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
 } from "@mantine/core";
-import GoogleIcon from "../../public/icons/GoogleIcon";
+import { useForm } from "@mantine/form";
+import { useDisclosure, useToggle } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import Link from "next/link";
+import router from "next/router";
+import { setCredentials } from "../../lib/authSlice";
+import GoogleIcon from "../../public/icons/GoogleIcon";
+import {
+  usePostLoginMutation,
+  usePostRegisterMutation,
+} from "../../services/accountApi";
 import { TermsContent } from "../termsContent";
+import { useDispatch } from "react-redux";
 
 export default function AuthenticationForm(props: PaperProps) {
+  const dispatch = useDispatch();
+
+  const [postLogin] = usePostLoginMutation();
+  const [postRegister] = usePostRegisterMutation();
+
   const [isModalOpened, { open: openModal, close: closeModal }] =
     useDisclosure(false);
 
-  const [type, toggle] = useToggle(["login", "register"]);
+  const [authActionType, toggleAuthActionType] = useToggle([
+    "login",
+    "register",
+  ]);
   const form = useForm({
     initialValues: {
       email: "",
@@ -44,6 +61,51 @@ export default function AuthenticationForm(props: PaperProps) {
     },
   });
 
+  const handleAuth = async (values: typeof form.values) => {
+    if (authActionType === "login") {
+      try {
+        const response = await postLogin({
+          identifier: values.email,
+          password: values.password,
+        }).unwrap();
+        dispatch(
+          setCredentials({
+            token: response.token,
+            user: response.user,
+            expiresAt: response.expiresAt,
+          })
+        );
+
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+        localStorage.setItem("expiresAt", response.expiresAt);
+
+        router.push("/");
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
+    } else {
+      try {
+        const response = await postRegister({
+          email: values.email,
+          password: values.password,
+        }).unwrap();
+
+        notifications.show({
+          message: response.message,
+          color: "teal",
+          title: "Успешная регистрация",
+          position: "top-right",
+          icon: <CheckIcon size={20} />,
+        });
+        toggleAuthActionType();
+        form.reset();
+      } catch (error) {
+        console.error("Registration failed:", error);
+      }
+    }
+  };
+
   return (
     <Center>
       <Paper
@@ -54,14 +116,20 @@ export default function AuthenticationForm(props: PaperProps) {
         className="border-transparent shadow-none min-[500px]:border-gray-200 min-[500px]:shadow-md"
       >
         <Text ta="center" fw={900} mb={5} size="xl">
-          {type === "register"
+          {authActionType === "register"
             ? "Зарегистрируйтесь с помощью..."
             : "Войдите с помощью..."}
         </Text>
         <Text c="dimmed" size="sm" ta="center" mb={20}>
-          {type === "register" ? "Уже есть аккаунт? " : "Еще нет аккаунта? "}
-          <Anchor size="sm" component="button" onClick={() => toggle()}>
-            {type === "register" ? "Войдите" : "Зарегистрируйтесь"}
+          {authActionType === "register"
+            ? "Уже есть аккаунт? "
+            : "Еще нет аккаунта? "}
+          <Anchor
+            size="sm"
+            component="button"
+            onClick={() => toggleAuthActionType()}
+          >
+            {authActionType === "register" ? "Войдите" : "Зарегистрируйтесь"}
           </Anchor>
         </Text>
         <Button
@@ -81,7 +149,7 @@ export default function AuthenticationForm(props: PaperProps) {
           mb="xs"
         />
 
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={form.onSubmit((values) => handleAuth(values))}>
           <Stack>
             <TextInput
               required
@@ -107,7 +175,7 @@ export default function AuthenticationForm(props: PaperProps) {
               radius="md"
             />
 
-            {type === "register" && (
+            {authActionType === "register" && (
               <PasswordInput
                 required
                 label="Подтвердите пароль"
@@ -126,7 +194,7 @@ export default function AuthenticationForm(props: PaperProps) {
           </Stack>
 
           <Group justify="space-between" mt="xl">
-            {type === "register" ? (
+            {authActionType === "register" ? (
               <Checkbox
                 label={
                   <>
@@ -155,7 +223,7 @@ export default function AuthenticationForm(props: PaperProps) {
             )}
 
             <Button type="submit">
-              {type === "login" ? "Войти" : "Далее"}
+              {authActionType === "login" ? "Войти" : "Далее"}
             </Button>
           </Group>
         </form>

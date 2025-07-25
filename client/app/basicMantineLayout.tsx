@@ -32,7 +32,8 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
+import { setCredentials } from "../lib/authSlice";
 import { store } from "../lib/store";
 import Filters from "./filters";
 import Footer from "./footer";
@@ -66,6 +67,7 @@ export const notifications = [
 ];
 
 export default function BasicMantineLayout({ children }: { children: any }) {
+  const dispatch = useDispatch();
   const [isFilterDrawerOpen, { toggle: toggleFilterDrawer }] =
     useDisclosure(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -92,7 +94,21 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         setIsTermsDrawerOpen(true);
       }
     }, 50);
-  }, []);
+
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    const expiresAt = localStorage.getItem("expiresAt");
+
+    if (token) {
+      dispatch(
+        setCredentials({
+          token,
+          user: user ? JSON.parse(user) : undefined,
+          expiresAt: expiresAt || undefined,
+        })
+      );
+    }
+  }, [dispatch]);
 
   return (
     // padding="md" is padding of the main part, so this is additional distance from header to main
