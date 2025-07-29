@@ -17,6 +17,9 @@ public class PostComment
     [ForeignKey(nameof(User))]
     public string? UserId { get; set; }
 
+    [ForeignKey(nameof(Guest))]
+    public Guid? GuestId { get; set; }
+
     [Required]
     [MaxLength(50)]
     public required string Text { get; set; }
@@ -28,4 +31,6 @@ public class PostComment
     public required Post Post { get; set; }
 
     public ApplicationUser? User { get; set; }
+
+    public Guest? Guest { get; set; }
 }

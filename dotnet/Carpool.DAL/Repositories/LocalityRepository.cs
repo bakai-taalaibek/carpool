@@ -1,4 +1,3 @@
-using System;
 using Carpool.DAL.Interfaces;
 using Carpool.Entities;
 using GameStore.Shared.Exceptions;

@@ -11,7 +11,7 @@ public class LocalityService(IUnitOfWork unitOfWork) : ILocalityService
     private readonly IUnitOfWork _unitOfwork = unitOfWork;
     public async Task<IEnumerable<LocalityFullDto>> GetAllAsync()
     {
-        List<Locality> localities = (List<Locality>)(await _unitOfwork.Localities.GetAllAsync());
+        List<Locality> localities = (List<Locality>)await _unitOfwork.Localities.GetAllAsync();
 
         return localities.OrderByDescending(l => l.Population).Select(i => i.ToFullDto());
     }

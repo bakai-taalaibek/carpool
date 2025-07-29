@@ -13,6 +13,9 @@ public class Post
     [ForeignKey(nameof(User))]
     public string? UserId { get; set; }
 
+    [ForeignKey(nameof(Guest))]
+    public Guid? GuestId { get; set; }
+
     [ForeignKey(nameof(RideRole))]
     public int RideRoleId { get; set; }
 
@@ -56,4 +59,6 @@ public class Post
     public Locality? Destination { get; set; }
 
     public ApplicationUser? User { get; set; }
+
+    public Guest? Guest { get; set; }
 }
