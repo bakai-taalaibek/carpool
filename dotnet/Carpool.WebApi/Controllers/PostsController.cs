@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Carpool.BLL.Intefaces;
 using Carpool.Contracts.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,18 @@ public class PostsController(IPostService postService) : ControllerBase
     private readonly IPostService _postService = postService;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get([FromQuery] PostQueryParameters parameters)
     {
-        var posts = await _postService.GetAllAsync();
+        string? userId = User.Identity?.IsAuthenticated == true
+            ? User.FindFirstValue(ClaimTypes.NameIdentifier)
+            : null;
+
+        if (!Guid.TryParse(Request.Headers["X-Guest-Id"].FirstOrDefault(), out var guestId))
+        {
+            return BadRequest("Invalid Guest ID format");
+        }
+
+        var posts = await _postService.GetAsync(parameters, userId, guestId);
         return Ok(posts);
     }
 

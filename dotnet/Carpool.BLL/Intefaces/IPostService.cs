@@ -1,11 +1,14 @@
-using System;
 using Carpool.Contracts.DTOs;
+using Carpool.Entities;
 
 namespace Carpool.BLL.Intefaces;
 
 public interface IPostService
 {
-    Task<IEnumerable<PostFullDto>> GetAllAsync();
+    Task<PostsPagedResponse> GetAsync(
+        PostQueryParameters parameters,
+        string? userId = null,
+        Guid? guestId = null);
 
     Task<PostFullDto> GetByIdAsync(int id);
 

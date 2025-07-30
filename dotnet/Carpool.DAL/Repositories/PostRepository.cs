@@ -8,9 +8,9 @@ namespace Carpool.DAL.Repositories;
 public class PostRepository(ApplicationDbContext context) : IPostRepository
 {
     private readonly ApplicationDbContext _context = context;
-    public async Task<IEnumerable<Post>> GetAllAsync()
+    public IQueryable<Post> GetAllAsQueryable()
     {
-        return await _context.Posts.AsNoTracking().ToListAsync();
+        return _context.Posts.AsNoTracking().AsQueryable();
     }
 
     public async Task<Post> GetByIdAsync(int id)

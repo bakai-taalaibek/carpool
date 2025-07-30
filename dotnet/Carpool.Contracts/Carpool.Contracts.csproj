@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Carpool.Shared/Carpool.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

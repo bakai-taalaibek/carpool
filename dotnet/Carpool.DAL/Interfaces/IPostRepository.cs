@@ -4,7 +4,7 @@ namespace Carpool.DAL.Interfaces;
 
 public interface IPostRepository
 {
-    Task<IEnumerable<Post>> GetAllAsync();
+    IQueryable<Post> GetAllAsQueryable();
 
     Task<Post> GetByIdAsync(int id);
 
