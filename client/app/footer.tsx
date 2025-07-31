@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { forwardRef } from "react";
-import { usePostReviewMutation } from "../services/reviewApi";
+import { useCreateReviewMutation } from "../services/reviewsApi";
 import { ContactIconsList } from "./contactIcons";
 
 const Footer = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
@@ -27,13 +27,13 @@ const Footer = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
     },
   });
 
-  const [postReview, { isLoading, isError, isSuccess }] =
-    usePostReviewMutation();
+  const [createReview, { isLoading, isError, isSuccess }] =
+    useCreateReviewMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await postReview(form.getValues()).unwrap();
+      await createReview(form.getValues()).unwrap();
     } catch (err) {
       console.error("Failed to post review:", err);
     }

@@ -1,12 +1,12 @@
 import { ReviewCreateDto, ReviewFullDto } from "../types/review";
 import { api } from "./api";
 
-export const gameApi = api.injectEndpoints({
+export const reviewsApi = api.injectEndpoints({
   endpoints: (build) => ({
     getReviews: build.query<ReviewFullDto[], void>({
       query: () => "reviews",
     }),
-    postReview: build.mutation<ReviewFullDto, ReviewCreateDto>({
+    createReview: build.mutation<ReviewFullDto, ReviewCreateDto>({
       query: (body) => ({
         url: "reviews",
         method: "POST",
@@ -14,7 +14,6 @@ export const gameApi = api.injectEndpoints({
       }),
     }),
   }),
-  overrideExisting: false,
 });
 
-export const { useGetReviewsQuery, usePostReviewMutation } = gameApi;
+export const { useGetReviewsQuery, useCreateReviewMutation } = reviewsApi;

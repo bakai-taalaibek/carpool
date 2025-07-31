@@ -22,18 +22,15 @@ import Link from "next/link";
 import router from "next/router";
 import { setCredentials } from "../../lib/authSlice";
 import GoogleIcon from "../../public/icons/GoogleIcon";
-import {
-  usePostLoginMutation,
-  usePostRegisterMutation,
-} from "../../services/accountApi";
 import { TermsContent } from "../termsContent";
 import { useDispatch } from "react-redux";
+import { useLoginUserMutation, useRegisterUserMutation } from "../../services/accountsApi";
 
 export default function AuthenticationForm(props: PaperProps) {
   const dispatch = useDispatch();
 
-  const [postLogin] = usePostLoginMutation();
-  const [postRegister] = usePostRegisterMutation();
+  const [loginUser] = useLoginUserMutation();
+  const [registerUser] = useRegisterUserMutation();
 
   const [isModalOpened, { open: openModal, close: closeModal }] =
     useDisclosure(false);
@@ -64,7 +61,7 @@ export default function AuthenticationForm(props: PaperProps) {
   const handleAuth = async (values: typeof form.values) => {
     if (authActionType === "login") {
       try {
-        const response = await postLogin({
+        const response = await loginUser({
           identifier: values.email,
           password: values.password,
         }).unwrap();
@@ -86,7 +83,7 @@ export default function AuthenticationForm(props: PaperProps) {
       }
     } else {
       try {
-        const response = await postRegister({
+        const response = await registerUser({
           email: values.email,
           password: values.password,
         }).unwrap();

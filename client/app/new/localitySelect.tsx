@@ -1,6 +1,6 @@
 import { Box, Combobox, InputBase, useCombobox } from "@mantine/core";
 import { useMemo, useState } from "react";
-import { useGetLocalitiesQuery } from "../../services/localityApi";
+import { useGetLocalitiesQuery } from "../../services/localitiesApi";
 import { LocalityFullDto } from "../../types/locality";
 
 function normalizeForSearchString(input: string) {

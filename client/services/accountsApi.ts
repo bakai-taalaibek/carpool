@@ -2,16 +2,16 @@ import { LoginRequestDto, LoginResponseDto } from "../types/login";
 import { RegisterRequestDto, RegisterResponseDto } from "../types/register";
 import { api } from "./api";
 
-export const gameApi = api.injectEndpoints({
+export const accountsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    postLogin: build.mutation<LoginResponseDto, LoginRequestDto>({
+    loginUser: build.mutation<LoginResponseDto, LoginRequestDto>({
       query: (body) => ({
         url: "accounts/login",
         method: "POST",
         body,
       }),
     }),
-    postRegister: build.mutation<RegisterResponseDto, RegisterRequestDto>({
+    registerUser: build.mutation<RegisterResponseDto, RegisterRequestDto>({
       query: (body) => ({
         url: "accounts/register",
         method: "POST",
@@ -19,7 +19,6 @@ export const gameApi = api.injectEndpoints({
       }),
     }),
   }),
-  overrideExisting: false,
 });
 
-export const { usePostLoginMutation, usePostRegisterMutation } = gameApi;
+export const { useLoginUserMutation, useRegisterUserMutation } = accountsApi;
