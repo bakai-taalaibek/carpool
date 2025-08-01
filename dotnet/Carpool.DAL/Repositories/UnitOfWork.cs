@@ -3,10 +3,10 @@ using Carpool.DAL.Interfaces;
 namespace Carpool.DAL.Repositories;
 
 public class UnitOfWork(
-    ApplicationDbContext _context, 
-    IPostRepository postRepository, 
-    IPostCommentRepository postCommentRepository, 
-    IReviewRepository reviewRepository, 
+    ApplicationDbContext _context,
+    IRidePostRepository ridePostRepository,
+    IRidePostCommentRepository ridePostCommentRepository,
+    IReviewRepository reviewRepository,
     ILocalityRepository localityRepository,
     ICountryRepository countryRepository,
     ILocalityTypeRepository localityTypeRepository,
@@ -15,9 +15,9 @@ public class UnitOfWork(
     IRideRoleRepository rideRoleRepository,
     IAimakRepository aimakRepository) : IUnitOfWork
 {
-    public IPostRepository Posts { get; } = postRepository;
+    public IRidePostRepository RidePosts { get; } = ridePostRepository;
 
-    public IPostCommentRepository PostComments { get; } = postCommentRepository;
+    public IRidePostCommentRepository RidePostComments { get; } = ridePostCommentRepository;
 
     public IReviewRepository Reviews { get; } = reviewRepository;
 

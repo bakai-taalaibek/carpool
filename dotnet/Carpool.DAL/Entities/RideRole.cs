@@ -14,5 +14,5 @@ public class RideRole
     [MaxLength(50)]
     public required string Name { get; set; }
 
-    public ICollection<Post>? Posts { get; set; } = [];
+    public ICollection<RidePost>? RidePosts { get; set; } = [];
 }

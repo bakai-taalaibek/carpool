@@ -13,8 +13,8 @@ namespace Carpool.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var posts = await _localityService.GetAllAsync();
-            return Ok(posts);
+            var localities = await _localityService.GetAllAsync();
+            return Ok(localities);
         }
     }
 }

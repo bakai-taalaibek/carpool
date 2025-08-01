@@ -2,8 +2,8 @@ namespace Carpool.DAL.Interfaces;
 
 public interface IUnitOfWork
 {
-    IPostRepository Posts { get; }
-    IPostCommentRepository PostComments { get; }
+    IRidePostRepository RidePosts { get; }
+    IRidePostCommentRepository RidePostComments { get; }
     IReviewRepository Reviews { get; }
     ILocalityRepository Localities { get; }
     ICountryRepository Countries { get; }

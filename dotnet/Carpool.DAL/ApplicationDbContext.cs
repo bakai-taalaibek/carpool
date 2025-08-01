@@ -13,7 +13,7 @@ namespace Carpool.DAL
 
         public DbSet<Locality> Localities { get; set; }
 
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<RidePost> RidePosts { get; set; }
 
         public DbSet<Region> Regions { get; set; }
 
@@ -21,7 +21,7 @@ namespace Carpool.DAL
 
         public DbSet<RideRole> RideRoles { get; set; }
 
-        public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<RidePostComment> RidePostComments { get; set; }
 
         public DbSet<LocalityType> LocalityTypes { get; set; }
 
