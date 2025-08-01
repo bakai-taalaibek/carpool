@@ -11,6 +11,7 @@ public interface IUnitOfWork
     IRegionRepository Regions { get; }
     IDistrictRepository Districts { get; }
     IAimakRepository Aimaks { get; }
+    IRideRoleRepository RideRoles { get; }
 
     Task SaveChangesAsync();
 }

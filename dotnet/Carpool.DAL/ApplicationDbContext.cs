@@ -49,6 +49,18 @@ namespace Carpool.DAL
             modelBuilder.Entity<RideRole>()
             .HasIndex(r => r.Name)
             .IsUnique();
+
+            modelBuilder.Entity<RideRole>().HasData(
+                new RideRole
+                {
+                    Id = 1,
+                    Name = "Driver",
+                },
+                new RideRole
+                {
+                    Id = 2,
+                    Name = "Passenger",
+                });
         }
     }
 }

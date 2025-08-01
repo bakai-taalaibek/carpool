@@ -1,4 +1,5 @@
 export type RideRoleFullDto = {
-    id: number,
-    name: string,
-}
+  id: number;
+  name: RideRoleName;
+};
+export type RideRoleName = "Driver" | "Passenger";

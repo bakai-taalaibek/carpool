@@ -23,6 +23,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ILocalityService, LocalityService>();
+builder.Services.AddScoped<IRideRoleService, RideRoleService>();
 
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
 builder.Services.AddScoped<IAimakRepository, AimakRepository>();
 builder.Services.AddScoped<ILocalityRepository, LocalityRepository>();
 builder.Services.AddScoped<ILocalityTypeRepository, LocalityTypeRepository>();
+builder.Services.AddScoped<IRideRoleRepository, RideRoleRepository>();
 builder.Services.AddScoped<ISeeder, Seeder>();
 
 string? allowedOrigins = builder.Configuration["AllowedOrigins"];
