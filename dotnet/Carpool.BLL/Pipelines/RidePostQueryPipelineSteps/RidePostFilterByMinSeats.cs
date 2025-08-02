@@ -8,6 +8,11 @@ public class RidePostFilterByMinSeats : IRidePostQueryPipelineStep
     public IQueryable<RidePost> Execute(
         IQueryable<RidePost> input, RidePostQueryParameters parameters)
     {
+        if (parameters.MinSeats == null)
+        {
+            return input;
+        }
+
         return input.Where(p => p.Seats >= parameters.MinSeats);
     }
 }

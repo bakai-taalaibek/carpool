@@ -22,7 +22,7 @@ public class RidePostQueryParameters
 
     public DateTimeOffset? DepartureEndDateTime { get; set; }
 
-    public int MinSeats { get; set; } = 1;
+    public int? MinSeats { get; set; }
 
     public int? MaxSeats { get; set; }
 

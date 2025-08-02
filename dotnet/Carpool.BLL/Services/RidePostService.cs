@@ -125,11 +125,13 @@ public class RidePostService(IUnitOfWork unitOfWork) : IRidePostService
         IQueryable<RidePost> input, RidePostQueryParameters parameters)
     {
         int pageSize = parameters.PageSize;
+
+        int totalNumberOfPages = input.Count();
+        var numberOfPages = (int)Math.Ceiling(totalNumberOfPages / (double)pageSize);
+
         input = input
             .Skip((parameters.Page - 1) * pageSize)
             .Take(pageSize);
-
-        var numberOfPages = (int)Math.Ceiling(input.Count() / (double)pageSize);
 
         return (input, numberOfPages);
     }
