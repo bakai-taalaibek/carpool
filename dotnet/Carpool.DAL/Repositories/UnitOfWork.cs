@@ -13,6 +13,7 @@ public class UnitOfWork(
     IRegionRepository regionRepository,
     IDistrictRepository districtRepository,
     IRideRoleRepository rideRoleRepository,
+    IGuestRepository guestRepository,
     IAimakRepository aimakRepository) : IUnitOfWork
 {
     public IRidePostRepository RidePosts { get; } = ridePostRepository;
@@ -34,6 +35,8 @@ public class UnitOfWork(
     public IAimakRepository Aimaks { get; } = aimakRepository;
 
     public IRideRoleRepository RideRoles { get; } = rideRoleRepository;
+
+    public IGuestRepository Guests { get; } = guestRepository;
 
     public Task SaveChangesAsync()
     {

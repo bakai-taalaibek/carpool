@@ -13,7 +13,7 @@ public interface IRidePostService
 
     Task<IEnumerable<RidePostFullDto>> GetByUserIdAsync(string userId);
 
-    Task<RidePostFullDto> AddAsync(RidePostFullDto ridePost);
+    Task<RidePostFullDto> AddAsync(RidePostCreateDto ridePost, string? userId, Guid? guestId);
 
     Task<RidePostFullDto> UpdateAsync(RidePostFullDto ridePost);
 

@@ -27,6 +27,8 @@ namespace Carpool.DAL
 
         public DbSet<Aimak> Aimaks { get; set; }
 
+        public DbSet<Guest> Guests { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 

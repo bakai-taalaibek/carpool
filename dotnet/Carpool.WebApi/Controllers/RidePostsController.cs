@@ -1,15 +1,20 @@
 using System.Security.Claims;
 using Carpool.BLL.Intefaces;
 using Carpool.Contracts.DTOs;
+using Carpool.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpool.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RidePostsController(IRidePostService ridePostService) : ControllerBase
+public class RidePostsController(
+    IRidePostService ridePostService,
+    IGuestService guestService) : ControllerBase
 {
     private readonly IRidePostService _ridePostService = ridePostService;
+
+    private readonly IGuestService _guestService = guestService;
 
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] RidePostQueryParameters parameters)
@@ -42,9 +47,13 @@ public class RidePostsController(IRidePostService ridePostService) : ControllerB
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] RidePostFullDto ridePost)
+    public async Task<IActionResult> Add([FromBody] RidePostCreateDto ridePost)
     {
-        var newRidePost = await _ridePostService.AddAsync(ridePost);
+        (var userId, var guestId) = ExtractUserIdAndGuestId();
+
+        await _guestService.EnsureGuestExistsIfAnonymousAsync(userId, guestId);
+
+        var newRidePost = await _ridePostService.AddAsync(ridePost, userId, guestId);
         return CreatedAtAction(nameof(GetById), new { id = newRidePost.Id }, newRidePost);
     }
 
@@ -60,5 +69,27 @@ public class RidePostsController(IRidePostService ridePostService) : ControllerB
     {
         await _ridePostService.DeleteAsync(id);
         return NoContent();
+    }
+
+    private (string? userId, Guid? guestId) ExtractUserIdAndGuestId()
+    {
+        string? userId = User.Identity?.IsAuthenticated == true
+            ? User.FindFirstValue(ClaimTypes.NameIdentifier)
+            : null;
+
+        var guestIdRaw = Request.Headers["X-Guest-Id"].FirstOrDefault();
+
+        Guid? guestId = null;
+        if (!string.IsNullOrWhiteSpace(guestIdRaw))
+        {
+            if (!Guid.TryParse(guestIdRaw, out var parsedGuestId))
+            {
+                throw new BadHttpRequestException("Invalid Guest ID format");
+            }
+
+            guestId = parsedGuestId;
+        }
+
+        return (userId, guestId);
     }
 }

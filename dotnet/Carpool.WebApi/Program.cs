@@ -22,11 +22,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRidePostService, RidePostService>();
+builder.Services.AddScoped<IGuestService, GuestService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ILocalityService, LocalityService>();
 builder.Services.AddScoped<IRideRoleService, RideRoleService>();
 
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IGuestRepository, GuestRepository>();
 builder.Services.AddScoped<IRidePostRepository, RidePostRepository>();
 builder.Services.AddScoped<IRidePostCommentRepository, PostCommentRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();

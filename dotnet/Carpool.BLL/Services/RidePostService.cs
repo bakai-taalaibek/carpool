@@ -65,11 +65,13 @@ public class RidePostService(IUnitOfWork unitOfWork) : IRidePostService
         return ridePosts.Select(p => p.ToFullDto());
     }
 
-    public async Task<RidePostFullDto> AddAsync(RidePostFullDto ridePost)
+    public async Task<RidePostFullDto> AddAsync(
+        RidePostCreateDto ridePost, string? userId, Guid? guestId)
     {
         RidePost newRidePost = new()
         {
-            UserId = ridePost.UserId,
+            UserId = userId,
+            GuestId = guestId,
             RideRoleId = ridePost.RideRoleId,
             SourceId = ridePost.SourceId,
             DestinationId = ridePost.DestinationId,
@@ -78,8 +80,8 @@ public class RidePostService(IUnitOfWork unitOfWork) : IRidePostService
             PricePerSeat = ridePost.PricePerSeat,
             PricePerCar = ridePost.PricePerCar,
             Comment = ridePost.Comment,
-            DateCreated = ridePost.DateCreated,
-            DateModified = ridePost.DateModified,
+            DateCreated = DateTimeOffset.UtcNow,
+            DateModified = DateTimeOffset.UtcNow,
             AnonName = ridePost.AnonName,
             AnonPhone = ridePost.AnonPhone,
             AnonCar = ridePost.AnonCar,
