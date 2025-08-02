@@ -1,46 +1,32 @@
 "use client";
 import {
   Button,
-  NumberInput,
-  SegmentedControl,
   Stack,
-  Textarea,
   TextInput,
   Text,
-  SimpleGrid,
   Avatar,
-  Chip,
-  Checkbox,
   Group,
-  Box,
-  Fieldset,
-  Grid,
   Flex,
   Divider,
   Anchor,
-  ActionIcon,
   Accordion,
   AccordionItem,
   AccordionControl,
   AccordionPanel,
-  Space,
   FileButton,
   PasswordInput,
   Modal,
   Alert,
 } from "@mantine/core";
-import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconAlertTriangle,
-  IconClock,
-  IconEdit,
   IconLogout2,
-  IconPencil,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useLogout } from "../../lib/useLogout";
 
 const data = {
   name: "Асан Болотов",
@@ -51,6 +37,7 @@ const data = {
 };
 
 export default function NewPage() {
+  const logoutUser = useLogout();
   const [isBeingEdited, setIsBeingEdited] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isModalOpened, { open: openModal, close: closeModal }] =
@@ -248,7 +235,7 @@ export default function NewPage() {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="exit">
-          <AccordionControl>
+          <AccordionControl >
             <Text fz={18}>Выйти из аккаунта</Text>
           </AccordionControl>
           <AccordionPanel>
@@ -257,6 +244,7 @@ export default function NewPage() {
               w="max-content"
               variant="filled"
               mt={10}
+              onClick={logoutUser}
             >
               Выйти из аккаунта
             </Button>

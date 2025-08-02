@@ -1,7 +1,7 @@
 "use client";
 import { ActionIcon, Box, Flex, Stack, Title, Tooltip } from "@mantine/core";
-import { notifications } from "../basicMantineLayout";
 import { IconMail, IconMailOpened } from "@tabler/icons-react";
+import { notifications } from "../userMenu";
 
 export default function Notifications() {
   return (
@@ -9,12 +9,9 @@ export default function Notifications() {
       <Title order={3} mb={12}>
         Уведомления
       </Title>
-      {notifications.map((item, index) => (
+      {notifications.map((item) => (
         <Flex key={item.id} w="full" gap={0} align="stretch">
-          <Box
-            w={3}
-            bg={item.isOpened ? "gray.3" : "blue.3"}
-          ></Box>
+          <Box w={3} bg={item.isOpened ? "gray.3" : "blue.3"}></Box>
           <Flex
             w="100%"
             key={item.id}

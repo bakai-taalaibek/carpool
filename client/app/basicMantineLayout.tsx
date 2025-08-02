@@ -2,18 +2,10 @@
 import {
   Anchor,
   AppShell,
-  Avatar,
   Box,
   Button,
   Drawer,
   Group,
-  Indicator,
-  Menu,
-  MenuDivider,
-  MenuDropdown,
-  MenuItem,
-  MenuLabel,
-  MenuTarget,
   Modal,
   Space,
   Stack,
@@ -22,55 +14,26 @@ import {
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
-import {
-  IconFilterSearch,
-  IconLogout2,
-  IconPlus,
-  IconSettings,
-} from "@tabler/icons-react";
+import { IconFilterSearch, IconPlus } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Provider, useDispatch } from "react-redux";
-import { setCredentials } from "../lib/authSlice";
+import { Provider } from "react-redux";
 import { store } from "../lib/store";
 import Filters from "./filters";
 import Footer from "./footer";
-import NotificationCustom from "./notificationCustom";
 import { TermsContent } from "./termsContent";
+import UserMenu from "./userMenu";
 
 export const metadata = {
   title: "Mantine Next.js template",
   description: "I am using Mantine with Next.js!",
 };
 
-export const notifications = [
-  {
-    id: 1,
-    title: "Ответ на комментарий",
-    description: "Привет, меня зовут Паша, сколько мест еще есть?",
-    isOpened: false,
-  },
-  {
-    id: 2,
-    title: "Комментарий к объявлению",
-    description: "Привет, меня зовут Паша, сколько мест еще есть?",
-    isOpened: false,
-  },
-  {
-    id: 3,
-    title: "Комментарий к объявлению",
-    description: "Привет, меня зовут Паша, сколько мест еще есть?",
-    isOpened: true,
-  },
-];
-
 export default function BasicMantineLayout({ children }: { children: any }) {
-  const dispatch = useDispatch();
   const [isFilterDrawerOpen, { toggle: toggleFilterDrawer }] =
     useDisclosure(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isTermsDrawerOpen, setIsTermsDrawerOpen] = useState(false);
   const [isTermsModalOpen, { open: openTermsModal, close: closeTermsModal }] =
     useDisclosure(false);
@@ -94,21 +57,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
         setIsTermsDrawerOpen(true);
       }
     }, 50);
-
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    const expiresAt = localStorage.getItem("expiresAt");
-
-    if (token) {
-      dispatch(
-        setCredentials({
-          token,
-          user: user ? JSON.parse(user) : undefined,
-          expiresAt: expiresAt || undefined,
-        })
-      );
-    }
-  }, [dispatch]);
+  }, []);
 
   return (
     // padding="md" is padding of the main part, so this is additional distance from header to main
@@ -181,91 +130,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               >
                 Войти
               </Button>
-
-              <Box mr={10}>
-                <Menu
-                  shadow="md"
-                  width={280}
-                  position="bottom-end"
-                  opened={isUserMenuOpen}
-                  onChange={setIsUserMenuOpen}
-                >
-                  <MenuTarget>
-                    <Indicator
-                      position="top-end"
-                      color="red"
-                      label={2}
-                      size={16}
-                      offset={4}
-                    >
-                      <Avatar
-                        color="blue"
-                        radius="xl"
-                        style={{ cursor: "pointer" }}
-                      />
-                    </Indicator>
-                  </MenuTarget>
-
-                  <MenuDropdown px={0}>
-                    <MenuLabel>Таалайбек уулу Бакай</MenuLabel>
-                    <MenuItem
-                      leftSection={
-                        <IconSettings style={{ width: 14, height: 14 }} />
-                      }
-                      component={Link}
-                      href="/profile"
-                    >
-                      Профиль
-                    </MenuItem>
-                    <MenuItem
-                      leftSection={
-                        <IconLogout2 style={{ width: 14, height: 14 }} />
-                      }
-                    >
-                      Выйти
-                    </MenuItem>
-                    <MenuDivider />
-                    <MenuLabel pb={0}>Уведомления</MenuLabel>
-                    <Stack gap={0}>
-                      <Group w="full">
-                        <Button
-                          variant="transparent"
-                          size="xs"
-                          color="blue"
-                          ml="auto"
-                          h={20}
-                          mb={5}
-                        >
-                          Очистить все
-                        </Button>
-                      </Group>
-                      {notifications.map((item, index) => (
-                        <NotificationCustom
-                          key={item.id}
-                          title={item.title}
-                          isLast={notifications.length - 1 === index}
-                        >
-                          {item.description}
-                        </NotificationCustom>
-                      ))}
-                      <Group justify="center" w="full" py={3}>
-                        <Button
-                          onClick={() => setIsUserMenuOpen(false)}
-                          component={Link}
-                          href="/notifications"
-                          variant="light"
-                          radius="xl"
-                          color="gray"
-                          size="xs"
-                          mt={5}
-                        >
-                          Просмотреть все
-                        </Button>
-                      </Group>
-                    </Stack>
-                  </MenuDropdown>
-                </Menu>
-              </Box>
+              <UserMenu />
             </Group>
           </Group>
           {/* only in mobile viewport on index page show sub-header (hiddenFrom="sm") */}
