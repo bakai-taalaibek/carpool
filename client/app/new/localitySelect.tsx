@@ -49,9 +49,16 @@ function getFilteredData(data: LocalityFullDto[] | undefined, param: string) {
 type TProps = {
   placeholder: string;
   label?: string;
+  value?: number;
+  onChange?: (arg: number) => void;
 };
 
-export default function LocalitySelect({ placeholder, label }: TProps) {
+export default function LocalitySelect({
+  placeholder,
+  label,
+  value,
+  onChange,
+}: TProps) {
   const [localityId, setLocalityId] = useState<string>("");
   const [userSearchString, setUserSearchString] = useState("");
 
@@ -66,8 +73,8 @@ export default function LocalitySelect({ placeholder, label }: TProps) {
   }
 
   const localityName = useMemo(
-    () => getLocalityNameById(localityId),
-    [data, localityId]
+    () => getLocalityNameById(value?.toString() || localityId),
+    [data, localityId, value]
   );
 
   const filteredOptions = getFilteredData(data, userSearchString);
@@ -102,6 +109,7 @@ export default function LocalitySelect({ placeholder, label }: TProps) {
       store={combobox}
       // withinPortal={false}
       onOptionSubmit={(val) => {
+        val && onChange && onChange(Number.parseInt(val));
         setLocalityId(val);
         setUserSearchString(getLocalityNameById(val));
         combobox.closeDropdown();
