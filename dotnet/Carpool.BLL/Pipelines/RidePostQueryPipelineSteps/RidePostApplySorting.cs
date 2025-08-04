@@ -11,10 +11,12 @@ public class RidePostApplySorting : IRidePostQueryPipelineStep
     {
         return parameters.Sort switch
         {
-            SortingOptions.Newest => input.OrderByDescending(g => g.DateCreated),
-            SortingOptions.Oldest => input.OrderBy(g => g.DateCreated),
-            SortingOptions.Cheapest => input.OrderBy(g => g.PricePerSeat),
-            SortingOptions.MostExpensive => input.OrderByDescending(g => g.PricePerSeat),
+            SortingOptions.Cheaper => input.OrderBy(g => g.PricePerSeat),
+            SortingOptions.MoreExpensive => input.OrderByDescending(g => g.PricePerSeat),
+            SortingOptions.Sooner => input.OrderByDescending(g => g.DepartureDateTime),
+            SortingOptions.Later => input.OrderBy(g => g.DepartureDateTime),
+            SortingOptions.FewerSeats => input.OrderBy(g => g.Seats),
+            SortingOptions.MoreSeats => input.OrderByDescending(g => g.Seats),
             _ => input,
         };
     }
