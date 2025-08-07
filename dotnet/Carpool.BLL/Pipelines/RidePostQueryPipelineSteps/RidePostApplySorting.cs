@@ -13,8 +13,8 @@ public class RidePostApplySorting : IRidePostQueryPipelineStep
         {
             SortingOptions.Cheaper => input.OrderBy(g => g.PricePerSeat),
             SortingOptions.MoreExpensive => input.OrderByDescending(g => g.PricePerSeat),
-            SortingOptions.Sooner => input.OrderByDescending(g => g.DepartureDateTime),
-            SortingOptions.Later => input.OrderBy(g => g.DepartureDateTime),
+            SortingOptions.Sooner => input.OrderBy(g => g.DepartureDateTime),
+            SortingOptions.Later => input.OrderByDescending(g => g.DepartureDateTime),
             SortingOptions.FewerSeats => input.OrderBy(g => g.Seats),
             SortingOptions.MoreSeats => input.OrderByDescending(g => g.Seats),
             _ => input,
