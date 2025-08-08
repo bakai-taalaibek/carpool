@@ -1,5 +1,6 @@
 import { Box, Combobox, InputBase, useCombobox } from "@mantine/core";
-import { useMemo, useState } from "react";
+import { IconX } from "@tabler/icons-react";
+import { useEffect, useMemo, useState } from "react";
 import { useGetLocalitiesQuery } from "../../services/localitiesApi";
 import { LocalityFullDto } from "../../types/locality";
 
@@ -50,7 +51,7 @@ type TProps = {
   placeholder: string;
   label?: string;
   value?: number;
-  onChange?: (arg: number) => void;
+  onChange?: (arg: number | undefined) => void;
 };
 
 export default function LocalitySelect({
@@ -64,6 +65,12 @@ export default function LocalitySelect({
 
   const { data } = useGetLocalitiesQuery();
 
+  useEffect(() => {
+    const valueAsString = value?.toString() || "";
+    setLocalityId(valueAsString);
+    setUserSearchString(getLocalityNameById(valueAsString));
+  }, [value]);
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -73,8 +80,8 @@ export default function LocalitySelect({
   }
 
   const localityName = useMemo(
-    () => getLocalityNameById(value?.toString() || localityId),
-    [data, localityId, value]
+    () => getLocalityNameById(localityId),
+    [data, localityId]
   );
 
   const filteredOptions = getFilteredData(data, userSearchString);
@@ -117,7 +124,17 @@ export default function LocalitySelect({
     >
       <Combobox.Target>
         <InputBase
-          // rightSection={<Combobox.Chevron />}
+          rightSection={
+            <IconX
+              size={16}
+              cursor="pointer"
+              onClick={() => {
+                onChange && onChange(undefined);
+                setLocalityId("");
+                setUserSearchString(getLocalityNameById(""));
+              }}
+            />
+          }
           value={userSearchString}
           onChange={(event) => {
             combobox.openDropdown();
@@ -138,7 +155,6 @@ export default function LocalitySelect({
           }}
           placeholder={localityName === "" ? placeholder : localityName}
           label={label}
-          required
           // rightSectionPointerEvents="none"
         />
       </Combobox.Target>

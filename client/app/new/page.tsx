@@ -20,6 +20,7 @@ import { useCreateRidePostMutation } from "../../services/ridePostsApi";
 import { useGetRideRolesQuery } from "../../services/rideRolesApi";
 import { RidePostCreateDto } from "../../types/ridePost";
 import { RideRoleName } from "../../types/rideRole";
+import { mergeDateAndTimeToISO } from "../../utils/dateTime";
 import LocalitySelect from "./localitySelect";
 
 type RidePostFormValues = Omit<RidePostCreateDto, "departureDateTime"> & {
@@ -30,24 +31,12 @@ type RidePostFormValues = Omit<RidePostCreateDto, "departureDateTime"> & {
 export default function NewPage() {
   const router = useRouter();
   const [createRidePost] = useCreateRidePostMutation();
-  const { data: rideRoles } = useGetRideRolesQuery();
-  const rideRoleIdToNameMap =
-    rideRoles?.reduce<Record<number, RideRoleName>>((acc, i) => {
-      acc[i.id] = i.name;
-      return acc;
-    }, {} as Record<number, RideRoleName>) ??
-    ({} as Record<number, RideRoleName>);
-
-  const rideRoleNameToIdMap =
-    rideRoles?.reduce<Record<RideRoleName, number>>((acc, i) => {
-      acc[i.name] = i.id;
-      return acc;
-    }, {} as Record<RideRoleName, number>) ??
-    ({} as Record<RideRoleName, number>);
+  const { data: { rideRoles, rideRoleIdToNameMap, rideRoleNameToIdMap } = {} } =
+    useGetRideRolesQuery();
 
   const form = useForm<RidePostFormValues>({
     initialValues: {
-      rideRoleId: rideRoleNameToIdMap["Driver"],
+      rideRoleId: undefined,
       sourceId: undefined,
       destinationId: undefined,
       departureDate: new Date().toString(),
@@ -63,9 +52,10 @@ export default function NewPage() {
 
     validate: {
       seats: (val, values) =>
-        values.rideRoleId === rideRoleNameToIdMap["Passenger"] ||
+        !rideRoleNameToIdMap ||
+        values.rideRoleId === rideRoleNameToIdMap[RideRoleName.Passenger] ||
         (val && val > 0)
-          ? null
+          ? undefined
           : "Недействительное количество мест",
     },
   });
@@ -73,18 +63,15 @@ export default function NewPage() {
   useEffect(() => {
     form.setValues({
       ...form.values,
-      rideRoleId: rideRoleNameToIdMap["Driver"],
+      rideRoleId: rideRoleNameToIdMap?.[RideRoleName.Driver],
     });
   }, [rideRoles]);
 
   const handleSubmit = async (values: typeof form.values) => {
-    const date = new Date(values.departureDate);
-    const [hours, minutes] = values.departureTime.split(":").map(Number);
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    const departureDateTime = date.toISOString();
+    const departureDateTime = mergeDateAndTimeToISO(
+      values.departureDate,
+      values.departureTime
+    );
 
     try {
       await createRidePost({ ...values, departureDateTime }).unwrap();
@@ -103,17 +90,25 @@ export default function NewPage() {
     }
   };
 
+  if (
+    !rideRoles ||
+    !rideRoleIdToNameMap ||
+    !rideRoleNameToIdMap ||
+    !form.values.rideRoleId
+  )
+    return null;
+
   return (
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-      <Stack w="80%" maw={600} mx="auto" mb={50} gap={33}>
+      <Stack w="80%" maw={600} mx="auto" py="md" mb={50} gap={33}>
         <Text fz={{ base: 16, xs: 18, sm: 20 }}>
           Укажите детали вашей поездки:
         </Text>
         <SegmentedControl
           value={rideRoleIdToNameMap[form.values.rideRoleId]}
           data={[
-            { label: "Я водитель", value: "Driver" },
-            { label: "Я пассажир", value: "Passenger" },
+            { label: "Я водитель", value: RideRoleName.Driver },
+            { label: "Я пассажир", value: RideRoleName.Passenger },
           ]}
           onChange={(val) =>
             form.setFieldValue(
@@ -178,7 +173,8 @@ export default function NewPage() {
             onChange={(val) => form.setFieldValue("departureTime", val)}
           />
         </SimpleGrid>
-        {form.values.rideRoleId === rideRoleNameToIdMap["Driver"] && (
+        {form.values.rideRoleId ===
+          rideRoleNameToIdMap[RideRoleName.Driver] && (
           <>
             <SimpleGrid cols={{ base: 1, xs: 4 }}>
               <TextInput
@@ -193,7 +189,7 @@ export default function NewPage() {
                 label="Мест"
                 placeholder="3"
                 allowDecimal={false}
-                value={form.values.seats}
+                value={form.values.seats ?? undefined}
                 onChange={(val) =>
                   form.setFieldValue(
                     "seats",
@@ -206,7 +202,7 @@ export default function NewPage() {
                 placeholder="400"
                 hideControls
                 allowDecimal={false}
-                value={form.values.pricePerSeat}
+                value={form.values.pricePerSeat ?? undefined}
                 onChange={(val) =>
                   form.setFieldValue(
                     "pricePerSeat",
@@ -219,7 +215,7 @@ export default function NewPage() {
                 placeholder="2000"
                 hideControls
                 allowDecimal={false}
-                value={form.values.pricePerCar}
+                value={form.values.pricePerCar ?? undefined}
                 onChange={(val) =>
                   form.setFieldValue(
                     "pricePerCar",

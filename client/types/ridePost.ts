@@ -5,11 +5,10 @@ export type RidePostFullDto = RidePostCreateDto & {
 };
 
 export type RidePostCreateDto = {
-  userId?: string;
-  rideRoleId: number;
+  rideRoleId?: number;
   sourceId?: number;
   destinationId?: number;
-  departureDateTime: string;
+  departureDateTime?: string;
   seats?: number;
   pricePerSeat?: number;
   pricePerCar?: number;
@@ -20,27 +19,26 @@ export type RidePostCreateDto = {
 };
 
 export type RidePostQueryParameters = {
-  postAuthorRoleId?: number;
-  onlyOwnPosts?: boolean;
+  ridePostAuthorRoleId?: number;
+  onlyOwnRidePosts?: boolean;
   sourceId?: number;
   destinationId?: number;
   minPrice?: number;
   maxPrice?: number;
-  departureStartDateTime?: string; // ISO string
-  departureEndDateTime?: string; // ISO string
+  departureStartDateTime?: string;
+  departureEndDateTime?: string;
   minSeats?: number; // default is 1
   maxSeats?: number;
   authorName?: string;
   authorPhoneNumber?: string;
   authorComment?: string;
-  sort?: RidePostSortOption; // value should match one of the server-supported sort keys
+  sort?: string; // value should match one of the server-supported sort keys
   page?: number; // default is 1
   pageSize?: number; // default is 20
 };
-export type RidePostSortOption = "newest" | "oldest" | "cheapest" | "mostExpensive";
 
 export type RidePostPagedResponse = {
-  posts: RidePostFullDto[];
+  ridePosts: RidePostFullDto[];
   totalPages: number;
   currentPage: number;
 };
