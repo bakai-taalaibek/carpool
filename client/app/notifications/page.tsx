@@ -5,7 +5,7 @@ import { notifications } from "../userMenu";
 
 export default function Notifications() {
   return (
-    <Stack w="90%" maw={600} mx="auto" gap={0}>
+    <Stack w="90%" maw={600} mx="auto" gap={0} py="lg">
       <Title order={3} mb={12}>
         Уведомления
       </Title>

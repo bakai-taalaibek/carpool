@@ -14,14 +14,13 @@ import {
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
-import { IconFilterSearch, IconPlus } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "../lib/store";
-import Filters from "./filters";
 import Footer from "./footer";
 import { TermsContent } from "./termsContent";
 import UserMenu from "./userMenu";
@@ -32,8 +31,6 @@ export const metadata = {
 };
 
 export default function BasicMantineLayout({ children }: { children: any }) {
-  const [isFilterDrawerOpen, { toggle: toggleFilterDrawer }] =
-    useDisclosure(false);
   const [isTermsDrawerOpen, setIsTermsDrawerOpen] = useState(false);
   const [isTermsModalOpen, { open: openTermsModal, close: closeTermsModal }] =
     useDisclosure(false);
@@ -60,15 +57,15 @@ export default function BasicMantineLayout({ children }: { children: any }) {
   }, []);
 
   return (
-    // padding="md" is padding of the main part, so this is additional distance from header to main
     // in mobile viewport on index page I added additional Space to account for sub-header
+    // header={{height: 60 }} allocates 60px for Box and substructs 60px from main
     <Provider store={store}>
-      <AppShell padding="md">
-        {/* <AppShell.Header></AppShell.Header> */}
+      <AppShell header={{ height: 60 }}>
         <Box
           h={60}
+          w="100%"
           style={{
-            position: "sticky",
+            position: "absolute",
             top: 0,
             zIndex: 3,
             borderBottom: "1px solid var(--mantine-color-gray-3)",
@@ -87,19 +84,6 @@ export default function BasicMantineLayout({ children }: { children: any }) {
               POPUTKA.KG
             </Text>
             <Group gap={20}>
-              {pathname == "/" && (
-                <Button
-                  // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
-                  variant="subtle"
-                  color="cyan"
-                  onClick={toggleFilterDrawer}
-                  radius="xl"
-                  leftSection={<IconFilterSearch size={22} />}
-                  visibleFrom="sm"
-                >
-                  Фильтры
-                </Button>
-              )}
               {pathname !== "/new" && (
                 <Button
                   component={Link}
@@ -107,7 +91,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                   radius="xl"
                   variant="gradient"
                   gradient={{ from: "orange", to: "red", deg: 90 }}
-                  visibleFrom="sm"
+                  visibleFrom="xs"
                 >
                   + Новая попутка
                 </Button>
@@ -117,7 +101,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
                 color="cyan"
                 radius="xl"
                 onClick={() => scrollFooterIntoView()}
-                visibleFrom="md"
+                visibleFrom="sm"
               >
                 Оставить отзыв
               </Button>
@@ -136,22 +120,12 @@ export default function BasicMantineLayout({ children }: { children: any }) {
           {/* only in mobile viewport on index page show sub-header (hiddenFrom="sm") */}
           {pathname === "/" && (
             <Group
-              hiddenFrom="sm"
+              hiddenFrom="xs"
               w="100%"
               bg="gray.0"
               h={45}
               justify="space-evenly"
             >
-              <Button
-                // className="[&_*[data-position='left']]:[margin-inline-end:8px]"
-                variant="subtle"
-                color="cyan"
-                onClick={() => toggleFilterDrawer()}
-                radius="xl"
-                leftSection={<IconFilterSearch size={22} />}
-              >
-                Фильтры
-              </Button>
               <Button
                 className="[&_*[data-position='left']]:[margin-inline-end:6px]"
                 component={Link}
@@ -174,26 +148,9 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             paddingInline: 0,
           }}
         >
-          <Drawer
-            opened={isFilterDrawerOpen && pathname == "/"}
-            onClose={toggleFilterDrawer}
-            title={<Text fz={20}>Фильтры</Text>}
-            position="right"
-            styles={{
-              body: { padding: 0 },
-              header: {
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                minHeight: "50px",
-                maxHeight: "50px",
-              },
-            }}
-            size="md"
-          >
-            <Filters />
-          </Drawer>
           <Stack pt={0} style={{ flexGrow: "1" }}>
             {/* in mobile viewport on index page add additional Space to account for sub-header */}
-            {pathname === "/" && <Space h={25} hiddenFrom="sm" />}
+            {pathname === "/" && <Space h={25} hiddenFrom="xs" />}
             {children}
           </Stack>
         </AppShell.Main>

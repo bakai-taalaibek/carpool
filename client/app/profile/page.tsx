@@ -61,7 +61,7 @@ export default function NewPage() {
   });
 
   return (
-    <Stack w="90%" maw={600} mx="auto" gap={0} pt={30}>
+    <Stack w="90%" maw={600} mx="auto" gap={0} pt="xl">
       <Flex
         align={{ base: "center", xs: "start" }}
         gap={50}

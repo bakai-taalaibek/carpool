@@ -50,7 +50,7 @@ const Footer = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
       pt="calc(var(--mantine-spacing-xl) * 1.8)"
     >
       <GridCol span={{ base: 12, sm: 6 }} w={400} maw={400}>
-        <Title c="white" lh={1} ff="Greycliff CF">
+        <Title c="white" lh={1}>
           Свяжитесь с нами
         </Title>
         <Text

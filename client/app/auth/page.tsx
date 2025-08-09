@@ -104,7 +104,7 @@ export default function AuthenticationForm(props: PaperProps) {
   };
 
   return (
-    <Center>
+    <Center py="xl">
       <Paper
         radius="md"
         p="xl"

@@ -69,7 +69,7 @@ export default function LocalitySelect({
     const valueAsString = value?.toString() || "";
     setLocalityId(valueAsString);
     setUserSearchString(getLocalityNameById(valueAsString));
-  }, [value]);
+  }, [value, data]);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),

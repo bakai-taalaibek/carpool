@@ -1,5 +1,7 @@
 export type RidePostFullDto = RidePostCreateDto & {
   id: number;
+  userId: string;
+  guestId: string
   dateCreated: string;
   dateModified: string;
 };
