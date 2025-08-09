@@ -11,6 +11,7 @@ public static class RidePostExtension
         {
             Id = ridePost.Id,
             UserId = ridePost.UserId,
+            GuestId = ridePost.GuestId,
             RideRoleId = ridePost.RideRoleId,
             SourceId = ridePost.SourceId,
             DestinationId = ridePost.DestinationId,

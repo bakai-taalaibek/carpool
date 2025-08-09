@@ -15,10 +15,10 @@ public class RidePostFilterByAuthorName : IRidePostQueryPipelineStep
 
         return input.Where(p =>
             (p.AnonName != null &&
-            p.AnonName.Contains(parameters.AuthorName))
+            p.AnonName.ToLower().Contains(parameters.AuthorName.ToLower()))
             ||
             (p.User != null && p.User.DisplayName != null &&
-                p.User.DisplayName.Contains(parameters.AuthorName)));
+                p.User.DisplayName.ToLower().Contains(parameters.AuthorName.ToLower())));
     }
 }
 

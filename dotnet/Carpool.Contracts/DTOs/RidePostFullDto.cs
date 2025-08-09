@@ -6,6 +6,8 @@ public class RidePostFullDto
 
     public string? UserId { get; set; }
 
+    public Guid? GuestId { get; set; }
+
     public int RideRoleId { get; set; }
 
     public int SourceId { get; set; }

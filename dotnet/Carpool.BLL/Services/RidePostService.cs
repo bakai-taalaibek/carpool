@@ -95,8 +95,6 @@ public class RidePostService(IUnitOfWork unitOfWork) : IRidePostService
     public async Task<RidePostFullDto> UpdateAsync(RidePostFullDto ridePost)
     {
         var ridePostToUpdate = await _unitOfWork.RidePosts.GetByIdAsync(ridePost.Id);
-
-        ridePostToUpdate.UserId = ridePost.UserId;
         ridePostToUpdate.RideRoleId = ridePost.RideRoleId;
         ridePostToUpdate.SourceId = ridePost.SourceId;
         ridePostToUpdate.DestinationId = ridePost.DestinationId;
@@ -105,7 +103,6 @@ public class RidePostService(IUnitOfWork unitOfWork) : IRidePostService
         ridePostToUpdate.PricePerSeat = ridePost.PricePerSeat;
         ridePostToUpdate.PricePerCar = ridePost.PricePerCar;
         ridePostToUpdate.Comment = ridePost.Comment;
-        ridePostToUpdate.DateCreated = ridePost.DateCreated;
         ridePostToUpdate.DateModified = DateTimeOffset.UtcNow;
         ridePostToUpdate.AnonName = ridePost.AnonName;
         ridePostToUpdate.AnonPhone = ridePost.AnonPhone;

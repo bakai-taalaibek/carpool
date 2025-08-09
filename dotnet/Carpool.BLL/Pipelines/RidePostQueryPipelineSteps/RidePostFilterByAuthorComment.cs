@@ -14,7 +14,7 @@ public class RidePostFilterByAuthorComment : IRidePostQueryPipelineStep
         }
 
         return input.Where(p =>
-            p.Comment != null && p.Comment.Contains(parameters.AuthorComment));
+            p.Comment != null && p.Comment.ToLower().Contains(parameters.AuthorComment.ToLower()));
     }
 }
 

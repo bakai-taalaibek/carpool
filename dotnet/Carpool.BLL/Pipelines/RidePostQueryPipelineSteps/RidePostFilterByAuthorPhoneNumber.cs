@@ -15,7 +15,11 @@ public class RidePostFilterByAuthorPhoneNumber : IRidePostQueryPipelineStep
 
         return input.Where(p =>
             p.AnonPhone == parameters.AuthorPhoneNumber ||
-            (p.User != null && p.User.PhoneNumber == parameters.AuthorPhoneNumber));
+            (p.User != null &&
+            p.User.PhoneNumber != null &&
+            p.User.PhoneNumber
+                .Replace(" ", "")
+                .Contains(parameters.AuthorPhoneNumber.Replace(" ", ""))));
     }
 }
 
