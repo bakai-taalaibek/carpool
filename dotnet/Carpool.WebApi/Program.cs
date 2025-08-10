@@ -20,12 +20,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRidePostService, RidePostService>();
 builder.Services.AddScoped<IGuestService, GuestService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ILocalityService, LocalityService>();
 builder.Services.AddScoped<IRideRoleService, RideRoleService>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IGuestRepository, GuestRepository>();
@@ -38,6 +41,7 @@ builder.Services.AddScoped<IAimakRepository, AimakRepository>();
 builder.Services.AddScoped<ILocalityRepository, LocalityRepository>();
 builder.Services.AddScoped<ILocalityTypeRepository, LocalityTypeRepository>();
 builder.Services.AddScoped<IRideRoleRepository, RideRoleRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ISeeder, Seeder>();
 
 string? allowedOrigins = builder.Configuration["AllowedOrigins"];

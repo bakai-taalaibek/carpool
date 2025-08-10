@@ -29,6 +29,8 @@ namespace Carpool.DAL
 
         public DbSet<Guest> Guests { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 

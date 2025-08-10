@@ -13,6 +13,7 @@ public interface IUnitOfWork
     IAimakRepository Aimaks { get; }
     IRideRoleRepository RideRoles { get; }
     IGuestRepository Guests { get; }
+    ICommentRepository Comments { get; }
 
     Task SaveChangesAsync();
 }

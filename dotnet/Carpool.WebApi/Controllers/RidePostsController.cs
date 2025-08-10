@@ -10,23 +10,17 @@ namespace Carpool.WebApi.Controllers;
 [ApiController]
 public class RidePostsController(
     IRidePostService ridePostService,
+    IUserContextService userContextService,
     IGuestService guestService) : ControllerBase
 {
     private readonly IRidePostService _ridePostService = ridePostService;
-
+    private readonly IUserContextService _userContextService = userContextService;
     private readonly IGuestService _guestService = guestService;
 
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] RidePostQueryParameters parameters)
     {
-        string? userId = User.Identity?.IsAuthenticated == true
-            ? User.FindFirstValue(ClaimTypes.NameIdentifier)
-            : null;
-
-        if (!Guid.TryParse(Request.Headers["X-Guest-Id"].FirstOrDefault(), out var guestId))
-        {
-            return BadRequest("Invalid Guest ID format");
-        }
+        (var userId, var guestId) = _userContextService.GetUserIdAndGuestId();
 
         var ridePosts = await _ridePostService.GetAsync(parameters, userId, guestId);
         return Ok(ridePosts);
@@ -49,12 +43,12 @@ public class RidePostsController(
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] RidePostCreateDto ridePost)
     {
-        (var userId, var guestId) = ExtractUserIdAndGuestId();
+        (var userId, var guestId) = _userContextService.GetUserIdAndGuestId();
 
         await _guestService.EnsureGuestExistsIfAnonymousAsync(userId, guestId);
 
         var newRidePost = await _ridePostService.AddAsync(ridePost, userId, guestId);
-        return CreatedAtAction(nameof(GetById), new { id = newRidePost.Id }, newRidePost);
+        return CreatedAtAction(nameof(Add), new { id = newRidePost.Id }, newRidePost);
     }
 
     [HttpPut]
@@ -69,27 +63,5 @@ public class RidePostsController(
     {
         await _ridePostService.DeleteAsync(id);
         return NoContent();
-    }
-
-    private (string? userId, Guid? guestId) ExtractUserIdAndGuestId()
-    {
-        string? userId = User.Identity?.IsAuthenticated == true
-            ? User.FindFirstValue(ClaimTypes.NameIdentifier)
-            : null;
-
-        var guestIdRaw = Request.Headers["X-Guest-Id"].FirstOrDefault();
-
-        Guid? guestId = null;
-        if (!string.IsNullOrWhiteSpace(guestIdRaw))
-        {
-            if (!Guid.TryParse(guestIdRaw, out var parsedGuestId))
-            {
-                throw new BadHttpRequestException("Invalid Guest ID format");
-            }
-
-            guestId = parsedGuestId;
-        }
-
-        return (userId, guestId);
     }
 }
