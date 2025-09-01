@@ -27,10 +27,11 @@ public class CommentService(IUnitOfWork unitOfWork) : ICommentService
                 Id = i.Id,
                 UserId = i.UserId,
                 GuestId = i.GuestId,
-                Content = i.Content,
+                Content = i.IsDeleted ? "Комментарий удален" : i.Content,
                 ParentId = i.ParentId,
                 RidePostId = i.RidePostId,
                 IsEdited = i.IsEdited,
+                IsDeleted = i.IsDeleted,
                 DateCreated = i.DateCreated,
                 DateModified = i.DateModified,
                 UserDisplayName = i.User?.DisplayName

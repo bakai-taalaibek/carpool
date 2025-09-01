@@ -12,10 +12,11 @@ public static class CommentExtensions
             Id = comment.Id,
             UserId = comment.UserId,
             GuestId = comment.GuestId,
-            Content = comment.Content,
+            Content = comment.IsDeleted ? "Комментарий удален" : comment.Content,
             ParentId = comment.ParentId,
             RidePostId = comment.RidePostId,
             IsEdited = comment.IsEdited,
+            IsDeleted = comment.IsDeleted,
             DateCreated = comment.DateCreated,
             DateModified = comment.DateModified,
         };
