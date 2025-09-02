@@ -45,4 +45,10 @@ export const ridePostsApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetRidePostsQuery, useCreateRidePostMutation } = ridePostsApi;
+export const {
+  useGetRidePostsQuery,
+  useGetRidePostByIdQuery,
+  useCreateRidePostMutation,
+  useUpdateRidePostMutation,
+  useDeleteRidePostMutation,
+} = ridePostsApi;
