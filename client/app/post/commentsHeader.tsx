@@ -1,11 +1,43 @@
 "use client";
 
-import { Text, Button, FocusTrap, Group, Stack, Textarea } from "@mantine/core";
+import {
+  Button,
+  CheckIcon,
+  FocusTrap,
+  Group,
+  Stack,
+  Text,
+  Textarea,
+} from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { IconChevronsRight } from "@tabler/icons-react";
 import { useState } from "react";
+import { useCreateCommentMutation } from "../../services/commentsApi";
 
-function CommentsHeader() {
+function CommentsHeader({ ridePostId }: { ridePostId: number }) {
   const [isCommentFieldOpen, setIsCommentFieldOpen] = useState(false);
+  const [commentContent, setCommentContent] = useState("");
+  const [createComment] = useCreateCommentMutation();
+
+  const handleSubmit = async () => {
+    try {
+      await createComment({
+        ridePostId,
+        parentId: undefined,
+        content: commentContent,
+      }).unwrap();
+      notifications.show({
+        message: "Комментарий успешно добавлен",
+        color: "teal",
+        title: "Успех!",
+        position: "top-right",
+        icon: <CheckIcon size={20} />,
+      });
+      setIsCommentFieldOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Stack>
@@ -26,7 +58,7 @@ function CommentsHeader() {
             <Button
               color="green.7"
               size="xs"
-              onClick={() => setIsCommentFieldOpen(false)}
+              onClick={() => handleSubmit()}
               rightSection={<IconChevronsRight />}
             >
               <Text fz={14}>Отправить</Text>
@@ -44,7 +76,11 @@ function CommentsHeader() {
       </Group>
       {isCommentFieldOpen && (
         <FocusTrap>
-          <Textarea placeholder="Введите комментарий" />
+          <Textarea
+            placeholder="Введите комментарий"
+            value={commentContent}
+            onChange={(event) => setCommentContent(event.currentTarget.value)}
+          />
         </FocusTrap>
       )}
     </Stack>
