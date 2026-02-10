@@ -18,7 +18,7 @@ import {
   TimelineItem,
   Title,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import {
   IconCar,
@@ -51,6 +51,8 @@ export default function Post({ params }: { params: { post: string } }) {
     useGetRideRolesQuery();
   const [getComments, { data: comments }] =
     useLazyGetCommentsByRidePostIdQuery();
+
+  const isSm = useMediaQuery(`(min-width: 600px)`);
 
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const guestId = useSelector((state: RootState) => state.auth.guestId);
@@ -171,23 +173,57 @@ export default function Post({ params }: { params: { post: string } }) {
         </Timeline>
         {(ridePost.seats || ridePost.pricePerSeat || ridePost.pricePerCar) && (
           <Stack align="end" gap={8} ml="auto">
-            <Text fz={24} fw={900} lh={1} c="orange.7">
-              {ridePost.pricePerSeat}
-              <Text ml={6} c="dark" lh={1} component="span" fz={16} fw={400}>
-                сом / место
-              </Text>
-            </Text>
-            {ridePost.pricePerCar && (
-              <Text fz={24} fw={900} lh={1} c="blue.4">
-                {ridePost.pricePerCar}
+            <Flex
+              align={isSm ? "end" : "start"}
+              rowGap={8}
+              columnGap={14}
+              direction={isSm ? "column" : "row"}
+              justify="space-evenly"
+              w="100%"
+            >
+              <Text
+                fz={24}
+                fw={900}
+                lh={1}
+                c="orange.7"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                {ridePost.pricePerSeat}
                 <Text ml={6} c="dark" lh={1} component="span" fz={16} fw={400}>
-                  сом / салон
+                  сом / место
                 </Text>
               </Text>
-            )}
+              {ridePost.pricePerCar && (
+                <Text
+                  fz={24}
+                  fw={900}
+                  lh={1}
+                  c="blue.4"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  {ridePost.pricePerCar}
+                  <Text
+                    ml={6}
+                    c="dark"
+                    lh={1}
+                    component="span"
+                    fz={16}
+                    fw={400}
+                  >
+                    сом / салон
+                  </Text>
+                </Text>
+              )}
+            </Flex>
 
             {ridePost.seats && (
-              <Text c="gray.6" fz="xs" fw={500} mt={2}>
+              <Text
+                c="gray.6"
+                fz="xs"
+                fw={500}
+                mt={2}
+                style={{ whiteSpace: "nowrap" }}
+              >
                 Свободно {ridePost.seats} места
               </Text>
             )}
@@ -208,8 +244,8 @@ export default function Post({ params }: { params: { post: string } }) {
       ) : (
         <Divider />
       )}
-      <Group justify="start" c="dark.3" gap={0}>
-        <Flex gap={6} mr="auto">
+      <Group justify="start" c="dark.3" gap={18}>
+        <Flex gap={6} justify="space-evenly" w={isSm ? "auto" : "100%"}>
           {ridePost.userId === userId || ridePost.guestId === guestId ? (
             <>
               <Button
@@ -254,21 +290,23 @@ export default function Post({ params }: { params: { post: string } }) {
           )}
         </Flex>
 
-        <IconFileSpark size={14} />
-        {/* <IconFilePlus size={14} /> */}
+        <Flex ml="auto">
+          <IconFileSpark size={14} />
+          {/* <IconFilePlus size={14} /> */}
 
-        <Text fz="xs" fs="italic">
-          : {dayjs(ridePost.dateCreated).fromNow()}
-        </Text>
-        {ridePost.dateModified && (
-          <>
-            <Space w="lg" />
-            <IconPencil size={14} />
-            <Text fz="xs" fs="italic">
-              : {dayjs(ridePost.dateModified).fromNow()}
-            </Text>
-          </>
-        )}
+          <Text fz="xs" fs="italic">
+            : {dayjs(ridePost.dateCreated).fromNow()}
+          </Text>
+          {ridePost.dateModified && (
+            <>
+              <Space w="lg" />
+              <IconPencil size={14} />
+              <Text fz="xs" fs="italic">
+                : {dayjs(ridePost.dateModified).fromNow()}
+              </Text>
+            </>
+          )}
+        </Flex>
       </Group>
       <Stack my={20}>
         <CommentsHeader ridePostId={ridePost.id} />
@@ -279,8 +317,7 @@ export default function Post({ params }: { params: { post: string } }) {
               <Comment
                 writtenByRidePostAuthor={
                   (!!comment.userId && comment.userId === ridePost.userId) ||
-                  (!!comment.guestId &&
-                    comment.guestId === ridePost.guestId)
+                  (!!comment.guestId && comment.guestId === ridePost.guestId)
                 }
                 key={comment.id}
                 comment={comment}
