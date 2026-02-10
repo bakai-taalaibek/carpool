@@ -70,7 +70,7 @@ function CommentsHeader({ ridePostId }: { ridePostId: number }) {
             size="xs"
             onClick={() => setIsCommentFieldOpen(true)}
           >
-            <Text fz={14}>+ Добавить комментарий</Text>
+            <Text fz={14}>+ Добавить</Text>
           </Button>
         )}
       </Group>
