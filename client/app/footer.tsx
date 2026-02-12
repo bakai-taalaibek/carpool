@@ -1,5 +1,6 @@
 import {
   Button,
+  Flex,
   Grid,
   GridCol,
   Group,
@@ -10,9 +11,11 @@ import {
   Title,
 } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { forwardRef } from "react";
 import { useCreateReviewMutation } from "../services/reviewsApi";
 import { ContactIconsList } from "./contactIcons";
+import { TermsModal } from "./termsModal";
 
 const Footer = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
   const form = useForm({
@@ -26,6 +29,8 @@ const Footer = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
       text: isNotEmpty("Пожалуйста добавьте сообщение"),
     },
   });
+  const [isTermsModalOpen, { open: openTermsModal, close: closeTermsModal }] =
+    useDisclosure(false);
 
   const [createReview, { isLoading, isError, isSuccess }] =
     useCreateReviewMutation();
@@ -93,11 +98,31 @@ const Footer = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
           </form>
         </Paper>
       </GridCol>
-      <GridCol span={12} p="md" pt="xs">
-        <Text ta="center" c="white" fz={14} fw={500}>
-          © {new Date().getFullYear()} Bakai Taalaibek uulu
-        </Text>
+      <GridCol span={12} px={0} py="md">
+        <Flex
+          px={25}
+          mx="auto"
+          justify="space-between"
+          align="center"
+          maw={{ base: 400, sm: 800 }}
+          fz={{ base: 13, sm: 14 }}
+        >
+          <Button
+            p="0"
+            variant="transparent"
+            fw="400"
+            color="white"
+            onClick={openTermsModal}
+            fz={{ base: 13, sm: 14 }}
+          >
+            Условия использования
+          </Button>
+          <Text ta="center" c="white" fz={{ base: 13, sm: 14 }}>
+            © {new Date().getFullYear()} Bakai Taalaibek uulu
+          </Text>
+        </Flex>
       </GridCol>
+      <TermsModal opened={isTermsModalOpen} onClose={closeTermsModal} />
     </Grid>
   );
 });

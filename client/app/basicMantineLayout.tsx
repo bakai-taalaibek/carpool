@@ -6,7 +6,6 @@ import {
   Button,
   Drawer,
   Group,
-  Modal,
   Space,
   Stack,
   Text,
@@ -22,8 +21,8 @@ import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "../lib/store";
 import Footer from "./footer";
-import { TermsContent } from "./termsContent";
 import UserMenu from "./userMenu";
+import { TermsModal } from "./termsModal";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -193,18 +192,9 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             Понятно
           </Button>
         </Drawer>
-        <Modal
-          size="xl"
+        <TermsModal  
           opened={isTermsModalOpen}
-          onClose={closeTermsModal}
-          title={
-            <Text fw="600" fz="18">
-              Условия использования платформы POPUTKA.KG
-            </Text>
-          }
-        >
-          <TermsContent />
-        </Modal>
+          onClose={closeTermsModal}/>
       </AppShell>
     </Provider>
   );
