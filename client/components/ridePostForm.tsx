@@ -1,10 +1,12 @@
 "use client";
 import {
   Button,
+  Card,
   NumberInput,
   SegmentedControl,
   SimpleGrid,
   Stack,
+  Switch,
   Text,
   Textarea,
   TextInput,
@@ -12,6 +14,7 @@ import {
 import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IconClock } from "@tabler/icons-react";
+import { useState } from "react";
 import LocalitySelect from "../app/new/localitySelect";
 import { useGetRideRolesQuery } from "../services/rideRolesApi";
 import { RidePostCreateDto } from "../types/ridePost";
@@ -38,6 +41,7 @@ export default function RidePostForm({
 }: TProps) {
   const { data: { rideRoleIdToNameMap, rideRoleNameToIdMap } = {} } =
     useGetRideRolesQuery();
+  const [isFullCar, setIsFullCar] = useState(false);
 
   const form = useForm<RidePostFormValues>({
     initialValues: initialData,
@@ -136,14 +140,22 @@ export default function RidePostForm({
           rideRoleNameToIdMap[RideRoleName.Driver] && (
           <>
             <SimpleGrid cols={{ base: 1, xs: 4 }}>
-              <TextInput
-                label="Авто"
-                placeholder="Тойота Королла"
-                value={form.values.anonCar}
-                onChange={(event) =>
-                  form.setFieldValue("anonCar", event.currentTarget.value)
-                }
-              />
+              <Card
+                onClick={() => {
+                  setIsFullCar(!isFullCar);
+                }}
+                style={{ cursor: "pointer" }}
+                p={0}
+              >
+                <Text fz={14} mb={9} fw="500">
+                  Только салон
+                </Text>
+                <Switch
+                  checked={isFullCar}
+                  style={{ pointerEvents: "none" }}
+                  size="md"
+                />
+              </Card>
               <NumberInput
                 label="Мест"
                 placeholder="3"
@@ -156,30 +168,42 @@ export default function RidePostForm({
                   )
                 }
               />
-              <NumberInput
-                label="Сомов за место"
-                placeholder="400"
-                hideControls
-                allowDecimal={false}
-                value={form.values.pricePerSeat ?? undefined}
-                onChange={(val) =>
-                  form.setFieldValue(
-                    "pricePerSeat",
-                    typeof val === "number" ? val : Number.parseInt(val)
-                  )
-                }
-              />
-              <NumberInput
-                label="Сомов за салон"
-                placeholder="2000"
-                hideControls
-                allowDecimal={false}
-                value={form.values.pricePerCar ?? undefined}
-                onChange={(val) =>
-                  form.setFieldValue(
-                    "pricePerCar",
-                    typeof val === "number" ? val : Number.parseInt(val)
-                  )
+              {isFullCar ? (
+                <NumberInput
+                  label="Сомов за салон"
+                  placeholder="2000"
+                  hideControls
+                  allowDecimal={false}
+                  value={form.values.pricePerCar ?? undefined}
+                  onChange={(val) =>
+                    form.setFieldValue(
+                      "pricePerCar",
+                      typeof val === "number" ? val : Number.parseInt(val)
+                    )
+                  }
+                />
+              ) : (
+                <NumberInput
+                  label="Сомов за место"
+                  placeholder="400"
+                  hideControls
+                  allowDecimal={false}
+                  value={form.values.pricePerSeat ?? undefined}
+                  onChange={(val) =>
+                    form.setFieldValue(
+                      "pricePerSeat",
+                      typeof val === "number" ? val : Number.parseInt(val)
+                    )
+                  }
+                />
+              )}
+
+              <TextInput
+                label="Авто"
+                placeholder="Тойота Королла"
+                value={form.values.anonCar}
+                onChange={(event) =>
+                  form.setFieldValue("anonCar", event.currentTarget.value)
                 }
               />
             </SimpleGrid>
@@ -200,4 +224,7 @@ export default function RidePostForm({
       </Stack>
     </form>
   );
+}
+function useEffect(arg0: () => any, arg1: any[]) {
+  throw new Error("Function not implemented.");
 }
