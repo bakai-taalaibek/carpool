@@ -136,79 +136,82 @@ export default function RidePostForm({
             onChange={(val) => form.setFieldValue("departureTime", val)}
           />
         </SimpleGrid>
-        {form.values.rideRoleId ===
-          rideRoleNameToIdMap[RideRoleName.Driver] && (
-          <>
-            <SimpleGrid cols={{ base: 1, xs: 4 }}>
-              <Card
-                onClick={() => {
-                  setIsFullCar(!isFullCar);
-                }}
-                style={{ cursor: "pointer" }}
-                p={0}
-              >
-                <Text fz={14} mb={9} fw="500">
-                  Только салон
-                </Text>
-                <Switch
-                  checked={isFullCar}
-                  style={{ pointerEvents: "none" }}
-                  size="md"
-                />
-              </Card>
-              <NumberInput
-                label="Мест"
-                placeholder="3"
-                allowDecimal={false}
-                value={form.values.seats ?? undefined}
-                onChange={(val) =>
-                  form.setFieldValue(
-                    "seats",
-                    typeof val === "number" ? val : Number.parseInt(val)
-                  )
-                }
-              />
-              {isFullCar ? (
-                <NumberInput
-                  label="Сомов за салон"
-                  placeholder="2000"
-                  hideControls
-                  allowDecimal={false}
-                  value={form.values.pricePerCar ?? undefined}
-                  onChange={(val) =>
-                    form.setFieldValue(
-                      "pricePerCar",
-                      typeof val === "number" ? val : Number.parseInt(val)
-                    )
-                  }
-                />
-              ) : (
-                <NumberInput
-                  label="Сомов за место"
-                  placeholder="400"
-                  hideControls
-                  allowDecimal={false}
-                  value={form.values.pricePerSeat ?? undefined}
-                  onChange={(val) =>
-                    form.setFieldValue(
-                      "pricePerSeat",
-                      typeof val === "number" ? val : Number.parseInt(val)
-                    )
-                  }
-                />
-              )}
+        <SimpleGrid cols={{ base: 1, xs: 4 }}>
+          <Card
+            onClick={() => {
+              setIsFullCar(!isFullCar);
+            }}
+            style={{ cursor: "pointer" }}
+            p={0}
+          >
+            <Text fz={14} mb={9} fw="500">
+              Только салон
+            </Text>
+            <Switch
+              checked={isFullCar}
+              style={{ pointerEvents: "none" }}
+              size="md"
+            />
+          </Card>
+          {isFullCar ? (
+            <NumberInput
+              label="Сомов за салон"
+              placeholder="2000"
+              hideControls
+              allowDecimal={false}
+              value={form.values.pricePerCar ?? undefined}
+              onChange={(val) =>
+                form.setFieldValue(
+                  "pricePerCar",
+                  typeof val === "number" ? val : Number.parseInt(val)
+                )
+              }
+            />
+          ) : (
+            <NumberInput
+              label="Сомов за место"
+              placeholder="400"
+              hideControls
+              allowDecimal={false}
+              value={form.values.pricePerSeat ?? undefined}
+              onChange={(val) =>
+                form.setFieldValue(
+                  "pricePerSeat",
+                  typeof val === "number" ? val : Number.parseInt(val)
+                )
+              }
+            />
+          )}
 
-              <TextInput
-                label="Авто"
-                placeholder="Тойота Королла"
-                value={form.values.anonCar}
-                onChange={(event) =>
-                  form.setFieldValue("anonCar", event.currentTarget.value)
-                }
-              />
-            </SimpleGrid>
-          </>
-        )}
+          <NumberInput
+            label={
+              form.values.rideRoleId ===
+              rideRoleNameToIdMap[RideRoleName.Driver]
+                ? "Мест"
+                : "Человек"
+            }
+            placeholder="3"
+            allowDecimal={false}
+            value={form.values.seats ?? undefined}
+            onChange={(val) =>
+              form.setFieldValue(
+                "seats",
+                typeof val === "number" ? val : Number.parseInt(val)
+              )
+            }
+          />
+          {form.values.rideRoleId ===
+            rideRoleNameToIdMap[RideRoleName.Driver] && (
+            <TextInput
+              label="Авто"
+              placeholder="Тойота Королла"
+              value={form.values.anonCar}
+              onChange={(event) =>
+                form.setFieldValue("anonCar", event.currentTarget.value)
+              }
+            />
+          )}
+        </SimpleGrid>
         <Textarea
           autosize
           minRows={2}
