@@ -2,6 +2,7 @@
 import {
   Button,
   Card,
+  Flex,
   NumberInput,
   SegmentedControl,
   SimpleGrid,
@@ -144,14 +145,17 @@ export default function RidePostForm({
             style={{ cursor: "pointer" }}
             p={0}
           >
-            <Text fz={14} mb={9} fw="500">
-              Только салон
+            <Text fz={14} mb={3} fw="500">
+              Весь салон
             </Text>
-            <Switch
-              checked={isFullCar}
-              style={{ pointerEvents: "none" }}
-              size="md"
-            />
+            <Flex bd="solid 1px gray.4" h={36} align="center" pl={8} bdrs={4}>
+              <Switch
+                checked={isFullCar}
+                onClick={() => setIsFullCar((c) => !c)}
+                style={{ pointerEvents: "none" }}
+                size="sm"
+              />
+            </Flex>
           </Card>
           {isFullCar ? (
             <NumberInput
