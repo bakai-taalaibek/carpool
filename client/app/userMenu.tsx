@@ -45,10 +45,11 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
   const logoutUser = useLogout();
   const dispatch = useDispatch();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  let user = null;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    user = localStorage.getItem("user");
     const expiresAt = localStorage.getItem("expiresAt");
     const guestId = localStorage.getItem("guestId");
 
@@ -58,7 +59,7 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
           token,
           user: user ? JSON.parse(user) : undefined,
           expiresAt: expiresAt || undefined,
-        })
+        }),
       );
     } else if (guestId) {
       dispatch(setGuest(guestId));
@@ -95,7 +96,7 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
           <MenuItem
             leftSection={<IconSettings style={{ width: 14, height: 14 }} />}
             component={Link}
-            href="/profile"
+            href={`/user/${user ?? "current"}`}
           >
             Профиль
           </MenuItem>

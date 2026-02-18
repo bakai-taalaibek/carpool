@@ -1,32 +1,29 @@
 "use client";
 import {
-  Button,
-  Stack,
-  TextInput,
-  Text,
-  Avatar,
-  Group,
-  Flex,
-  Divider,
-  Anchor,
   Accordion,
-  AccordionItem,
   AccordionControl,
+  AccordionItem,
   AccordionPanel,
-  FileButton,
-  PasswordInput,
-  Modal,
   Alert,
+  Anchor,
+  Avatar,
+  Button,
+  Divider,
+  FileButton,
+  Flex,
+  Group,
+  Modal,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import {
-  IconAlertTriangle,
-  IconLogout2,
-} from "@tabler/icons-react";
+import { IconAlertTriangle, IconLogout2 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
-import { useLogout } from "../../lib/useLogout";
+import { useLogout } from "../../../lib/useLogout";
 
 const data = {
   name: "Асан Болотов",
@@ -184,7 +181,7 @@ export default function NewPage() {
                   onChange={(event) =>
                     form.setFieldValue(
                       "currentPassword",
-                      event.currentTarget.value
+                      event.currentTarget.value,
                     )
                   }
                   error={form.errors.currentPassword}
@@ -209,7 +206,7 @@ export default function NewPage() {
                   onChange={(event) =>
                     form.setFieldValue(
                       "passwordConfirmation",
-                      event.currentTarget.value
+                      event.currentTarget.value,
                     )
                   }
                   error={form.errors.passwordConfirmation}
@@ -235,7 +232,7 @@ export default function NewPage() {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="exit">
-          <AccordionControl >
+          <AccordionControl>
             <Text fz={18}>Выйти из аккаунта</Text>
           </AccordionControl>
           <AccordionPanel>
