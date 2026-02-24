@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Carpool.DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,6 +108,12 @@ builder.Services
             };
         });
 
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = CredentialFactory.FromFile<ServiceAccountCredential>("firebase-service-account.json")
+                                  .ToGoogleCredential()
+});
+
 var app = builder.Build();
 
 if (args.Contains("--seed"))
@@ -131,7 +139,7 @@ else
     app.UseHttpsRedirection();
 }
 
-app.UseCors();
+app.UseCors("AnyOrigin");
 
 app.UseAuthentication();
 app.UseAuthorization();

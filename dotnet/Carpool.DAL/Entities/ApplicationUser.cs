@@ -12,6 +12,8 @@ namespace Carpool.DAL.Entities
 
         public string? Avatar { get; set; }
 
+        public string? FirebaseUid { get; set; }
+
         public DateTimeOffset DateCreated { get; set; }
     }
 }
