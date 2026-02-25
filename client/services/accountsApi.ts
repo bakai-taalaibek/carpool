@@ -18,7 +18,20 @@ export const accountsApi = api.injectEndpoints({
         body,
       }),
     }),
+    sentToken: build.mutation<LoginResponseDto, string>({
+      query: (token) => ({
+        url: "accounts/auth",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation } = accountsApi;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useSentTokenMutation,
+} = accountsApi;

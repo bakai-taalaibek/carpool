@@ -7,7 +7,6 @@ import {
   CheckIcon,
   Divider,
   Group,
-  Modal,
   Paper,
   PaperProps,
   PasswordInput,
@@ -18,16 +17,23 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure, useToggle } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
 import router from "next/router";
-import { setCredentials } from "../../lib/authSlice";
-import GoogleIcon from "../../public/icons/GoogleIcon";
-import { TermsContent } from "../termsContent";
 import { useDispatch } from "react-redux";
-import { useLoginUserMutation, useRegisterUserMutation } from "../../services/accountsApi";
+import { setCredentials } from "../../lib/authSlice";
+import { auth } from "../../lib/firebase";
+import GoogleIcon from "../../public/icons/GoogleIcon";
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useSentTokenMutation,
+} from "../../services/accountsApi";
+import { TermsModal } from "../termsModal";
 
 export default function AuthenticationForm(props: PaperProps) {
   const dispatch = useDispatch();
+  const [sendToken] = useSentTokenMutation();
 
   const [loginUser] = useLoginUserMutation();
   const [registerUser] = useRegisterUserMutation();
@@ -57,6 +63,33 @@ export default function AuthenticationForm(props: PaperProps) {
       terms: (val) => !val,
     },
   });
+
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+
+    const result = await signInWithPopup(auth, provider);
+
+    const idToken = await result.user.getIdToken();
+
+    try {
+      const response = await sendToken(idToken).unwrap();
+      dispatch(
+        setCredentials({
+          token: response.token,
+          user: response.user,
+          expiresAt: response.expiresAt,
+        }),
+      );
+
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem("expiresAt", response.expiresAt);
+
+      router.push("/");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
 
   const handleAuth = async (values: typeof form.values) => {
     if (authActionType === "login") {
@@ -104,7 +137,7 @@ export default function AuthenticationForm(props: PaperProps) {
   };
 
   return (
-    <Center py="xl">
+    <Center py="lg">
       <Paper
         radius="md"
         p="xl"
@@ -135,6 +168,7 @@ export default function AuthenticationForm(props: PaperProps) {
           radius="xl"
           fullWidth
           mb="md"
+          onClick={loginWithGoogle}
         >
           Google
         </Button>
@@ -225,18 +259,7 @@ export default function AuthenticationForm(props: PaperProps) {
           </Group>
         </form>
       </Paper>
-      <Modal
-        size="xl"
-        opened={isModalOpened}
-        onClose={closeModal}
-        title={
-          <Text fw="600" fz="18">
-            Условия использования платформы POPUTKA.KG
-          </Text>
-        }
-      >
-        <TermsContent />
-      </Modal>
+      <TermsModal opened={isModalOpened} onClose={closeModal} />
     </Center>
   );
 }
