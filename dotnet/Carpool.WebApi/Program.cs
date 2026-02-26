@@ -110,7 +110,7 @@ builder.Services
 
 FirebaseApp.Create(new AppOptions()
 {
-    Credential = CredentialFactory.FromFile<ServiceAccountCredential>("firebase-service-account.json")
+    Credential = CredentialFactory.FromFile<ServiceAccountCredential>("../firebase-service-account.json")
                                   .ToGoogleCredential()
 });
 

@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Carpool.Contracts.DTOs;
 using Carpool.DAL;
 using Carpool.DAL.Entities;
+using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +30,12 @@ public class AccountsController(
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequestDto input)
     {
-        var newUser = new ApplicationUser();
-        newUser.UserName = input.Email ?? input.PhoneNumber;
-        newUser.Email = input.Email;
-        newUser.PhoneNumber = input.PhoneNumber;
+        var newUser = new ApplicationUser
+        {
+            UserName = input.Email ?? input.PhoneNumber,
+            Email = input.Email,
+            PhoneNumber = input.PhoneNumber
+        };
 
         var result = await _userManager.CreateAsync(newUser, input.Password);
         if (result.Succeeded)
@@ -76,39 +79,10 @@ public class AccountsController(
         }
         else
         {
-            var signingKey = _configuration["JWT:SigningKey"]
-                ?? throw new InvalidOperationException("JWT SigningKey is missing in configuration.");
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault();
 
-            var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(
-                    System.Text.Encoding.UTF8.GetBytes(signingKey)),
-                    SecurityAlgorithms.HmacSha256);
-
-            var userName = user.UserName
-                ?? throw new InvalidOperationException("UserName cannot be null.");
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userName),
-                new Claim(ClaimTypes.Email, user.Email ?? ""),
-                new Claim(ClaimTypes.MobilePhone, user.PhoneNumber ?? ""),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-            };
-
-            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            if (!string.IsNullOrEmpty(role))
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            var expirySeconds = int.Parse(_configuration["JWT:ExpirySeconds"] ?? "3600");
-            var jwtObject = new JwtSecurityToken(
-                issuer: _configuration["JWT:Issuer"],
-                audience: _configuration["JWT:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddSeconds(expirySeconds),
-                signingCredentials: signingCredentials);
-
+            JwtSecurityToken jwtObject = MakeJwtObject(user, role);
             var jwtString = new JwtSecurityTokenHandler().WriteToken(jwtObject);
 
             return Ok(new LoginResponseDto
@@ -129,5 +103,153 @@ public class AccountsController(
                 }
             });
         }
+    }
+
+    [HttpPost("auth")]
+    public async Task<ActionResult> Auth()
+    {
+        var authHeader = Request.Headers["Authorization"]
+            .FirstOrDefault();
+
+        if (authHeader == null || !authHeader.StartsWith("Bearer "))
+            return Unauthorized();
+
+        var token = authHeader.Substring("Bearer ".Length);
+
+        FirebaseToken decodedToken;
+        try
+        {
+            decodedToken = await FirebaseAuth
+                .DefaultInstance
+                .VerifyIdTokenAsync(token);
+        }
+        catch
+        {
+            return Unauthorized();
+        }
+
+        var uid = decodedToken.Uid;
+        var email = decodedToken.Claims.ContainsKey("email")
+            ? decodedToken.Claims["email"]?.ToString()
+            : null;
+        var phoneNumber = decodedToken.Claims.ContainsKey("phone")
+            ? decodedToken.Claims["phone"]?.ToString()
+            : null;
+
+        // Find or create user in your DB here
+        ApplicationUser? user = await _userManager.Users
+            .FirstOrDefaultAsync(u => u.FirebaseUid == uid);
+
+        if (user == null)
+        {
+            if (email != null && new EmailAddressAttribute().IsValid(email))
+            {
+                var emailVerified =
+                    decodedToken.Claims.ContainsKey("email_verified") &&
+                    (bool)decodedToken.Claims["email_verified"];
+
+                if (emailVerified)
+                {
+                    user = await _userManager.FindByEmailAsync(email);
+
+                    if (user != null)
+                    {
+                        user.FirebaseUid = uid;
+                        await _userManager.UpdateAsync(user);
+                    }
+                }
+            }
+
+            if (user == null && !string.IsNullOrEmpty(phoneNumber))
+            {
+                user = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+
+                if (user != null)
+                {
+                    user.FirebaseUid = uid;
+                    await _userManager.UpdateAsync(user);
+                }
+            }
+
+            if (user == null)
+            {
+                user = new ApplicationUser
+                {
+                    UserName = email ?? phoneNumber ?? uid,
+                    Email = email,
+                    PhoneNumber = phoneNumber,
+                    FirebaseUid = uid
+                };
+
+                var result = await _userManager.CreateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
+                }
+
+                _logger.LogInformation("User {userName} created via Firebase.", user.UserName);
+            }
+        }
+        var roles = await _userManager.GetRolesAsync(user);
+        var role = roles.FirstOrDefault();
+
+        JwtSecurityToken jwtObject = MakeJwtObject(user, role);
+
+        var jwtString = new JwtSecurityTokenHandler().WriteToken(jwtObject);
+
+        return Ok(new LoginResponseDto
+        {
+            Token = jwtString,
+            ExpiresAt = jwtObject.ValidTo,
+            User = new UserFullDto
+            {
+                Id = user.Id,
+                Role = role,
+                DisplayName = user.DisplayName,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email,
+                Car = user.Car,
+                About = user.About,
+                Avatar = user.Avatar,
+                DateCreated = user.DateCreated,
+            }
+        });
+    }
+
+    private JwtSecurityToken MakeJwtObject(ApplicationUser user, string? role)
+    {
+        var signingKey = _configuration["JWT:SigningKey"]
+            ?? throw new InvalidOperationException("JWT SigningKey is missing in configuration.");
+
+        var signingCredentials = new SigningCredentials(
+            new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(signingKey)),
+                SecurityAlgorithms.HmacSha256);
+
+        var userName = user.UserName
+            ?? throw new InvalidOperationException("UserName cannot be null.");
+
+        var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Email, user.Email ?? ""),
+                new Claim(ClaimTypes.MobilePhone, user.PhoneNumber ?? ""),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
+
+        if (!string.IsNullOrEmpty(role))
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        var expirySeconds = int.Parse(_configuration["JWT:ExpirySeconds"] ?? "3600");
+        return new JwtSecurityToken(
+            issuer: _configuration["JWT:Issuer"],
+            audience: _configuration["JWT:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddSeconds(expirySeconds),
+            signingCredentials: signingCredentials);
     }
 }
