@@ -5,11 +5,13 @@ import {
   Center,
   Checkbox,
   CheckIcon,
+  CloseButton,
   Divider,
   Group,
   Paper,
   PaperProps,
   PasswordInput,
+  PinInput,
   Stack,
   Text,
   TextInput,
@@ -17,9 +19,16 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure, useToggle } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  ConfirmationResult,
+  GoogleAuthProvider,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  signInWithPopup,
+} from "firebase/auth";
 import Link from "next/link";
-import router from "next/router";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../lib/authSlice";
 import { auth } from "../../lib/firebase";
@@ -29,11 +38,18 @@ import {
   useRegisterUserMutation,
   useSentTokenMutation,
 } from "../../services/accountsApi";
+import { LoginResponseDto } from "../../types/login";
 import { TermsModal } from "../termsModal";
 
 export default function AuthenticationForm(props: PaperProps) {
   const dispatch = useDispatch();
   const [sendToken] = useSentTokenMutation();
+  const [isWaitingForCode, setIsWaitingForCode] = useState(false);
+  const [code, setCode] = useState("");
+  const [confirmation, setConfirmation] = useState<ConfirmationResult | null>(
+    null,
+  );
+  const router = useRouter();
 
   const [loginUser] = useLoginUserMutation();
   const [registerUser] = useRegisterUserMutation();
@@ -45,24 +61,56 @@ export default function AuthenticationForm(props: PaperProps) {
     "login",
     "register",
   ]);
+
+  const recaptchaRef = useRef<RecaptchaVerifier | null>(null);
+
+  useEffect(() => {
+    if (!recaptchaRef.current) {
+      recaptchaRef.current = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        { size: "invisible" },
+      );
+    }
+  }, []);
+
   const form = useForm({
     initialValues: {
-      email: "",
+      emailOrPhone: "",
       password: "",
       passwordConfirmation: "",
       terms: false,
     },
 
     validate: {
-      email: (val) =>
-        /^\S+@\S+$/.test(val) ? null : "Недействительный формат почты",
-      password: (val) =>
-        val.length <= 6 ? "Минимальная длина пароля - 6 символов" : null,
-      passwordConfirmation: (val, values) =>
-        val === values.password ? null : "Введенные пароли не совпадают",
-      terms: (val) => !val,
+      emailOrPhone: (val) => {
+        const isEmail = /^\S+@\S+\.\S+$/.test(val);
+        if (isEmail) {
+          return null;
+        }
+
+        const isPhone = /^\+?\d[\d\s]{9,17}$/.test(val);
+        if (isPhone) {
+          return null;
+        }
+
+        return "Введите корректную почту или номер телефона";
+      },
+      // password: (val) =>
+      //   val.length <= 6 ? "Минимальная длина пароля - 6 символов" : null,
+      // passwordConfirmation: (val, values) =>
+      //   authActionType === "register" && val === values.password
+      //     ? null
+      //     : "Введенные пароли не совпадают",
+      // terms: (val) => !val,
     },
   });
+
+  const input = form.values.emailOrPhone;
+
+  const isPhoneUsed = /^\+?\d*$/.test(input);
+  const isEmpty = input === "";
+  const isEmailUsed = !isEmpty && !isPhoneUsed;
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
@@ -73,51 +121,38 @@ export default function AuthenticationForm(props: PaperProps) {
 
     try {
       const response = await sendToken(idToken).unwrap();
-      dispatch(
-        setCredentials({
-          token: response.token,
-          user: response.user,
-          expiresAt: response.expiresAt,
-        }),
-      );
 
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
-      localStorage.setItem("expiresAt", response.expiresAt);
-
-      router.push("/");
+      saveCredentials(response);
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
 
   const handleAuth = async (values: typeof form.values) => {
-    if (authActionType === "login") {
+    if (!isEmailUsed && recaptchaRef.current) {
+      setConfirmation(
+        await signInWithPhoneNumber(
+          auth,
+          values.emailOrPhone,
+          recaptchaRef.current,
+        ),
+      );
+      setIsWaitingForCode(true);
+    } else if (authActionType === "login") {
       try {
         const response = await loginUser({
-          identifier: values.email,
+          identifier: values.emailOrPhone,
           password: values.password,
         }).unwrap();
-        dispatch(
-          setCredentials({
-            token: response.token,
-            user: response.user,
-            expiresAt: response.expiresAt,
-          })
-        );
 
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("user", JSON.stringify(response.user));
-        localStorage.setItem("expiresAt", response.expiresAt);
-
-        router.push("/");
+        saveCredentials(response);
       } catch (error) {
         console.error("Login failed:", error);
       }
     } else {
       try {
         const response = await registerUser({
-          email: values.email,
+          email: values.emailOrPhone,
           password: values.password,
         }).unwrap();
 
@@ -134,6 +169,38 @@ export default function AuthenticationForm(props: PaperProps) {
         console.error("Registration failed:", error);
       }
     }
+  };
+
+  const confirmCode = async () => {
+    if (confirmation === null) return;
+    const result = await confirmation.confirm(code);
+    const idToken = await result.user.getIdToken();
+
+    try {
+      const response = await sendToken(idToken).unwrap();
+
+      saveCredentials(response);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+    setIsWaitingForCode(false);
+    setCode("");
+  };
+
+  const saveCredentials = (response: LoginResponseDto) => {
+    dispatch(
+      setCredentials({
+        token: response.token,
+        user: response.user,
+        expiresAt: response.expiresAt,
+      }),
+    );
+
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("user", JSON.stringify(response.user));
+    localStorage.setItem("expiresAt", response.expiresAt);
+
+    router.push("/");
   };
 
   return (
@@ -174,7 +241,7 @@ export default function AuthenticationForm(props: PaperProps) {
         </Button>
 
         <Divider
-          label="Или используйте почту"
+          label="Или через номер телефона / почту"
           labelPosition="center"
           mt="lg"
           mb="xs"
@@ -183,46 +250,82 @@ export default function AuthenticationForm(props: PaperProps) {
         <form onSubmit={form.onSubmit((values) => handleAuth(values))}>
           <Stack>
             <TextInput
+              disabled={isWaitingForCode}
               required
-              label="Почта"
-              placeholder="your.name@email.com"
-              value={form.values.email}
-              onChange={(event) =>
-                form.setFieldValue("email", event.currentTarget.value)
+              label={
+                isEmpty
+                  ? "Телефон или почта"
+                  : isPhoneUsed
+                    ? "Телефон"
+                    : "Почта"
               }
-              error={form.errors.email}
+              placeholder="0 500 600 700 / name@email.com"
+              value={form.values.emailOrPhone}
+              onChange={(event) =>
+                form.setFieldValue("emailOrPhone", event.currentTarget.value)
+              }
+              error={form.errors.emailOrPhone}
               radius="md"
             />
 
-            <PasswordInput
-              required
-              label="Пароль"
-              placeholder="Ваш пароль"
-              value={form.values.password}
-              onChange={(event) =>
-                form.setFieldValue("password", event.currentTarget.value)
-              }
-              error={form.errors.password}
-              radius="md"
-            />
+            {isEmailUsed && (
+              <>
+                <PasswordInput
+                  required
+                  label="Пароль"
+                  placeholder="Ваш пароль"
+                  value={form.values.password}
+                  onChange={(event) =>
+                    form.setFieldValue("password", event.currentTarget.value)
+                  }
+                  error={form.errors.password}
+                  radius="md"
+                />
 
-            {authActionType === "register" && (
-              <PasswordInput
-                required
-                label="Подтвердите пароль"
-                placeholder="Введите пароль снова"
-                value={form.values.passwordConfirmation}
-                onChange={(event) =>
-                  form.setFieldValue(
-                    "passwordConfirmation",
-                    event.currentTarget.value
-                  )
-                }
-                error={form.errors.passwordConfirmation}
-                radius="md"
-              />
+                {authActionType === "register" && (
+                  <PasswordInput
+                    required
+                    label="Подтвердите пароль"
+                    placeholder="Введите пароль снова"
+                    value={form.values.passwordConfirmation}
+                    onChange={(event) =>
+                      form.setFieldValue(
+                        "passwordConfirmation",
+                        event.currentTarget.value,
+                      )
+                    }
+                    error={form.errors.passwordConfirmation}
+                    radius="md"
+                  />
+                )}
+              </>
+            )}
+            {isWaitingForCode && (
+              <Stack gap={2}>
+                <Text fz={14} fw={500}>
+                  Введите полученный код:
+                </Text>
+                <Group justify="space-between">
+                  <PinInput
+                    length={6}
+                    size="xs"
+                    placeholder=""
+                    value={code}
+                    onChange={(value) => setCode(value)}
+                  />
+                  <CloseButton
+                    c="red"
+                    bg="red.0"
+                    onClick={() => {
+                      setIsWaitingForCode(false);
+                      setCode("");
+                    }}
+                  />
+                </Group>
+              </Stack>
             )}
           </Stack>
+          <div id="recaptcha-container"></div>
 
           <Group justify="space-between" mt="xl">
             {authActionType === "register" ? (
@@ -241,7 +344,7 @@ export default function AuthenticationForm(props: PaperProps) {
                 }
                 error={form.errors.terms}
               />
-            ) : (
+            ) : isEmailUsed ? (
               <Anchor
                 component={Link}
                 href="/auth/restore"
@@ -251,11 +354,21 @@ export default function AuthenticationForm(props: PaperProps) {
               >
                 Забыли пароль?
               </Anchor>
+            ) : (
+              <div></div>
             )}
 
-            <Button type="submit">
-              {authActionType === "login" ? "Войти" : "Далее"}
-            </Button>
+            {isWaitingForCode ? (
+              <Button onClick={() => confirmCode()}>{"Далее"}</Button>
+            ) : (
+              <Button type="submit">
+                {isEmailUsed
+                  ? authActionType === "login"
+                    ? "Войти"
+                    : "Далее"
+                  : "Получить SMS"}
+              </Button>
+            )}
           </Group>
         </form>
       </Paper>

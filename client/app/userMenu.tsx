@@ -101,12 +101,8 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
             Профиль
           </MenuItem>
           <MenuItem
-            leftSection={
-              <IconLogout2
-                style={{ width: 14, height: 14 }}
-                onClick={logoutUser}
-              />
-            }
+            onClick={logoutUser}
+            leftSection={<IconLogout2 style={{ width: 14, height: 14 }} />}
           >
             Выйти
           </MenuItem>
