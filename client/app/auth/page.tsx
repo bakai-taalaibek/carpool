@@ -84,25 +84,33 @@ export default function AuthenticationForm(props: PaperProps) {
 
     validate: {
       emailOrPhone: (val) => {
-        const isEmail = /^\S+@\S+\.\S+$/.test(val);
-        if (isEmail) {
-          return null;
+        if (isEmailUsed) {
+          const isEmailValid = /^\S+@\S+\.\S+$/.test(val);
+
+          if (isEmailValid) return null;
+          else return "Введите корректную почту";
         }
 
-        const isPhone = /^\+?\d[\d\s]{9,17}$/.test(val);
-        if (isPhone) {
-          return null;
-        }
+        if (isPhoneUsed) {
+          const hasPhoneCode = /^\+[1-9]\d{9,14}$/.test(val);
 
-        return "Введите корректную почту или номер телефона";
+          if (hasPhoneCode) return null;
+          else return "Пожалуйста укажите номер с кодом страны (+996)";
+        }
       },
-      // password: (val) =>
-      //   val.length <= 6 ? "Минимальная длина пароля - 6 символов" : null,
-      // passwordConfirmation: (val, values) =>
-      //   authActionType === "register" && val === values.password
-      //     ? null
-      //     : "Введенные пароли не совпадают",
-      // terms: (val) => !val,
+      password: (val) => {
+        if (authActionType === "login" || isPhoneUsed) return null;
+        else if (val.length < 6) return "Минимальная длина пароля - 6 символов";
+      },
+      passwordConfirmation: (val, values) => {
+        if (authActionType === "login" || isPhoneUsed) return null;
+        else if (val === values.password)
+          return "Введенные пароли не совпадают";
+      },
+      terms: (val) => {
+        if (authActionType === "register" && val) return null;
+        else return true;
+      },
     },
   });
 
@@ -259,7 +267,7 @@ export default function AuthenticationForm(props: PaperProps) {
                     ? "Телефон"
                     : "Почта"
               }
-              placeholder="0 500 600 700 / name@email.com"
+              placeholder="+996 500 600 700 / name@email.com"
               value={form.values.emailOrPhone}
               onChange={(event) =>
                 form.setFieldValue("emailOrPhone", event.currentTarget.value)
