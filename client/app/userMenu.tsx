@@ -15,8 +15,12 @@ import {
 import { IconLogout2, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
 import { forwardRef, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setCredentials, setGuest } from "../lib/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectIsAuthenticated,
+  setCredentials,
+  setGuest,
+} from "../lib/authSlice";
 import { useLogout } from "../lib/useLogout";
 import NotificationCustom from "./notificationCustom";
 
@@ -46,6 +50,7 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
   const dispatch = useDispatch();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   let user = null;
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -87,7 +92,11 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
             size={16}
             offset={4}
           >
-            <Avatar color="blue" radius="xl" style={{ cursor: "pointer" }} />
+            <Avatar
+              color={isAuthenticated ? "blue" : "gray"}
+              radius="xl"
+              style={{ cursor: "pointer" }}
+            />
           </Indicator>
         </MenuTarget>
 
@@ -100,12 +109,14 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
           >
             Профиль
           </MenuItem>
-          <MenuItem
-            onClick={logoutUser}
-            leftSection={<IconLogout2 style={{ width: 14, height: 14 }} />}
-          >
-            Выйти
-          </MenuItem>
+          {isAuthenticated && (
+            <MenuItem
+              onClick={logoutUser}
+              leftSection={<IconLogout2 style={{ width: 14, height: 14 }} />}
+            >
+              Выйти
+            </MenuItem>
+          )}
           <MenuDivider />
           <MenuLabel pb={0}>Уведомления</MenuLabel>
           <Stack gap={0}>

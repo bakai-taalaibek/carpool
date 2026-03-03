@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserFullDto } from "../types/user";
+import { RootState } from "./store";
 
 interface AuthState {
   token: string | null;
@@ -12,7 +13,7 @@ const initialState: AuthState = {
   token: null,
   user: null,
   expiresAt: null,
-  guestId: null
+  guestId: null,
 };
 
 export const authSlice = createSlice({
@@ -21,7 +22,11 @@ export const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ token: string; user?: UserFullDto; expiresAt?: string }>
+      action: PayloadAction<{
+        token: string;
+        user?: UserFullDto;
+        expiresAt?: string;
+      }>,
     ) => {
       state.token = action.payload.token;
       state.user = action.payload.user ?? null;
@@ -41,6 +46,8 @@ export const authSlice = createSlice({
     },
   },
 });
+
+export const selectIsAuthenticated = (state: RootState) => !!state.auth.token;
 
 export const { setCredentials, clearCredentials, setGuest } = authSlice.actions;
 export default authSlice.reducer;
