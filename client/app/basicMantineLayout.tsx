@@ -2,10 +2,8 @@
 import {
   Anchor,
   AppShell,
-  Box,
   Button,
   Drawer,
-  Group,
   Space,
   Stack,
   Text,
@@ -13,16 +11,14 @@ import {
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
-import { IconPlus } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "../lib/store";
 import Footer from "./footer";
-import UserMenu from "./userMenu";
 import { TermsModal } from "./termsModal";
+import { Header } from "./header";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -60,86 +56,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
     // header={{height: 60 }} allocates 60px for Box and substructs 60px from main
     <Provider store={store}>
       <AppShell header={{ height: 60 }}>
-        <Box
-          h={60}
-          w="100%"
-          style={{
-            position: "absolute",
-            top: 0,
-            zIndex: 3,
-            borderBottom: "1px solid var(--mantine-color-gray-3)",
-          }}
-          bg="white"
-        >
-          <Group px="md" h="100%" justify="space-between">
-            <Text
-              component={Link}
-              href="/"
-              tt="uppercase"
-              c="cyan.8"
-              fw={700}
-              size="lg"
-            >
-              POPUTKA.KG
-            </Text>
-            <Group gap={20}>
-              {pathname !== "/new" && (
-                <Button
-                  component={Link}
-                  href="/new"
-                  radius="xl"
-                  variant="gradient"
-                  gradient={{ from: "orange", to: "red", deg: 90 }}
-                  visibleFrom="xs"
-                >
-                  + Новая попутка
-                </Button>
-              )}
-              <Button
-                variant="subtle"
-                color="cyan"
-                radius="xl"
-                onClick={() => scrollFooterIntoView()}
-                visibleFrom="sm"
-              >
-                Оставить отзыв
-              </Button>
-              <Button
-                component={Link}
-                href="/auth"
-                variant="subtle"
-                color="cyan"
-                radius="xl"
-              >
-                Войти
-              </Button>
-              <UserMenu />
-            </Group>
-          </Group>
-          {/* only in mobile viewport on index page show sub-header (hiddenFrom="sm") */}
-          {pathname === "/" && (
-            <Group
-              hiddenFrom="xs"
-              w="100%"
-              bg="gray.0"
-              h={45}
-              justify="space-evenly"
-            >
-              <Button
-                className="[&_*[data-position='left']]:[margin-inline-end:6px]"
-                component={Link}
-                href="/new"
-                radius="xl"
-                variant="subtle"
-                color="cyan"
-                leftSection={<IconPlus />}
-              >
-                Новая попутка
-              </Button>
-            </Group>
-          )}
-        </Box>
-
+        <Header scrollFooterIntoView={scrollFooterIntoView}/>
         <AppShell.Main
           style={{
             display: "flex",
@@ -192,9 +109,7 @@ export default function BasicMantineLayout({ children }: { children: any }) {
             Понятно
           </Button>
         </Drawer>
-        <TermsModal  
-          opened={isTermsModalOpen}
-          onClose={closeTermsModal}/>
+        <TermsModal opened={isTermsModalOpen} onClose={closeTermsModal} />
       </AppShell>
     </Provider>
   );
