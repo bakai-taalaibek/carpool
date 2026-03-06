@@ -28,9 +28,9 @@ import {
 } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setCredentials } from "../../lib/authSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsAuthenticated, setCredentials } from "../../lib/authSlice";
 import { auth } from "../../lib/firebase";
 import GoogleIcon from "../../public/icons/GoogleIcon";
 import {
@@ -49,6 +49,7 @@ export default function AuthenticationForm(props: PaperProps) {
   const [confirmation, setConfirmation] = useState<ConfirmationResult | null>(
     null,
   );
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const router = useRouter();
 
   const [loginUser] = useLoginUserMutation();
@@ -62,15 +63,18 @@ export default function AuthenticationForm(props: PaperProps) {
     "register",
   ]);
 
-  const recaptchaRef = useRef<RecaptchaVerifier | null>(null);
-
   useEffect(() => {
-    if (!recaptchaRef.current) {
-      recaptchaRef.current = new RecaptchaVerifier(
+    if (!(window as any).recaptchaVerifier) {
+      (window as any).recaptchaVerifier = new RecaptchaVerifier(
         auth,
         "recaptcha-container",
-        { size: "invisible" },
+        {
+          size: "invisible",
+          callback: () => {},
+        },
       );
+
+      (window as any).recaptchaVerifier.render();
     }
   }, []);
 
@@ -100,15 +104,16 @@ export default function AuthenticationForm(props: PaperProps) {
       },
       password: (val) => {
         if (authActionType === "login" || isPhoneUsed) return null;
-        else if (val.length < 6) return "Минимальная длина пароля - 6 символов";
+        else if (val.length >= 6) return null;
+        else return "Минимальная длина пароля - 6 символов";
       },
       passwordConfirmation: (val, values) => {
         if (authActionType === "login" || isPhoneUsed) return null;
-        else if (val === values.password)
-          return "Введенные пароли не совпадают";
+        else if (val === values.password) return null;
+        else return "Введенные пароли не совпадают";
       },
       terms: (val) => {
-        if (authActionType === "register" && val) return null;
+        if (authActionType === "login" || val) return null;
         else return true;
       },
     },
@@ -136,17 +141,22 @@ export default function AuthenticationForm(props: PaperProps) {
     }
   };
 
-  const handleAuth = async (values: typeof form.values) => {
-    if (!isEmailUsed && recaptchaRef.current) {
-      setConfirmation(
-        await signInWithPhoneNumber(
-          auth,
-          values.emailOrPhone,
-          recaptchaRef.current,
-        ),
-      );
-      setIsWaitingForCode(true);
-    } else if (authActionType === "login") {
+  const sendSms = async () => {
+    const verifier = (window as any).recaptchaVerifier;
+
+    const result = await signInWithPhoneNumber(
+      auth,
+      form.values.emailOrPhone,
+      verifier,
+    );
+    setConfirmation(result);
+
+    setIsWaitingForCode(true);
+  };
+
+  const handleAuth = async () => {
+    const values = form.values;
+    if (authActionType === "login") {
       try {
         const response = await loginUser({
           identifier: values.emailOrPhone,
@@ -211,6 +221,8 @@ export default function AuthenticationForm(props: PaperProps) {
     router.push("/");
   };
 
+  if (isAuthenticated) router.push("/");
+
   return (
     <Center py="lg">
       <Paper
@@ -255,130 +267,124 @@ export default function AuthenticationForm(props: PaperProps) {
           mb="xs"
         />
 
-        <form onSubmit={form.onSubmit((values) => handleAuth(values))}>
-          <Stack>
-            <TextInput
-              disabled={isWaitingForCode}
-              required
-              label={
-                isEmpty
-                  ? "Телефон или почта"
-                  : isPhoneUsed
-                    ? "Телефон"
-                    : "Почта"
-              }
-              placeholder="+996 500 600 700 / name@email.com"
-              value={form.values.emailOrPhone}
-              onChange={(event) =>
-                form.setFieldValue("emailOrPhone", event.currentTarget.value)
-              }
-              error={form.errors.emailOrPhone}
-              radius="md"
-            />
+        <Stack>
+          <TextInput
+            disabled={isWaitingForCode}
+            required
+            label={
+              isEmpty ? "Телефон или почта" : isPhoneUsed ? "Телефон" : "Почта"
+            }
+            placeholder="+996 500 600 700 / name@email.com"
+            value={form.values.emailOrPhone}
+            onChange={(event) =>
+              form.setFieldValue("emailOrPhone", event.currentTarget.value)
+            }
+            error={form.errors.emailOrPhone}
+            radius="md"
+          />
 
-            {isEmailUsed && (
-              <>
+          {isEmailUsed && (
+            <>
+              <PasswordInput
+                required
+                label="Пароль"
+                placeholder="Ваш пароль"
+                value={form.values.password}
+                onChange={(event) =>
+                  form.setFieldValue("password", event.currentTarget.value)
+                }
+                error={form.errors.password}
+                radius="md"
+              />
+
+              {authActionType === "register" && (
                 <PasswordInput
                   required
-                  label="Пароль"
-                  placeholder="Ваш пароль"
-                  value={form.values.password}
+                  label="Подтвердите пароль"
+                  placeholder="Введите пароль снова"
+                  value={form.values.passwordConfirmation}
                   onChange={(event) =>
-                    form.setFieldValue("password", event.currentTarget.value)
+                    form.setFieldValue(
+                      "passwordConfirmation",
+                      event.currentTarget.value,
+                    )
                   }
-                  error={form.errors.password}
+                  error={form.errors.passwordConfirmation}
                   radius="md"
                 />
+              )}
+            </>
+          )}
+          {isWaitingForCode && (
+            <Stack gap={2}>
+              <Text fz={14} fw={500}>
+                Введите полученный код:
+              </Text>
+              <Group justify="space-between">
+                <PinInput
+                  length={6}
+                  size="xs"
+                  placeholder=""
+                  value={code}
+                  onChange={(value) => setCode(value)}
+                />
+                <CloseButton
+                  c="red"
+                  bg="red.0"
+                  onClick={() => {
+                    setIsWaitingForCode(false);
+                    setCode("");
+                  }}
+                />
+              </Group>
+            </Stack>
+          )}
+        </Stack>
+        <div id="recaptcha-container"></div>
 
-                {authActionType === "register" && (
-                  <PasswordInput
-                    required
-                    label="Подтвердите пароль"
-                    placeholder="Введите пароль снова"
-                    value={form.values.passwordConfirmation}
-                    onChange={(event) =>
-                      form.setFieldValue(
-                        "passwordConfirmation",
-                        event.currentTarget.value,
-                      )
-                    }
-                    error={form.errors.passwordConfirmation}
-                    radius="md"
-                  />
-                )}
-              </>
-            )}
-            {isWaitingForCode && (
-              <Stack gap={2}>
-                <Text fz={14} fw={500}>
-                  Введите полученный код:
-                </Text>
-                <Group justify="space-between">
-                  <PinInput
-                    length={6}
-                    size="xs"
-                    placeholder=""
-                    value={code}
-                    onChange={(value) => setCode(value)}
-                  />
-                  <CloseButton
-                    c="red"
-                    bg="red.0"
-                    onClick={() => {
-                      setIsWaitingForCode(false);
-                      setCode("");
-                    }}
-                  />
-                </Group>
-              </Stack>
-            )}
-          </Stack>
-          <div id="recaptcha-container"></div>
+        <Group justify="space-between" mt="xl">
+          {authActionType === "register" ? (
+            <Checkbox
+              label={
+                <>
+                  Я принимаю{" "}
+                  <Anchor inherit component="button" onClick={openModal}>
+                    условия
+                  </Anchor>
+                </>
+              }
+              checked={form.values.terms}
+              onChange={(event) =>
+                form.setFieldValue("terms", event.currentTarget.checked)
+              }
+              error={form.errors.terms}
+            />
+          ) : isEmailUsed ? (
+            <Anchor
+              component={Link}
+              href="/auth/restore"
+              c="dimmed"
+              size="sm"
+              ta="start"
+            >
+              Забыли пароль?
+            </Anchor>
+          ) : (
+            <div></div>
+          )}
 
-          <Group justify="space-between" mt="xl">
-            {authActionType === "register" ? (
-              <Checkbox
-                label={
-                  <>
-                    Я принимаю{" "}
-                    <Anchor inherit component="button" onClick={openModal}>
-                      условия
-                    </Anchor>
-                  </>
-                }
-                checked={form.values.terms}
-                onChange={(event) =>
-                  form.setFieldValue("terms", event.currentTarget.checked)
-                }
-                error={form.errors.terms}
-              />
-            ) : isEmailUsed ? (
-              <Anchor
-                component={Link}
-                href="/auth/restore"
-                c="dimmed"
-                size="sm"
-                ta="start"
-              >
-                Забыли пароль?
-              </Anchor>
-            ) : (
-              <div></div>
-            )}
-
-            {isWaitingForCode ? (
-              <Button onClick={() => confirmCode()}>{"Далее"}</Button>
-            ) : (
-              <Button type="submit">
-                {isEmailUsed
-                  ? authActionType === "login"
-                    ? "Войти"
-                    : "Далее"
-                  : "Получить SMS"}
-              </Button>
-            )}
-          </Group>
-        </form>
+          {isWaitingForCode ? (
+            <Button onClick={() => confirmCode()}>{"Далее"}</Button>
+          ) : isEmailUsed ? (
+            <Button onClick={handleAuth}>
+              {authActionType === "login" ? "Войти" : "Далее"}
+            </Button>
+          ) : (
+            <Button onClick={sendSms}>
+              Получить SMS
+            </Button>
+          )}
+        </Group>
       </Paper>
       <TermsModal opened={isModalOpened} onClose={closeModal} />
     </Center>
