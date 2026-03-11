@@ -59,10 +59,18 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
     const guestId = localStorage.getItem("guestId");
 
     if (token) {
+      let parsedUser;
+      try {
+        parsedUser = JSON.parse(user || "");
+      } catch (error) {
+        console.error("Failed to parse user JSON:", error);
+        parsedUser = undefined;
+      }
+
       dispatch(
         setCredentials({
           token,
-          user: user ? JSON.parse(user) : undefined,
+          user: parsedUser,
           expiresAt: expiresAt || undefined,
         }),
       );

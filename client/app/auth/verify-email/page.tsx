@@ -14,7 +14,6 @@ export default function VerifyEmail() {
 
   const router = useRouter();
 
-  const dispatch = useDispatch();
   const [verifyEmail, { isError }] = useVerifyEmailMutation();
 
   const paramsIncomplete = !token || !userId;
