@@ -1,5 +1,8 @@
 import { LoginRequestDto, LoginResponseDto } from "../types/login";
-import { ForgotPasswordRequest } from "../types/passwordReset";
+import {
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+} from "../types/passwordReset";
 import { RegisterRequestDto, RegisterResponseDto } from "../types/register";
 import { VerificationRequestDto } from "../types/verification";
 import { api } from "./api";
@@ -38,7 +41,14 @@ export const accountsApi = api.injectEndpoints({
     }),
     forgotPassword: build.mutation<void, ForgotPasswordRequest>({
       query: (body) => ({
-        url: "accounts/forgot-email",
+        url: "accounts/forgot-password",
+        method: "POST",
+        body,
+      }),
+    }),
+    resetPassword: build.mutation<void, ResetPasswordRequest>({
+      query: (body) => ({
+        url: "accounts/reset-password",
         method: "POST",
         body,
       }),
@@ -52,4 +62,5 @@ export const {
   useSentTokenMutation,
   useVerifyEmailMutation,
   useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = accountsApi;

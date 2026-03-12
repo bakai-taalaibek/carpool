@@ -345,7 +345,7 @@ export default function AuthenticationForm(props: PaperProps) {
         ) : isEmailUsed ? (
           <Anchor
             component={Link}
-            href="/auth/restore"
+            href="/auth/forgot-password"
             c="dimmed"
             size="sm"
             ta="start"
