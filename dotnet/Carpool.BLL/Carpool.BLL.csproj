@@ -11,4 +11,8 @@
     <ProjectReference Include="../Carpool.DAL/Carpool.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Resend" Version="0.2.1" />
+  </ItemGroup>
+
 </Project>

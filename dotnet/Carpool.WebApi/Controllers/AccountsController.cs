@@ -19,13 +19,17 @@ public class AccountsController(
     ILogger<AccountsController> logger,
     IConfiguration configuration,
     UserManager<ApplicationUser> userManager,
-    SignInManager<ApplicationUser> signInManager) : ControllerBase
+    SignInManager<ApplicationUser> signInManager,
+    EmailService emailService,
+    IConfiguration config) : ControllerBase
 {
     private readonly ApplicationDbContext _context = applicationDbContext;
     private readonly ILogger<AccountsController> _logger = logger;
     private readonly IConfiguration _configuration = configuration;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly IConfiguration _config = config;
+    private readonly EmailService _emailService = emailService;
 
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequestDto input)
@@ -43,6 +47,12 @@ public class AccountsController(
             _logger.LogInformation(
                 "User {userName} ({email}) has been created.",
                 newUser.UserName, newUser.Email);
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+            var link = $"{_config["FrontendUrl"]}/auth/verify-email?" +
+                        $"userId={newUser.Id}&token={Uri.EscapeDataString(token)}";
+
+            await _emailService.SendVerificationEmail(newUser.Email, link);
 
             return Created("", new RegisterResponseDto
             {
@@ -105,6 +115,22 @@ public class AccountsController(
         }
     }
 
+    [HttpPost("verify-email")]
+    public async Task<IActionResult> VerifyEmail(VerificationRequestDto request)
+    {
+        var user = await _userManager.FindByIdAsync(request.UserId);
+
+        if (user == null)
+            return BadRequest();
+
+        var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+
+        if (!result.Succeeded)
+            return BadRequest();
+
+        return Ok(new { message = "Email verified" });
+    }
+
     [HttpPost("auth")]
     public async Task<ActionResult> Auth()
     {
@@ -132,8 +158,8 @@ public class AccountsController(
         var email = decodedToken.Claims.ContainsKey("email")
             ? decodedToken.Claims["email"]?.ToString()
             : null;
-        var phoneNumber = decodedToken.Claims.ContainsKey("phone")
-            ? decodedToken.Claims["phone"]?.ToString()
+        var phoneNumber = decodedToken.Claims.ContainsKey("phone_number")
+            ? decodedToken.Claims["phone_number"]?.ToString()
             : null;
 
         // Find or create user in your DB here

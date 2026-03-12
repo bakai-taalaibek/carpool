@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Resend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddOptions();
+builder.Services.AddHttpClient<IResend, ResendClient>();
+builder.Services.Configure<ResendClientOptions>(o =>
+{
+    o.ApiToken = builder.Configuration["Resend:ApiKey"]
+        ?? throw new InvalidOperationException("Resend API key is missing in configuration.");
+});
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRidePostService, RidePostService>();
 builder.Services.AddScoped<IGuestService, GuestService>();
@@ -45,6 +55,8 @@ builder.Services.AddScoped<ILocalityTypeRepository, LocalityTypeRepository>();
 builder.Services.AddScoped<IRideRoleRepository, RideRoleRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ISeeder, Seeder>();
+
+builder.Services.AddScoped<EmailService>();
 
 string? allowedOrigins = builder.Configuration["AllowedOrigins"];
 builder.Services.AddCors(options =>
@@ -79,7 +91,13 @@ builder.Services
             options.Password.RequireNonAlphanumeric = true;
             options.Password.RequiredLength = 8;
         })
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(3); 
+});
 
 builder.Services
     .AddAuthentication(options =>

@@ -14,6 +14,6 @@ namespace Carpool.DAL.Entities
 
         public string? FirebaseUid { get; set; }
 
-        public DateTimeOffset DateCreated { get; set; }
+        public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.UtcNow;
     }
 }
