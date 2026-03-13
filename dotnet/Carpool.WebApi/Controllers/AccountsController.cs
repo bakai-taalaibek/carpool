@@ -61,7 +61,11 @@ public class AccountsController(
         }
         else
         {
-            return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
+            return BadRequest(new
+            {
+                Errors = result.Errors.Select(e =>
+                    new { code = e.Code, message = e.Description })
+            });
         }
     }
 
@@ -89,6 +93,15 @@ public class AccountsController(
         }
         else
         {
+            if (!string.IsNullOrWhiteSpace(user.Email) && !user.EmailConfirmed)
+            {
+                return StatusCode(403, new
+                {
+                    error = "EMAIL_NOT_VERIFIED",
+                    message = "Email has not been verified"
+                });
+            }
+
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
 
@@ -129,6 +142,43 @@ public class AccountsController(
             return BadRequest();
 
         return Ok(new { message = "Email verified" });
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestDto request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user == null)
+            return Ok();
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var link = $"{_config["FrontendUrl"]}/auth/reset-password?" +
+                    $"userEmail={user.Email}&token={Uri.EscapeDataString(token)}";
+
+        await _emailService.SendPasswordResetToken(user.Email, link);
+
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user == null)
+            return BadRequest();
+
+        var result = await _userManager.ResetPasswordAsync(
+            user,
+            request.Token,
+            request.Password
+        );
+
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        return Ok(new { message = "Password reset successful" });
     }
 
     [HttpPost("auth")]
