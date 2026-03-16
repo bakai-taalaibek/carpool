@@ -134,5 +134,3 @@ dist
 # dotnet bin and intermediate files
 **/bin/
 **/obj/
-dotnet/Carpool.WebApi/appsettings.Development.json
-dotnet/Carpool.WebApi/appsettings.Development.json

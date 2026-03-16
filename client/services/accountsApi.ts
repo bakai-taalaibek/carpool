@@ -4,7 +4,10 @@ import {
   ResetPasswordRequest,
 } from "../types/passwordReset";
 import { RegisterRequestDto, RegisterResponseDto } from "../types/register";
-import { VerificationRequestDto } from "../types/verification";
+import {
+  RequestEmailVerificationDto,
+  VerificationRequestDto,
+} from "../types/verification";
 import { api } from "./api";
 
 export const accountsApi = api.injectEndpoints({
@@ -32,6 +35,15 @@ export const accountsApi = api.injectEndpoints({
         },
       }),
     }),
+    requestEmailVerification: build.mutation<void, RequestEmailVerificationDto>(
+      {
+        query: (body) => ({
+          url: "accounts/request-email-verification",
+          method: "POST",
+          body,
+        }),
+      },
+    ),
     verifyEmail: build.mutation<RegisterResponseDto, VerificationRequestDto>({
       query: (body) => ({
         url: "accounts/verify-email",
@@ -63,4 +75,5 @@ export const {
   useVerifyEmailMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useRequestEmailVerificationMutation
 } = accountsApi;

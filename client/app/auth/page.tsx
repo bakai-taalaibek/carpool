@@ -6,6 +6,7 @@ import {
   CloseButton,
   Divider,
   Group,
+  Modal,
   PaperProps,
   PasswordInput,
   PinInput,
@@ -15,6 +16,8 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure, useToggle } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { IconExclamationCircle } from "@tabler/icons-react";
 import {
   ConfirmationResult,
   GoogleAuthProvider,
@@ -32,6 +35,7 @@ import GoogleIcon from "../../public/icons/GoogleIcon";
 import {
   useLoginUserMutation,
   useRegisterUserMutation,
+  useRequestEmailVerificationMutation,
   useSentTokenMutation,
 } from "../../services/accountsApi";
 import { LoginResponseDto } from "../../types/login";
@@ -51,9 +55,15 @@ export default function AuthenticationForm(props: PaperProps) {
 
   const [loginUser] = useLoginUserMutation();
   const [registerUser] = useRegisterUserMutation();
+  const [requestEmailVerification] = useRequestEmailVerificationMutation();
 
-  const [isModalOpened, { open: openModal, close: closeModal }] =
+  const [isTermsModalOpened, { open: openTermsModal, close: closeTermsModal }] =
     useDisclosure(false);
+
+  const [
+    isResendModalOpened,
+    { open: openResendModal, close: closeResendModal },
+  ] = useDisclosure(false);
 
   const [authActionType, toggleAuthActionType] = useToggle([
     "login",
@@ -149,7 +159,11 @@ export default function AuthenticationForm(props: PaperProps) {
         }).unwrap();
 
         saveCredentials(response);
-      } catch (error) {
+      } catch (error: any) {
+        // todo: standardize error string
+        if (error.data?.error === "EMAIL_NOT_VERIFIED") {
+          openResendModal();
+        }
         console.error("Login failed:", error);
       }
     } else {
@@ -160,7 +174,17 @@ export default function AuthenticationForm(props: PaperProps) {
         }).unwrap();
 
         router.push("auth/check-email");
-      } catch (error) {
+      } catch (error: any) {
+        if (error.data?.errors[0].code === "DuplicateUserName") {
+          notifications.show({
+            message: error.data?.errors[0].message,
+            color: "red",
+            title: "Что-то пошло не так",
+            position: "top-right",
+            icon: <IconExclamationCircle size={20} />,
+          });
+        }
+
         console.error("Registration failed:", error);
       }
     }
@@ -213,6 +237,14 @@ export default function AuthenticationForm(props: PaperProps) {
     router.push("/");
   };
 
+  const handleResendEmail = () => {
+    requestEmailVerification({
+      email: form.values.emailOrPhone,
+    });
+
+    closeResendModal();
+  };
+
   if (isAuthenticated) router.push("/");
 
   return (
@@ -254,6 +286,7 @@ export default function AuthenticationForm(props: PaperProps) {
 
       <Stack>
         <TextInput
+          required
           disabled={isWaitingForCode}
           label={
             isEmpty ? "Телефон или почта" : isPhoneUsed ? "Телефон" : "Почта"
@@ -270,6 +303,7 @@ export default function AuthenticationForm(props: PaperProps) {
         {isEmailUsed && (
           <>
             <PasswordInput
+              required
               label="Пароль"
               placeholder="Ваш пароль"
               value={form.values.password}
@@ -282,6 +316,7 @@ export default function AuthenticationForm(props: PaperProps) {
 
             {authActionType === "register" && (
               <PasswordInput
+                required
                 label="Подтвердите пароль"
                 placeholder="Введите пароль снова"
                 value={form.values.passwordConfirmation}
@@ -331,7 +366,7 @@ export default function AuthenticationForm(props: PaperProps) {
             label={
               <>
                 Я принимаю{" "}
-                <Anchor inherit component="button" onClick={openModal}>
+                <Anchor inherit component="button" onClick={openTermsModal}>
                   условия
                 </Anchor>
               </>
@@ -366,7 +401,29 @@ export default function AuthenticationForm(props: PaperProps) {
           </Button>
         )}
       </Group>
-      <TermsModal opened={isModalOpened} onClose={closeModal} />
+      <TermsModal opened={isTermsModalOpened} onClose={closeTermsModal} />
+      <Modal
+        opened={isResendModalOpened}
+        onClose={closeResendModal}
+        withCloseButton={false}
+        centered
+        size="md"
+      >
+        <Text ta="center" fw={900} mb={5} size="xl">
+          Ваша почта еще не верифицирована
+        </Text>
+
+        <Text c="dimmed" size="sm" ta="center" mb={20}>
+          При регистрации на вашу почту было направлено сообщение с ссылкой для
+          верификации. Возможно оно попало в спам.
+        </Text>
+        <Group justify="space-between" mt="lg">
+          <Button onClick={closeResendModal} variant="outline">
+            Закрыть
+          </Button>
+          <Button onClick={handleResendEmail}>Переслать сообщение</Button>
+        </Group>
+      </Modal>
     </>
   );
 }

@@ -1,11 +1,13 @@
 "use client";
 
-import { CheckIcon, Text } from "@mantine/core";
+import { Button, CheckIcon, Group, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { useVerifyEmailMutation } from "../../../services/accountsApi";
+import {
+  useRequestEmailVerificationMutation,
+  useVerifyEmailMutation,
+} from "../../../services/accountsApi";
 
 export default function VerifyEmail() {
   const params = useSearchParams();
@@ -15,6 +17,7 @@ export default function VerifyEmail() {
   const router = useRouter();
 
   const [verifyEmail, { isError }] = useVerifyEmailMutation();
+  const [requestEmailVerification] = useRequestEmailVerificationMutation();
 
   const paramsIncomplete = !token || !userId;
 
@@ -46,9 +49,23 @@ export default function VerifyEmail() {
 
   if (paramsIncomplete || isError)
     return (
-      <Text ta="center" fw={500} fz={20}>
-        Что-то пошло не так...
-      </Text>
+      <>
+        <Text ta="center" fw={500} fz={20} mb={10}>
+          Что-то пошло не так...
+        </Text>
+        <Text c="dimmed" size="sm" ta="center" mb={20}>
+          Возможно срок действия вашей ссылки истек
+        </Text>
+
+        <Group>
+          <Button
+            ml="auto"
+            onClick={() => requestEmailVerification({ userId })}
+          >
+            Переслать ссылку
+          </Button>
+        </Group>
+      </>
     );
   return (
     <Text ta="center" fw={500} fz={20}>
