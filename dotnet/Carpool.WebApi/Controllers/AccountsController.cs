@@ -128,6 +128,29 @@ public class AccountsController(
         }
     }
 
+    [HttpPost("request-email-verification")]
+    public async Task<IActionResult> ResendEmailVerification(RequestEmailVerificationDto request)
+    {
+        var user = request.UserId != null ? await _userManager.FindByIdAsync(request.UserId) :
+        request.Email != null ? await _userManager.FindByEmailAsync(request.Email) : null;
+
+        if (user == null)
+            return Ok();
+
+        if (user.EmailConfirmed)
+        {
+            return Ok();
+        }
+
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var link = $"{_config["FrontendUrl"]}/auth/verify-email?" +
+                    $"userId={user.Id}&token={Uri.EscapeDataString(token)}";
+
+        await _emailService.SendVerificationEmail(user.Email, link);
+
+        return Ok();
+    }
+
     [HttpPost("verify-email")]
     public async Task<IActionResult> VerifyEmail(VerificationRequestDto request)
     {
