@@ -17,12 +17,16 @@ import {
   Stack,
   Text,
   TextInput,
+  Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconAlertTriangle, IconLogout2 } from "@tabler/icons-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../lib/store";
 import { useLogout } from "../../../lib/useLogout";
 
 const data = {
@@ -39,6 +43,18 @@ export default function NewPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isModalOpened, { open: openModal, close: closeModal }] =
     useDisclosure(false);
+
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const guestId = useSelector((state: RootState) => state.auth.guestId);
+  const params = useParams();
+
+  // todo replace "current" with global const
+  const isOwnProfile =
+    params.user === "current" ||
+    params.user === userId ||
+    params.user === guestId;
+
+  const isLoggedIn = userId !== null && userId !== undefined;
 
   const form = useForm({
     initialValues: {
@@ -66,14 +82,27 @@ export default function NewPage() {
         direction={{ base: "column", xs: "row" }}
       >
         <Stack align="center" gap={5}>
-          <Avatar color="blue" radius={100} size={120} />
-          <FileButton onChange={setFile} accept="image/png,image/jpeg">
-            {(props) => (
-              <Button {...props} size="sm" fw={500} variant="transparent">
+          <Avatar
+            color={isLoggedIn ? "blue" : "gray"}
+            radius={100}
+            size={120}
+          />
+          {isLoggedIn && isOwnProfile ? (
+            <FileButton onChange={setFile} accept="image/png,image/jpeg">
+              {(props) => (
+                <Button {...props} size="sm" fw={500} variant="transparent">
+                  Выбрать аватар
+                </Button>
+              )}
+            </FileButton>
+          ) : (
+            <Tooltip label="Войдите, чтобы выбрать аватар">
+              <Button variant="white" bg="white" disabled>
+                {" "}
                 Выбрать аватар
               </Button>
-            )}
-          </FileButton>
+            </Tooltip>
+          )}
         </Stack>
         <Stack w="100%">
           <div className="grid grid-cols-[auto_1fr] align-items-center gap-x-4 gap-y-1 w-full">
@@ -150,122 +179,145 @@ export default function NewPage() {
                 Сохранить
               </Button>
             </Group>
+          ) : isOwnProfile ? (
+            isLoggedIn ? (
+              <Button
+                w="fit-content"
+                ml="auto"
+                variant="filled"
+                onClick={() => setIsBeingEdited(true)}
+              >
+                Редактировать
+              </Button>
+            ) : (
+              <Tooltip label="Войдите, чтобы отредактировать">
+                <Button
+                  w="fit-content"
+                  ml="auto"
+                  variant="filled"
+                  disabled
+                >
+                  Редактировать
+                </Button>
+              </Tooltip>
+            )
           ) : (
-            <Button
-              w="fit-content"
-              ml="auto"
-              variant="filled"
-              onClick={() => setIsBeingEdited(true)}
-            >
-              Редактировать
-            </Button>
+            <></>
           )}
         </Stack>
       </Flex>
 
-      <Divider mt={20} mb={0} />
+      {isLoggedIn && isOwnProfile && (
+        <>
+          <Divider mt={20} mb={0} />
+          <Accordion>
+            <AccordionItem value="change-password">
+              <AccordionControl>
+                <Text fz={18}>Изменить пароль</Text>
+              </AccordionControl>
+              <AccordionPanel>
+                <form onSubmit={form.onSubmit(() => {})}>
+                  <Stack pt={5} gap={12}>
+                    <PasswordInput
+                      required
+                      label="Текущий пароль"
+                      placeholder="Введите текущий снова"
+                      value={form.values.currentPassword}
+                      onChange={(event) =>
+                        form.setFieldValue(
+                          "currentPassword",
+                          event.currentTarget.value,
+                        )
+                      }
+                      error={form.errors.currentPassword}
+                    />
 
-      <Accordion>
-        <AccordionItem value="change-password">
-          <AccordionControl>
-            <Text fz={18}>Изменить пароль</Text>
-          </AccordionControl>
-          <AccordionPanel>
-            <form onSubmit={form.onSubmit(() => {})}>
-              <Stack pt={5} gap={12}>
-                <PasswordInput
-                  required
-                  label="Текущий пароль"
-                  placeholder="Введите текущий снова"
-                  value={form.values.currentPassword}
-                  onChange={(event) =>
-                    form.setFieldValue(
-                      "currentPassword",
-                      event.currentTarget.value,
-                    )
+                    <PasswordInput
+                      required
+                      label="Новый пароль"
+                      placeholder="Ваш новый пароль"
+                      value={form.values.newPassword}
+                      onChange={(event) =>
+                        form.setFieldValue(
+                          "newPassword",
+                          event.currentTarget.value,
+                        )
+                      }
+                      error={form.errors.newPassword}
+                    />
+
+                    <PasswordInput
+                      required
+                      label="Подтвердите пароль"
+                      placeholder="Введите новый пароль снова"
+                      value={form.values.passwordConfirmation}
+                      onChange={(event) =>
+                        form.setFieldValue(
+                          "passwordConfirmation",
+                          event.currentTarget.value,
+                        )
+                      }
+                      error={form.errors.passwordConfirmation}
+                    />
+                  </Stack>
+
+                  <Group pb={7} justify="space-between" mt="lg">
+                    <Anchor
+                      component={Link}
+                      href="/auth/restore"
+                      c="dimmed"
+                      size="sm"
+                      ta="start"
+                    >
+                      Забыли пароль?
+                    </Anchor>
+
+                    <Button type="submit" w="max-content" variant="filled">
+                      Изменить пароль
+                    </Button>
+                  </Group>
+                </form>
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem value="exit">
+              <AccordionControl>
+                <Text fz={18}>Выйти из аккаунта</Text>
+              </AccordionControl>
+              <AccordionPanel>
+                <Button
+                  leftSection={
+                    <IconLogout2 style={{ width: 16, height: 16 }} />
                   }
-                  error={form.errors.currentPassword}
-                />
-
-                <PasswordInput
-                  required
-                  label="Новый пароль"
-                  placeholder="Ваш новый пароль"
-                  value={form.values.newPassword}
-                  onChange={(event) =>
-                    form.setFieldValue("newPassword", event.currentTarget.value)
-                  }
-                  error={form.errors.newPassword}
-                />
-
-                <PasswordInput
-                  required
-                  label="Подтвердите пароль"
-                  placeholder="Введите новый пароль снова"
-                  value={form.values.passwordConfirmation}
-                  onChange={(event) =>
-                    form.setFieldValue(
-                      "passwordConfirmation",
-                      event.currentTarget.value,
-                    )
-                  }
-                  error={form.errors.passwordConfirmation}
-                />
-              </Stack>
-
-              <Group pb={7} justify="space-between" mt="lg">
-                <Anchor
-                  component={Link}
-                  href="/auth/restore"
-                  c="dimmed"
-                  size="sm"
-                  ta="start"
+                  w="max-content"
+                  variant="filled"
+                  mt={10}
+                  onClick={logoutUser}
                 >
-                  Забыли пароль?
-                </Anchor>
-
-                <Button type="submit" w="max-content" variant="filled">
-                  Изменить пароль
+                  Выйти из аккаунта
                 </Button>
-              </Group>
-            </form>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="exit">
-          <AccordionControl>
-            <Text fz={18}>Выйти из аккаунта</Text>
-          </AccordionControl>
-          <AccordionPanel>
-            <Button
-              leftSection={<IconLogout2 style={{ width: 16, height: 16 }} />}
-              w="max-content"
-              variant="filled"
-              mt={10}
-              onClick={logoutUser}
-            >
-              Выйти из аккаунта
-            </Button>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="delete">
-          <AccordionControl>
-            <Text fz={18}>Удалить аккаунт</Text>
-          </AccordionControl>
-          <AccordionPanel>
-            <Text mb={5} fz={14} mt={5}>
-              После удаления аккаунта, его невозможно восстановить
-            </Text>
-            <Button
-              w="max-content"
-              variant="filled"
-              color="red"
-              onClick={openModal}
-            >
-              Удалить аккаунт
-            </Button>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem value="delete">
+              <AccordionControl>
+                <Text fz={18}>Удалить аккаунт</Text>
+              </AccordionControl>
+              <AccordionPanel>
+                <Text mb={5} fz={14} mt={5}>
+                  После удаления аккаунта, его невозможно восстановить
+                </Text>
+                <Button
+                  w="max-content"
+                  variant="filled"
+                  color="red"
+                  onClick={openModal}
+                >
+                  Удалить аккаунт
+                </Button>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </>
+      )}
       <Modal
         opened={isModalOpened}
         onClose={closeModal}
