@@ -41,7 +41,7 @@ export default function NewPage() {
   if (!rideRoleNameToIdMap) return null;
 
   const initialData = {
-    rideRoleId: rideRoleNameToIdMap[RideRoleName.Driver],
+    rideRoleId: rideRoleNameToIdMap[RideRoleName.Passenger],
     sourceId: undefined,
     destinationId: undefined,
     departureDate: new Date().toString(),

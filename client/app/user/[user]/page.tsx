@@ -26,6 +26,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "../../../lib/authSlice";
 import { RootState } from "../../../lib/store";
 import { useLogout } from "../../../lib/useLogout";
 
@@ -46,6 +47,8 @@ export default function NewPage() {
 
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const guestId = useSelector((state: RootState) => state.auth.guestId);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
   const params = useParams();
 
   // todo replace "current" with global const
@@ -53,8 +56,6 @@ export default function NewPage() {
     params.user === "current" ||
     params.user === userId ||
     params.user === guestId;
-
-  const isLoggedIn = userId !== null && userId !== undefined;
 
   const form = useForm({
     initialValues: {
@@ -83,11 +84,11 @@ export default function NewPage() {
       >
         <Stack align="center" gap={5}>
           <Avatar
-            color={isLoggedIn ? "blue" : "gray"}
+            color={isAuthenticated ? "blue" : "gray"}
             radius={100}
             size={120}
           />
-          {isLoggedIn && isOwnProfile ? (
+          {isAuthenticated && isOwnProfile ? (
             <FileButton onChange={setFile} accept="image/png,image/jpeg">
               {(props) => (
                 <Button {...props} size="sm" fw={500} variant="transparent">
@@ -180,7 +181,7 @@ export default function NewPage() {
               </Button>
             </Group>
           ) : isOwnProfile ? (
-            isLoggedIn ? (
+            isAuthenticated ? (
               <Button
                 w="fit-content"
                 ml="auto"
@@ -191,12 +192,7 @@ export default function NewPage() {
               </Button>
             ) : (
               <Tooltip label="Войдите, чтобы отредактировать">
-                <Button
-                  w="fit-content"
-                  ml="auto"
-                  variant="filled"
-                  disabled
-                >
+                <Button w="fit-content" ml="auto" variant="filled" disabled>
                   Редактировать
                 </Button>
               </Tooltip>
@@ -207,7 +203,7 @@ export default function NewPage() {
         </Stack>
       </Flex>
 
-      {isLoggedIn && isOwnProfile && (
+      {isAuthenticated && isOwnProfile && (
         <>
           <Divider mt={20} mb={0} />
           <Accordion>

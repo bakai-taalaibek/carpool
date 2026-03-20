@@ -109,7 +109,9 @@ const UserMenu = forwardRef<HTMLDivElement | null>(function Footer(_, ref) {
         </MenuTarget>
 
         <MenuDropdown px={0}>
-          <MenuLabel>Таалайбек уулу Бакай</MenuLabel>
+          <MenuLabel>
+            {isAuthenticated ? "Таалайбек уулу Бакай" : "Гость"}
+          </MenuLabel>
           <MenuItem
             leftSection={<IconSettings style={{ width: 14, height: 14 }} />}
             component={Link}

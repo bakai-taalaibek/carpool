@@ -11,12 +11,15 @@ import {
   Text,
   Textarea,
   TextInput,
+  Tooltip,
 } from "@mantine/core";
 import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IconClock } from "@tabler/icons-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import LocalitySelect from "../app/new/localitySelect";
+import { selectIsAuthenticated } from "../lib/authSlice";
 import { useGetRideRolesQuery } from "../services/rideRolesApi";
 import { RidePostCreateDto } from "../types/ridePost";
 import { RideRoleName } from "../types/rideRole";
@@ -43,6 +46,7 @@ export default function RidePostForm({
   const { data: { rideRoleIdToNameMap, rideRoleNameToIdMap } = {} } =
     useGetRideRolesQuery();
   const [isFullCar, setIsFullCar] = useState(false);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const form = useForm<RidePostFormValues>({
     initialValues: initialData,
@@ -68,19 +72,32 @@ export default function RidePostForm({
             ? "Редактирование деталей вашей поездки:"
             : "Укажите детали вашей поездки:"}
         </Text>
-        <SegmentedControl
-          value={rideRoleIdToNameMap[form.values.rideRoleId]}
-          data={[
-            { label: "Я водитель", value: RideRoleName.Driver },
-            { label: "Я пассажир", value: RideRoleName.Passenger },
-          ]}
-          onChange={(val) =>
-            form.setFieldValue(
-              "rideRoleId",
-              rideRoleNameToIdMap[val as RideRoleName]
-            )
-          }
-        />
+        <Tooltip
+          events={{
+            hover: isAuthenticated ? false : true,
+            focus: false,
+            touch: false,
+          }}
+          label="Войдите, чтобы разместить объявление как водитель"
+        >
+          <SegmentedControl
+            value={rideRoleIdToNameMap[form.values.rideRoleId]}
+            data={[
+              { label: "Я пассажир", value: RideRoleName.Passenger },
+              {
+                label: "Я водитель",
+                value: RideRoleName.Driver,
+                disabled: !isAuthenticated,
+              },
+            ]}
+            onChange={(val) =>
+              form.setFieldValue(
+                "rideRoleId",
+                rideRoleNameToIdMap[val as RideRoleName],
+              )
+            }
+          />
+        </Tooltip>
         <SimpleGrid cols={{ base: 1, xs: 2 }}>
           <TextInput
             label="Имя"
@@ -167,7 +184,7 @@ export default function RidePostForm({
               onChange={(val) =>
                 form.setFieldValue(
                   "pricePerCar",
-                  typeof val === "number" ? val : Number.parseInt(val)
+                  typeof val === "number" ? val : Number.parseInt(val),
                 )
               }
             />
@@ -181,7 +198,7 @@ export default function RidePostForm({
               onChange={(val) =>
                 form.setFieldValue(
                   "pricePerSeat",
-                  typeof val === "number" ? val : Number.parseInt(val)
+                  typeof val === "number" ? val : Number.parseInt(val),
                 )
               }
             />
@@ -200,7 +217,7 @@ export default function RidePostForm({
             onChange={(val) =>
               form.setFieldValue(
                 "seats",
-                typeof val === "number" ? val : Number.parseInt(val)
+                typeof val === "number" ? val : Number.parseInt(val),
               )
             }
           />
